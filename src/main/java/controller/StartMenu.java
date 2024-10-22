@@ -5,9 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.IOException;
-
 import javax.swing.ImageIcon;
-import javax.swing.JPanel;
 
 public class StartMenu extends BaseScene implements KeyListener {
 

@@ -1,9 +1,6 @@
 package main.java.service;
 
 import java.awt.Component;
-import java.awt.Font;
-import java.awt.FontFormatException;
-import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -27,7 +24,6 @@ public class SceneManager {
     private static final String START_TIMER = "setIsStart";
 
     public SceneManager(JFrame frame) {
-        setUpfonts();
         this.frame = frame;
 
         try {
@@ -74,15 +70,6 @@ public class SceneManager {
                 | IllegalArgumentException
                 | InvocationTargetException ex) {
             Logger.getLogger(ex.getMessage());
-        }
-    }
-
-    public static void setUpfonts() {
-        File fontSource = new File("src/main/resources/fonts/pixeloid-font/PixeloidSans-mLxMm.ttf");
-        try {
-            SceneManager.pixelFont = Font.createFont(Font.TRUETYPE_FONT, fontSource).deriveFont(16f);
-        } catch (FontFormatException | IOException e) {
-            Logger.getLogger(e.getMessage());
         }
     }
 
@@ -174,10 +161,6 @@ public class SceneManager {
 
     public static int getSceneNum() {
         return a;
-    }
-
-    public static Font getPixelFont() {
-        return pixelFont;
     }
 
     public void closeApp() {
