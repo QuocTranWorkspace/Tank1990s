@@ -1,9 +1,11 @@
 package main.java.model.powerups;
 
-public class Helmet {
-    private final Tank player;
+import main.java.model.tanks.BaseTank;
 
-    public Helmet(Tank tank) {
+public class Helmet {
+    private final BaseTank player;
+
+    public Helmet(BaseTank tank) {
         this.player = tank;
     }
 

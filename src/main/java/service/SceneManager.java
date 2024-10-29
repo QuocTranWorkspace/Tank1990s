@@ -1,11 +1,10 @@
 package main.java.service;
 
 import java.awt.Component;
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
 import main.java.controller.StartMenu;
@@ -13,113 +12,106 @@ import main.java.utils.AccessingAllClassesInPackage;
 
 public class SceneManager {
 
-    Class<?>[] classes;
-    List<Component> sceneList = new ArrayList<>();
+    private Class<?>[] classes;
+    private List<Component> sceneList = new ArrayList<>();
     private JFrame frame;
-
-    static int a = 0;
-
-    Component currentScene;
-
+    private static int sceneCount = 0;
+    private Component currentScene;
     private static final String START_TIMER = "setIsStart";
+    private static final Logger LOGGER = Logger.getLogger(SceneManager.class.getName());
 
     public SceneManager(JFrame frame) {
         this.frame = frame;
+        loadClasses();
+        initializeScenes();
+    }
 
+    private void loadClasses() {
         try {
             classes = AccessingAllClassesInPackage.getFilteredClasses("main.java.controller", "BaseScene");
-        } catch (ClassNotFoundException | IOException ex) {
-            Logger.getLogger(ex.getMessage());
-        }
-
-        // Sort scene
-        try {
             quickSort(classes, 0, classes.length - 1);
-        } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
-                | NoSuchMethodException | SecurityException e) {
-            Logger.getLogger(e.getMessage());
+        } catch (Exception ex) {
+            LOGGER.log(Level.SEVERE, "Error loading classes: ", ex);
         }
+    }
 
-        for (Class<?> clazz : classes) {
-            a++;
-            Component comp;
-            try {
-                comp = (Component) clazz.getDeclaredConstructor().newInstance();
-                sceneList.add(comp);
-            } catch (InstantiationException | IllegalAccessException | IllegalArgumentException
-                    | InvocationTargetException | NoSuchMethodException | SecurityException e) {
-                Logger.getLogger(e.getMessage());
-            }
-        }
-
+    private void initializeScenes() {
         try {
-            // init stage
+            for (Class<?> clazz : classes) {
+                Component comp = (Component) clazz.getDeclaredConstructor().newInstance();
+                sceneList.add(comp);
+                sceneCount++;
+            }
+
+            // Set up the initial scene
             StartMenu startMenu = new StartMenu();
             currentScene = startMenu;
-            // Init the start scene to run
-            Method method;
+            invokeMethod(currentScene, START_TIMER, true);
 
-            method = startMenu.getClass().getMethod(START_TIMER, boolean.class);
-            method.invoke(startMenu, true);
-            // Request focus for curent sccene: required class ... setFocusable()
-            // Must request focus before add
-            frame.add(startMenu);
+            frame.add(currentScene);
+            frame.revalidate();
+            frame.repaint();
             startMenu.requestFocus();
-
-        } catch (IOException | NoSuchMethodException | SecurityException | IllegalAccessException
-                | IllegalArgumentException
-                | InvocationTargetException ex) {
-            Logger.getLogger(ex.getMessage());
+        } catch (Exception ex) {
+            LOGGER.log(Level.SEVERE, "Error initializing scenes: ", ex);
         }
     }
 
     public void loadScene(int index) {
-        frame.remove(currentScene);
-        /*
-         * @Solution for problem noted in Base scene
-         */
-        Method method;
-        try {
-            method = currentScene.getClass().getMethod(START_TIMER, boolean.class);
-            method.invoke(currentScene, false);
-        } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException
-                | InvocationTargetException e) {
-            Logger.getLogger(e.getMessage());
+        if (index >= sceneList.size()) {
+            LOGGER.log(Level.WARNING, "Scene index out of bounds: {0}", index);
+            return;
         }
-        currentScene = null;
-        Component comp;
+
+        frame.remove(currentScene);
+        invokeMethod(currentScene, START_TIMER, false);
+
         try {
-            comp = (Component) classes[index].getDeclaredConstructor().newInstance();
-            frame.add(comp);
-            comp.requestFocus();
+            Component newScene = sceneList.get(index);
+            invokeMethod(newScene, START_TIMER, true);
+            frame.add(newScene);
+            newScene.requestFocus();
+            frame.revalidate();
+            frame.repaint();
 
-            method = comp.getClass().getMethod(START_TIMER, boolean.class);
-            method.invoke(comp, true);
-
-            // Set current scence
-            currentScene = comp;
-        } catch (InstantiationException | IllegalAccessException | IllegalArgumentException
-                | InvocationTargetException | SecurityException | NoSuchMethodException e) {
-            Logger.getLogger(e.getMessage());
+            currentScene = newScene;
+        } catch (Exception ex) {
+            LOGGER.log(Level.SEVERE, "Error loading scene: ", ex);
         }
     }
 
-    // Partition function
-    static int partition(Class<?>[] arr, int low, int high) throws InstantiationException, IllegalAccessException,
-            IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+    private void invokeMethod(Component component, String methodName, boolean flag) {
+        try {
+            Method method = component.getClass().getMethod(methodName, boolean.class);
+            method.invoke(component, flag);
+        } catch (Exception ex) {
+            LOGGER.log(Level.WARNING, "Method invocation error: ", ex);
+        }
+    }
 
-        // Choose the pivot
+    public static int getSceneNum() {
+        return sceneCount;
+    }
+
+    public void closeApp() {
+        frame.dispose();
+    }
+
+    // QuickSort and Partition logic for sorting classes based on `getSceneIndex`
+    private static void quickSort(Class<?>[] arr, int low, int high) throws Exception {
+        if (low < high) {
+            int pi = partition(arr, low, high);
+            quickSort(arr, low, pi - 1);
+            quickSort(arr, pi + 1, high);
+        }
+    }
+
+    private static int partition(Class<?>[] arr, int low, int high) throws Exception {
         Object o = arr[high].getDeclaredConstructor().newInstance();
         Method method = arr[high].getMethod("getSceneIndex");
         int pivot = (int) method.invoke(o);
 
-        // Index of smaller element and indicates
-        // the right position of pivot found so far
         int i = low - 1;
-
-        // Traverse arr[low..high] and move all smaller
-        // elements to the left side. Elements from low to
-        // i are smaller after every iteration
         for (int j = low; j <= high - 1; j++) {
             Object o1 = arr[j].getDeclaredConstructor().newInstance();
             Method method1 = arr[j].getMethod("getSceneIndex");
@@ -130,41 +122,13 @@ public class SceneManager {
                 swap(arr, i, j);
             }
         }
-
-        // Move pivot after smaller elements and
-        // return its position
         swap(arr, i + 1, high);
         return i + 1;
     }
 
-    // Swap function
-    static void swap(Class<?>[] arr, int i, int j) {
+    private static void swap(Class<?>[] arr, int i, int j) {
         Class<?> temp = arr[i];
         arr[i] = arr[j];
         arr[j] = temp;
     }
-
-    // The QuickSort function implementation
-    static void quickSort(Class<?>[] arr, int low, int high) throws InstantiationException, IllegalAccessException,
-            IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
-        if (low < high) {
-
-            // pi is the partition return index of pivot
-            int pi = partition(arr, low, high);
-
-            // Recursion calls for smaller elements
-            // and greater or equals elements
-            quickSort(arr, low, pi - 1);
-            quickSort(arr, pi + 1, high);
-        }
-    }
-
-    public static int getSceneNum() {
-        return a;
-    }
-
-    public void closeApp() {
-        this.frame.dispose();
-    }
-
 }

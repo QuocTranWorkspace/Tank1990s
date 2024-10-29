@@ -1,8 +1,9 @@
-package main.java.model.powerups;
-
-import main.java.model.tanks.Tank;
+package main.java.service;
 
 import java.util.Random;
+import main.java.model.powerups.PowerUps;
+import main.java.model.powerups.Type;
+import main.java.model.tanks.BaseTank;
 
 public class PowerupsManager {
     private PowerUps currentPowerUp;
@@ -18,7 +19,7 @@ public class PowerupsManager {
         Type powerUpType = Type.getRandomType();
     }
 
-    public void collectPowerUp(Tank tank) {
+    public void collectPowerUp(BaseTank tank) {
         if (currentPowerUp != null) {
             tank.addPoints(500);
             currentPowerUp.activate(tank);
@@ -26,7 +27,7 @@ public class PowerupsManager {
         }
     }
 
-    public void flashingTankHit(Tank tank) {
+    public void flashingTankHit(BaseTank tank) {
         if (currentPowerUp != null) {
             currentPowerUp = null;
         }

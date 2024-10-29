@@ -1,7 +1,7 @@
 package main.java.model.powerups;
 
 public class Tank {
-    private main.java.model.tanks.Tank player;
+    private main.java.model.tanks.BaseTank player;
 
     public Tank() {
         this.player = player;

@@ -1,6 +1,8 @@
 package main.java.model.tanks;
 
-public abstract class Tank extends TankFunction {
+import main.java.model.Point2D;
+
+public abstract class BaseTank extends TankFunction {
     private String name;
     private Point2D position;
     private Directions direction;
@@ -12,7 +14,7 @@ public abstract class Tank extends TankFunction {
     private String description;
     private int bullet;
 
-    public Tank(String name, Point2D position, int point, int health, int movementSpeed, int bulletSpeed,
+    public BaseTank(String name, Point2D position, int point, int health, int movementSpeed, int bulletSpeed,
             String description) throws Exception {
         if (!isValidName(name)) {
             throw new Exception("Invalid tank name!");
@@ -207,10 +209,9 @@ public abstract class Tank extends TankFunction {
     }
 
     @Override
-    public void shoot(Tank tank) {
+    public void shoot(BaseTank tank) {
         // TODO Auto-generated method stub
-        int damage = this.bulletSpeed;
-        tank.takeDamage(damage);
+
     }
 
     public void takeDamage(int damage) {

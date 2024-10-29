@@ -1,13 +1,11 @@
 package main.java.controller;
 
-import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyListener;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 import main.java.App;
-import main.java.model.Player;
 
 public abstract class BaseScene extends JPanel implements ActionListener, KeyListener {
 
@@ -30,7 +28,7 @@ public abstract class BaseScene extends JPanel implements ActionListener, KeyLis
     transient Image lowerpipe = null;
 
     // Player component
-    transient Player player = null;
+    // transient Player player = null;
 
     // Game timer
     transient Timer gameLoop = null;

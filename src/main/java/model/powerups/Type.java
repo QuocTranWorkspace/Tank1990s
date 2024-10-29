@@ -5,9 +5,9 @@ import java.util.Random;
 public enum Type {
     GRENADE, HELMET, SHOVEL, STAR, TANK, TIMER;
 
-    public static Type getRandomType() {
-        Random random = new Random();
-        return values()[random.nextInt(values().length)];
+    private static final Random random = new Random();
 
+    public static Type getRandomType() {
+        return values()[random.nextInt(values().length)];
     }
 }

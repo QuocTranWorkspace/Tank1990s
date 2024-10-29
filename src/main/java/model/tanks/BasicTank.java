@@ -1,5 +1,7 @@
 package main.java.model.tanks;
 
+import main.java.model.Point2D;
+
 public class BasicTank extends EnemyTank {
     private Directions direction;
 
@@ -9,10 +11,12 @@ public class BasicTank extends EnemyTank {
     }
 
     // TODO: Getters, Setters, toString,...
+    @Override
     public Point2D getPosition() {
         return this.position;
     }
 
+    @Override
     public void setPosition(Point2D position) {
         this.position = position;
     }
