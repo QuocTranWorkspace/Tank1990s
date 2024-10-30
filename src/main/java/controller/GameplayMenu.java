@@ -52,6 +52,21 @@ public class GameplayMenu extends BaseScene {
 
         // Pause Panel
         pausePanel = new JPanel();
+        setUpPausePanel(pausePanel);
+
+        containerPanel.add(leftSidebar);
+        containerPanel.add(mainPanel);
+        containerPanel.add(rightSidebar);
+
+        // Add the container panel to the main frame
+        add(containerPanel, BorderLayout.CENTER);
+        mainPanel.setLayout(new GridBagLayout());
+        mainPanel.add(pausePanel);
+        mainPanel.setFocusable(true);
+        mainPanel.requestFocusInWindow();
+    }
+
+    private void setUpPausePanel(JPanel pausePanel) {
         pausePanel.setPreferredSize(new Dimension(FRAME_WIDTH / 5, FRAME_HEIGHT / 4));
         pausePanel.setBackground(Color.BLACK);
         pausePanel.setBorder(BorderFactory.createLineBorder(Color.WHITE));
@@ -87,17 +102,6 @@ public class GameplayMenu extends BaseScene {
         pausePanel.add(Box.createVerticalStrut(20));
         pausePanel.add(exitButton);
         pausePanel.add(Box.createVerticalGlue());
-
-        containerPanel.add(leftSidebar);
-        containerPanel.add(mainPanel);
-        containerPanel.add(rightSidebar);
-
-        // Add the container panel to the main frame
-        add(containerPanel, BorderLayout.CENTER);
-        mainPanel.setLayout(new GridBagLayout());
-        mainPanel.add(pausePanel);
-        mainPanel.setFocusable(true);
-        mainPanel.requestFocusInWindow();
     }
 
     private void togglePause() {
@@ -128,6 +132,7 @@ public class GameplayMenu extends BaseScene {
 
     @Override
     public void keyTyped(KeyEvent e) {
+        /**/
     }
 
     @Override
@@ -139,5 +144,6 @@ public class GameplayMenu extends BaseScene {
 
     @Override
     public void keyReleased(KeyEvent e) {
+        /**/
     }
 }

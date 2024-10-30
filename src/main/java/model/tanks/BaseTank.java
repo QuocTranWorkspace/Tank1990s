@@ -2,6 +2,8 @@ package main.java.model.tanks;
 
 import main.java.model.Point2D;
 
+import java.awt.*;
+
 public abstract class BaseTank extends TankFunction {
     private String name;
     private Point2D position;
@@ -13,6 +15,7 @@ public abstract class BaseTank extends TankFunction {
     private int life;
     private String description;
     private int bullet;
+    private Image image;
 
     protected BaseTank(String name, Point2D position, int point, int health, int movementSpeed, int bulletSpeed,
             String description) throws Exception {
@@ -205,5 +208,13 @@ public abstract class BaseTank extends TankFunction {
 
     public void addPoints(int score) {
         this.point += score;
+    }
+
+    public Image getImage() {
+        return image;
+    }
+
+    public void setImage(Image image) {
+        this.image = image;
     }
 }
