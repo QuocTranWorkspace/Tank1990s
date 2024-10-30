@@ -6,7 +6,6 @@ import javax.swing.*;
 import java.awt.*;
 
 public class App extends JFrame {
-
     public static final int FRAME_WIDTH = (int) Toolkit.getDefaultToolkit().getScreenSize().getWidth();
     public static final int FRAME_HEIGHT = (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight();
 
@@ -25,8 +24,7 @@ public class App extends JFrame {
     }
 
     public static void main(String[] args) {
-        App app = new App();
+        new App();
         App.prepareGUI();
     }
-
 }

@@ -9,7 +9,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyListener;
 
 public abstract class BaseScene extends JPanel implements ActionListener, KeyListener {
-
     // Scene index fo loading scene
     int sceneIndex;
 
@@ -28,11 +27,6 @@ public abstract class BaseScene extends JPanel implements ActionListener, KeyLis
     // Component's asset
     transient Image playerImg = null;
     transient Image backgroundImg = null;
-    transient Image higherPipe = null;
-    transient Image lowerpipe = null;
-
-    // Player component
-    // transient Player player = null;
 
     // Game timer
     transient Timer gameLoop = null;
@@ -64,9 +58,19 @@ public abstract class BaseScene extends JPanel implements ActionListener, KeyLis
 
     public void setIsStart(boolean isStart) {
         this.isStart = isStart;
-        if (isStart) {
-            gameLoop.start();
-        }
+        if (isStart && gameLoop != null) {
+                gameLoop.start();
+            }
     }
 
+    public Timer getGameLoop() { return this.gameLoop; }
+
+    protected void customizeButton(JButton button) {
+        button.setForeground(Color.WHITE);
+        button.setContentAreaFilled(false);
+        button.setBorderPainted(false);
+        button.setFocusPainted(true);
+        button.setAlignmentX(Component.CENTER_ALIGNMENT);
+        button.setFont(new Font("Rockwell", Font.BOLD, 36));
+    }
 }

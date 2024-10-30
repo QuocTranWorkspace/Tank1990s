@@ -14,7 +14,7 @@ public abstract class BaseTank extends TankFunction {
     private String description;
     private int bullet;
 
-    public BaseTank(String name, Point2D position, int point, int health, int movementSpeed, int bulletSpeed,
+    protected BaseTank(String name, Point2D position, int point, int health, int movementSpeed, int bulletSpeed,
             String description) throws Exception {
         if (!isValidName(name)) {
             throw new Exception("Invalid tank name!");
@@ -120,7 +120,6 @@ public abstract class BaseTank extends TankFunction {
     }
 
     private boolean isValidPosition(Point2D position2) {
-        // TODO Auto-generated method stub
         int minX = 1;
         int maxX = 100;
         int minY = 1;
@@ -129,10 +128,7 @@ public abstract class BaseTank extends TankFunction {
         if (position2 == null) {
             return false;
         }
-        if (position2.getX() < minX || position2.getX() > maxX || position2.getY() < minY || position2.getY() > maxY) {
-            return false;
-        }
-        return true;
+        return position2.getX() >= minX && position2.getX() <= maxX && position2.getY() >= minY && position2.getY() <= maxY;
     }
 
     private boolean isValidName(String name) {
@@ -147,11 +143,7 @@ public abstract class BaseTank extends TankFunction {
         if (name.length() < minLength || name.length() > maxLength) {
             return false;
         }
-        if (!name.matches("[a-zA-Z0-9]+")) {
-            return false;
-        }
-        // TODO Auto-generated method stub
-        return true;
+        return name.matches("[a-zA-Z0-9]+");
     }
 
     public boolean isValidPoint(int point) {
@@ -159,24 +151,15 @@ public abstract class BaseTank extends TankFunction {
     }
 
     public boolean isValidHealth(int health) {
-        if (health <= 0 || health > 4) {
-            return false;
-        }
-        return true;
+        return health > 0 && health <= 4;
     }
 
     public boolean isValidMovementSpeed(int movementSpeed) {
-        if (movementSpeed <= 0 || movementSpeed > 3) {
-            return false;
-        }
-        return true;
+        return movementSpeed > 0 && movementSpeed <= 3;
     }
 
     public boolean isValidBulletSpeed(int bulletSpeed) {
-        if (bulletSpeed <= 0 || bulletSpeed > 3) {
-            return false;
-        }
-        return true;
+        return bulletSpeed > 0 && bulletSpeed <= 3;
     }
 
     @Override
@@ -188,14 +171,16 @@ public abstract class BaseTank extends TankFunction {
 
     @Override
     public void move() throws Exception {
-        // TODO Auto-generated method stub
         switch (direction) {
             case UP:
                 position = new Point2D(position.getX(), position.getY() - movementSpeed);
+                break;
             case DOWN:
                 position = new Point2D(position.getX(), position.getY() + movementSpeed);
+                break;
             case LEFT:
                 position = new Point2D(position.getX() - movementSpeed, position.getY());
+                break;
             case RIGHT:
                 position = new Point2D(position.getX() + movementSpeed, position.getY());
                 break;
@@ -221,5 +206,4 @@ public abstract class BaseTank extends TankFunction {
     public void addPoints(int score) {
         this.point += score;
     }
-
 }

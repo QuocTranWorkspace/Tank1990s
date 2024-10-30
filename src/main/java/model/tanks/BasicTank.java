@@ -10,7 +10,6 @@ public class BasicTank extends EnemyTank {
         this.direction = Directions.DOWN;
     }
 
-    // TODO: Getters, Setters, toString,...
     @Override
     public Point2D getPosition() {
         return this.position;
@@ -25,10 +24,12 @@ public class BasicTank extends EnemyTank {
         return this.direction;
     }
 
+    @Override
     public void setDirection(Directions direction) {
         this.direction = direction;
     }
 
+    @Override
     public String toString() {
         return "Tank [name=" + getName() + ", position=" + getPosition() + ", point=" + getPoint() + ", health="
                 + getHealth()

@@ -12,12 +12,11 @@ import java.util.Objects;
 
 public class StartMenu extends BaseScene implements KeyListener {
 
-    transient final Image title = new ImageIcon(Objects.requireNonNull(getClass().getResource("../../resource/img/gameScreen/StartScreen.png"))).getImage();
+    private final transient Image title = new ImageIcon(Objects.requireNonNull(getClass().getResource("../../resource/img/gameScreen/StartScreen.png"))).getImage();
 
     public StartMenu() throws IOException {
         sceneIndex = 1;
         setPreferredSize(new Dimension(FRAME_WIDTH, FRAME_HEIGHT));
-        gameLoop = new Timer(1000 / 90, this);
         setFocusable(true);
         setUpGUI();
     }
@@ -29,12 +28,6 @@ public class StartMenu extends BaseScene implements KeyListener {
         JButton playButton = new JButton("Play");
         customizeButton(playButton);
         playButton.addActionListener(actionEvent ->
-                /*
-                 * @Problem: the redirectIndex is shared across all button listeners,
-                 * so every button will use the final value of redirectIndex
-                 *
-                 * @Solution: Declared the value at the time action is added
-                 */
                 App.sceneManager.loadScene(1)
         );
 
@@ -50,15 +43,6 @@ public class StartMenu extends BaseScene implements KeyListener {
         this.add(Box.createVerticalStrut(20));
         this.add(exitButton);
         this.add(Box.createVerticalGlue());
-    }
-
-    private void customizeButton(JButton button) {
-        button.setForeground(Color.WHITE);
-        button.setContentAreaFilled(false);
-        button.setBorderPainted(false);
-        button.setFocusPainted(true);
-        button.setAlignmentX(Component.CENTER_ALIGNMENT);
-        button.setFont(new Font("Rockwell", Font.BOLD, 36));
     }
 
     @Override

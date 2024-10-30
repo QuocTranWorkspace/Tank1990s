@@ -14,10 +14,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class SceneManager {
-
     private Class<?>[] classes;
-    private List<Component> sceneList = new ArrayList<>();
-    private JFrame frame;
+    private final List<Component> sceneList = new ArrayList<>();
+    private final JFrame frame;
     private static int sceneCount = 0;
     private Component currentScene;
     private static final String START_TIMER = "setIsStart";
@@ -52,7 +51,7 @@ public class SceneManager {
             // Set up the initial scene
             StartMenu startMenu = new StartMenu();
             currentScene = startMenu;
-            invokeMethod(currentScene, START_TIMER, true);
+            invokeMethod(currentScene, true);
 
             frame.add(currentScene);
             frame.revalidate();
@@ -70,11 +69,11 @@ public class SceneManager {
         }
 
         frame.remove(currentScene);
-        invokeMethod(currentScene, START_TIMER, false);
+        invokeMethod(currentScene, false);
 
         try {
             Component newScene = sceneList.get(index);
-            invokeMethod(newScene, START_TIMER, true);
+            invokeMethod(newScene, true);
             frame.add(newScene);
             newScene.requestFocus();
             frame.revalidate();
@@ -86,9 +85,9 @@ public class SceneManager {
         }
     }
 
-    private void invokeMethod(Component component, String methodName, boolean flag) {
+    private void invokeMethod(Component component, boolean flag) {
         try {
-            Method method = component.getClass().getMethod(methodName, boolean.class);
+            Method method = component.getClass().getMethod(SceneManager.START_TIMER, boolean.class);
             method.invoke(component, flag);
         } catch (Exception ex) {
             LOGGER.log(Level.WARNING, "Method invocation error: ", ex);

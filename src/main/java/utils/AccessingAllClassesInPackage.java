@@ -5,12 +5,12 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 
 public class AccessingAllClassesInPackage {
-
     private AccessingAllClassesInPackage() {
         throw new IllegalStateException("Utility class");
     }
@@ -57,8 +57,7 @@ public class AccessingAllClassesInPackage {
         return classes;
     }
 
-    private static String decodeUrl(String url) throws UnsupportedEncodingException {
-        return URLDecoder.decode(url, "UTF-8");
+    private static String decodeUrl(String url) {
+        return URLDecoder.decode(url, StandardCharsets.UTF_8);
     }
-
 }
