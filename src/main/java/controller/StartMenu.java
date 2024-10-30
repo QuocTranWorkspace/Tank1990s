@@ -1,22 +1,64 @@
 package main.java.controller;
 
+import main.java.App;
+
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.IOException;
-import javax.swing.*;
+import java.util.Objects;
 
 public class StartMenu extends BaseScene implements KeyListener {
 
+    transient final Image title = new ImageIcon(Objects.requireNonNull(getClass().getResource("../../resource/img/gameScreen/StartScreen.png"))).getImage();
+
     public StartMenu() throws IOException {
         sceneIndex = 1;
-
         setPreferredSize(new Dimension(FRAME_WIDTH, FRAME_HEIGHT));
-
         gameLoop = new Timer(1000 / 90, this);
-
         setFocusable(true);
+        setUpGUI();
+    }
+
+    private void setUpGUI() {
+        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        this.add(Box.createVerticalGlue());
+        // Create Play button
+        JButton playButton = new JButton("Play");
+        customizeButton(playButton);
+        playButton.addActionListener(actionEvent ->
+                /*
+                 * @Problem: the redirectIndex is shared across all button listeners,
+                 * so every button will use the final value of redirectIndex
+                 *
+                 * @Solution: Declared the value at the time action is added
+                 */
+                App.sceneManager.loadScene(1)
+        );
+
+        // Create Exit button
+        JButton exitButton = new JButton("Exit");
+        customizeButton(exitButton);
+        exitButton.addActionListener(actionEvent -> {
+            App.sceneManager.closeApp();
+        });
+
+        this.add(Box.createVerticalGlue());
+        this.add(playButton);
+        this.add(Box.createVerticalStrut(20));
+        this.add(exitButton);
+        this.add(Box.createVerticalGlue());
+    }
+
+    private void customizeButton(JButton button) {
+        button.setForeground(Color.WHITE);
+        button.setContentAreaFilled(false);
+        button.setBorderPainted(false);
+        button.setFocusPainted(true);
+        button.setAlignmentX(Component.CENTER_ALIGNMENT);
+        button.setFont(new Font("Rockwell", Font.BOLD, 36));
     }
 
     @Override
@@ -27,10 +69,9 @@ public class StartMenu extends BaseScene implements KeyListener {
     private void drawComponents(Graphics g) {
         // Draw the background
         g.setColor(Color.BLACK);
-        g.fillRect(0, 0, 640, 480);
+        g.fillRect(0, 0, FRAME_WIDTH, FRAME_HEIGHT);
 
-        g.setColor(Color.WHITE);
-        g.drawString("Score: " + (int) 100, 10, 35);
+        g.drawImage(title, FRAME_WIDTH / 4, 100, FRAME_WIDTH / 2, FRAME_HEIGHT / 4, null);
     }
 
     @Override

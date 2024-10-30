@@ -1,16 +1,20 @@
 package main.java.controller;
 
-import java.awt.Image;
+import main.java.App;
+import main.java.service.SceneManager;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyListener;
-import javax.swing.JPanel;
-import javax.swing.Timer;
-import main.java.App;
 
 public abstract class BaseScene extends JPanel implements ActionListener, KeyListener {
 
     // Scene index fo loading scene
     int sceneIndex;
+
+    // Tank font
+    Font tankFont = SceneManager.getTankFont();
 
     // JFrame size
     static final int FRAME_WIDTH = App.FRAME_WIDTH;

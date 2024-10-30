@@ -1,14 +1,17 @@
 package main.java.service;
 
-import java.awt.Component;
+import main.java.controller.StartMenu;
+import main.java.utils.AccessingAllClassesInPackage;
+
+import javax.swing.*;
+import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JFrame;
-import main.java.controller.StartMenu;
-import main.java.utils.AccessingAllClassesInPackage;
 
 public class SceneManager {
 
@@ -20,10 +23,13 @@ public class SceneManager {
     private static final String START_TIMER = "setIsStart";
     private static final Logger LOGGER = Logger.getLogger(SceneManager.class.getName());
 
+    static Font tankFont;
+
     public SceneManager(JFrame frame) {
         this.frame = frame;
         loadClasses();
         initializeScenes();
+        setUpFont();
     }
 
     private void loadClasses() {
@@ -89,12 +95,29 @@ public class SceneManager {
         }
     }
 
+    public static void setUpFont() {
+        File fontSource = new File("src/main/resource/font/tank_font.ttf");
+
+        if (fontSource.exists()) {
+            System.out.println("Font file exists: " + fontSource.getAbsolutePath());
+            try {
+                SceneManager.tankFont = Font.createFont(Font.TRUETYPE_FONT, fontSource).deriveFont(16f);
+            } catch (FontFormatException | IOException e) {
+                Logger.getLogger(e.getMessage());
+            }
+        } else {
+            System.out.println("Font file does not exist at: " + fontSource.getAbsolutePath());
+        }
+    }
+
+
     public static int getSceneNum() {
         return sceneCount;
     }
 
     public void closeApp() {
         frame.dispose();
+        System.exit(0);
     }
 
     // QuickSort and Partition logic for sorting classes based on `getSceneIndex`
@@ -130,5 +153,9 @@ public class SceneManager {
         Class<?> temp = arr[i];
         arr[i] = arr[j];
         arr[j] = temp;
+    }
+
+    public static Font getTankFont() {
+        return tankFont;
     }
 }

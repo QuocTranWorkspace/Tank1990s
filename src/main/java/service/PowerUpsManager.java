@@ -1,15 +1,16 @@
 package main.java.service;
 
-import java.util.Random;
 import main.java.model.powerups.PowerUps;
 import main.java.model.powerups.Type;
 import main.java.model.tanks.BaseTank;
 
-public class PowerupsManager {
-    private PowerUps currentPowerUp;
-    private Random random;
+import java.util.Random;
 
-    public PowerupsManager() {
+public class PowerUpsManager {
+    private PowerUps currentPowerUp;
+    private final Random random;
+
+    public PowerUpsManager() {
         this.random = new Random();
     }
 
