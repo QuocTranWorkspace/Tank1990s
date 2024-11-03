@@ -16,6 +16,8 @@ public abstract class BaseTank extends TankFunction {
     private String description;
     private int bullet;
     private Image image;
+    protected int width = 26;
+    protected int height = 32;
 
     protected BaseTank(String name, Point2D position, int point, int health, int movementSpeed, int bulletSpeed,
             String description) throws Exception {
@@ -216,5 +218,21 @@ public abstract class BaseTank extends TankFunction {
 
     public void setImage(Image image) {
         this.image = image;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
     }
 }

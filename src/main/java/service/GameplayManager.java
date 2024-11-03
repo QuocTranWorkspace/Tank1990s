@@ -37,7 +37,7 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
 
     public void drawComponents(Graphics g) {
         g.drawImage(player.getImage(), player.getPosition().getX(), player.getPosition().getY(),
-               30, 30,
+               player.getWidth(), player.getHeight(),
                 null);
     }
 
@@ -53,15 +53,22 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
     }
 
     @Override
-    public void keyPressed(KeyEvent e) {
+    public void keyPressed(KeyEvent e) throws RuntimeException {
+        Directions direction = player.getDirection();
         System.out.println("hello");
         if (e.getKeyCode() == KeyEvent.VK_S) {
-            try {
-                player.move(Directions.DOWN, 1);
-            } catch (Exception ex) {
-                throw new RuntimeException(ex);
-            }
-        } else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+            direction = Directions.DOWN;
+        }
+        else if (e.getKeyCode() == KeyEvent.VK_W) {
+            direction = Directions.UP;
+        }
+        else if (e.getKeyCode() == KeyEvent.VK_D) {
+            direction = Directions.RIGHT;
+        }
+        else if (e.getKeyCode() == KeyEvent.VK_A) {
+            direction = Directions.LEFT;
+        }
+        else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
             GameplayMenu.togglePause(GameplayMenu.pausePanel);
             if (TimerManager.getSharedTimer().isRunning()) {
                 TimerManager.getSharedTimer().stop();
@@ -69,10 +76,16 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
                 TimerManager.getSharedTimer().start();
             }
         }
+
+        try {
+            assert direction != null;
+            player.move(direction, 2);
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
-
     }
 }

@@ -116,7 +116,6 @@ public class GameplayMenu extends BaseScene {
 
     public static void togglePause(JPanel panel) {
         panel.setVisible(!pausePanel.isVisible());
-
     }
 
     private void requestFocusOnGameplayManager() {
@@ -141,10 +140,9 @@ public class GameplayMenu extends BaseScene {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        requestFocusOnGameplayManager();
         revalidate();
         repaint();
-        this.requestFocusInWindow();
-        requestFocusOnGameplayManager();
     }
 
     @Override
