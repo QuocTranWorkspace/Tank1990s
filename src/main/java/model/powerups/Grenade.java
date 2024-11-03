@@ -1,7 +1,8 @@
 package main.java.model.powerups;
 
-import java.util.List;
 import main.java.model.tanks.EnemyTank;
+
+import java.util.List;
 
 public class Grenade {
     public void activate(List<EnemyTank> enemyTanks) {

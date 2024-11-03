@@ -1,6 +1,7 @@
 package main.java.controller;
 
 import main.java.App;
+import main.java.service.TimerManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -62,6 +63,7 @@ public class StartMenu extends BaseScene implements KeyListener {
     public void actionPerformed(ActionEvent e) {
         revalidate();
         repaint();
+        System.out.println("hello start");
     }
 
     @Override
