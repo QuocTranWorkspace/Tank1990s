@@ -140,7 +140,6 @@ public class GameplayMenu extends BaseScene {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        requestFocusOnGameplayManager();
         revalidate();
         repaint();
     }
@@ -152,7 +151,7 @@ public class GameplayMenu extends BaseScene {
 
     @Override
     public void keyPressed(KeyEvent e) {
-
+        requestFocusOnGameplayManager();
     }
 
     @Override

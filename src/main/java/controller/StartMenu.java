@@ -1,7 +1,6 @@
 package main.java.controller;
 
 import main.java.App;
-import main.java.service.TimerManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,8 +11,7 @@ import java.io.IOException;
 import java.util.Objects;
 
 public class StartMenu extends BaseScene implements KeyListener {
-
-    private final transient Image title = new ImageIcon(Objects.requireNonNull(getClass().getResource("../../resource/img/gameScreen/StartScreen.png"))).getImage();
+    private final transient Image title = new ImageIcon(Objects.requireNonNull(getClass().getResource("../../resource/img/gameScreen/start_screen.png"))).getImage();
 
     public StartMenu() throws IOException {
         sceneIndex = 1;
@@ -63,22 +61,18 @@ public class StartMenu extends BaseScene implements KeyListener {
     public void actionPerformed(ActionEvent e) {
         revalidate();
         repaint();
-        System.out.println("hello start");
     }
 
     @Override
     public void keyTyped(KeyEvent e) {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
 }

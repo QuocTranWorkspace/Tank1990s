@@ -7,7 +7,8 @@ public class TimerManager {
 
     public static Timer getSharedTimer() {
         if (timer == null) {
-            timer = new Timer(1000/120, e -> {});
+            timer = new Timer(1000 / 60, e -> {
+            });
         }
         return timer;
     }

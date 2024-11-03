@@ -9,6 +9,5 @@ public class Grenade {
         for (EnemyTank tank : enemyTanks) {
             tank.takeDamage(1);
         }
-
     }
 }

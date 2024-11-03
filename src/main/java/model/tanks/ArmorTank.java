@@ -2,22 +2,17 @@ package main.java.model.tanks;
 
 import main.java.model.Point2D;
 
+import javax.swing.*;
+import java.util.Objects;
+
 public class ArmorTank extends EnemyTank {
     private Directions direction;
 
     public ArmorTank(Point2D position) throws Exception {
-        super("Armor Tank", position, 400, 4, 2, 1, "Desc");
+        super("ArmorTank", position, 400, 4, 2, 1, "Desc");
         this.direction = Directions.DOWN;
-    }
-
-    @Override
-    public Point2D getPosition() {
-        return this.position;
-    }
-
-    @Override
-    public void setPosition(Point2D position) {
-        this.position = position;
+        this.setImage(new ImageIcon(Objects.requireNonNull(getClass().getResource("../../../resource/img/enemy/enemy_d_down.png"))).getImage());
+        this.currentImage = "enemy_d";
     }
 
     public Directions getDirection() {

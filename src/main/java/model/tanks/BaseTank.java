@@ -1,8 +1,12 @@
 package main.java.model.tanks;
 
+import main.java.App;
+import main.java.model.Bullet;
 import main.java.model.Point2D;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class BaseTank extends TankFunction {
     private String name;
@@ -16,8 +20,11 @@ public abstract class BaseTank extends TankFunction {
     private String description;
     private int bullet;
     private Image image;
-    protected int width = 26;
-    protected int height = 32;
+    protected String currentImage = "";
+    protected List<Bullet> bulletList = new ArrayList<>();
+    private int width = 32;
+    private int height = 32;
+    private boolean isDisplay = false;
 
     protected BaseTank(String name, Point2D position, int point, int health, int movementSpeed, int bulletSpeed,
             String description) throws Exception {
@@ -126,9 +133,9 @@ public abstract class BaseTank extends TankFunction {
 
     private boolean isValidPosition(Point2D position2) {
         int minX = 1;
-        int maxX = 100;
+        int maxX = App.FRAME_HEIGHT;
         int minY = 1;
-        int maxY = 100;
+        int maxY = App.FRAME_HEIGHT;
 
         if (position2 == null) {
             return false;
@@ -234,5 +241,13 @@ public abstract class BaseTank extends TankFunction {
 
     public void setHeight(int height) {
         this.height = height;
+    }
+
+    public boolean isDisplay() {
+        return isDisplay;
+    }
+
+    public void setDisplay(boolean display) {
+        isDisplay = display;
     }
 }
