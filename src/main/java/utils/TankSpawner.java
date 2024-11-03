@@ -5,12 +5,18 @@ import main.java.model.tanks.BaseTank;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * The type Tank spawner.
+ */
 public class TankSpawner {
     private int spawnAnimationStep = 0;
     private Timer spawnDelayTimer;
     private Timer spawnAnimationTimer;
     private boolean isSpawning = false;
 
+    /**
+     * Instantiates a new Tank spawner.
+     */
     public TankSpawner() {
         spawnDelayTimer = new Timer(1000, e -> {
             isSpawning = true;
@@ -31,6 +37,12 @@ public class TankSpawner {
         spawnDelayTimer.start();
     }
 
+    /**
+     * Draw tank.
+     *
+     * @param g    the g
+     * @param tank the tank
+     */
     public void drawTank(Graphics g, BaseTank tank) {
         if (isSpawning) {
             Graphics2D g2d = (Graphics2D) g.create();

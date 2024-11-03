@@ -6,20 +6,34 @@ import main.java.model.tanks.BaseTank;
 
 import java.util.Random;
 
+/**
+ * The type Power ups manager.
+ */
 public class PowerUpsManager {
     private PowerUps currentPowerUp;
     private final Random random;
 
+    /**
+     * Instantiates a new Power ups manager.
+     */
     public PowerUpsManager() {
         this.random = new Random();
     }
 
+    /**
+     * Spawn power up.
+     */
     public void spawnPowerUp() {
         int x = random.nextInt();
         int y = random.nextInt();
         Type powerUpType = Type.getRandomType();
     }
 
+    /**
+     * Collect power up.
+     *
+     * @param tank the tank
+     */
     public void collectPowerUp(BaseTank tank) {
         if (currentPowerUp != null) {
             tank.addPoints(500);
@@ -28,6 +42,11 @@ public class PowerUpsManager {
         }
     }
 
+    /**
+     * Flashing tank hit.
+     *
+     * @param tank the tank
+     */
     public void flashingTankHit(BaseTank tank) {
         if (currentPowerUp != null) {
             currentPowerUp = null;

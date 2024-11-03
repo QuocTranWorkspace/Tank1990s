@@ -8,9 +8,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * The type Tank manager.
+ */
 public class TankManager {
     private final List<EnemyTank> tankList = new ArrayList<>();
 
+    /**
+     * Instantiates a new Tank manager.
+     *
+     * @throws Exception the exception
+     */
     public TankManager() throws Exception {
         int maxTank = 16;
         for (int i = 0; i < maxTank; i++) {
@@ -26,6 +34,11 @@ public class TankManager {
         }
     }
 
+    /**
+     * Gets tank list.
+     *
+     * @return the tank list
+     */
     public List<EnemyTank> getTankList() {
         return tankList;
     }

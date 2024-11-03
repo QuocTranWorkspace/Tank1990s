@@ -13,6 +13,9 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * The type Scene manager.
+ */
 public class SceneManager {
     private Class<?>[] classes;
     private final List<Component> sceneList = new ArrayList<>();
@@ -22,8 +25,16 @@ public class SceneManager {
     private static final String START_TIMER = "setIsStart";
     private static final Logger LOGGER = Logger.getLogger(SceneManager.class.getName());
 
+    /**
+     * The Tank font.
+     */
     static Font tankFont;
 
+    /**
+     * Instantiates a new Scene manager.
+     *
+     * @param frame the frame
+     */
     public SceneManager(JFrame frame) {
         this.frame = frame;
         loadClasses();
@@ -62,6 +73,11 @@ public class SceneManager {
         }
     }
 
+    /**
+     * Load scene.
+     *
+     * @param index the index
+     */
     public void loadScene(int index) {
         if (index >= sceneList.size()) {
             LOGGER.log(Level.WARNING, "Scene index out of bounds: {0}", index);
@@ -94,6 +110,9 @@ public class SceneManager {
         }
     }
 
+    /**
+     * Sets up font.
+     */
     public static void setUpFont() {
         File fontSource = new File("src/main/resource/font/tank_font.ttf");
 
@@ -110,10 +129,18 @@ public class SceneManager {
     }
 
 
+    /**
+     * Gets scene num.
+     *
+     * @return the scene num
+     */
     public static int getSceneNum() {
         return sceneCount;
     }
 
+    /**
+     * Close app.
+     */
     public void closeApp() {
         frame.dispose();
         System.exit(0);
@@ -154,6 +181,11 @@ public class SceneManager {
         arr[j] = temp;
     }
 
+    /**
+     * Gets tank font.
+     *
+     * @return the tank font
+     */
     public static Font getTankFont() {
         return tankFont;
     }

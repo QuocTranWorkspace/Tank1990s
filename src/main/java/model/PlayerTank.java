@@ -7,11 +7,20 @@ import javax.swing.*;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * The type Player tank.
+ */
 public class PlayerTank extends BaseTank {
     private Directions direction;
     private Point2D position;
     private String currentImage = "";
 
+    /**
+     * Instantiates a new Player tank.
+     *
+     * @param position the position
+     * @throws Exception the exception
+     */
     public PlayerTank(Point2D position) throws Exception {
         super("PlayerTank", position, 0, 2, 2, 3, "Desc");
         this.direction = Directions.UP;
@@ -19,6 +28,13 @@ public class PlayerTank extends BaseTank {
         this.setImage(new ImageIcon(Objects.requireNonNull(getClass().getResource("../../resource/img/player/player_up_1.png"))).getImage());
     }
 
+    /**
+     * Move.
+     *
+     * @param direction the direction
+     * @param velocity  the velocity
+     * @throws Exception the exception
+     */
     public void move(Directions direction, int velocity) throws Exception {
         switch (direction) {
             case DOWN:
@@ -82,6 +98,9 @@ public class PlayerTank extends BaseTank {
         changeImage("player_left");
     }
 
+    /**
+     * Shoot.
+     */
     public void shoot() {
         if (direction == Directions.DOWN) {
             Bullet bullet = new Bullet(this.position.getX() + this.getWidth() / 2, this.getPosition().getY() + this.getHeight(), getBulletSpeed(), direction);
@@ -108,6 +127,11 @@ public class PlayerTank extends BaseTank {
         this.position = position;
     }
 
+    /**
+     * Gets direction.
+     *
+     * @return the direction
+     */
     public Directions getDirection() {
         return this.direction;
     }
@@ -117,10 +141,20 @@ public class PlayerTank extends BaseTank {
         this.direction = direction;
     }
 
+    /**
+     * Gets bullet list.
+     *
+     * @return the bullet list
+     */
     public List<Bullet> getBulletList() {
         return bulletList;
     }
 
+    /**
+     * Sets bullet list.
+     *
+     * @param bulletList the bullet list
+     */
     public void setBulletList(List<Bullet> bulletList) {
         this.bulletList = bulletList;
     }

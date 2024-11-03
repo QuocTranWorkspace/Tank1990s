@@ -5,9 +5,18 @@ import main.java.model.Point2D;
 import javax.swing.*;
 import java.util.Objects;
 
+/**
+ * The type Armor tank.
+ */
 public class ArmorTank extends EnemyTank {
     private Directions direction;
 
+    /**
+     * Instantiates a new Armor tank.
+     *
+     * @param position the position
+     * @throws Exception the exception
+     */
     public ArmorTank(Point2D position) throws Exception {
         super("ArmorTank", position, 400, 4, 2, 1, "Desc");
         this.direction = Directions.DOWN;
@@ -15,6 +24,11 @@ public class ArmorTank extends EnemyTank {
         this.currentImage = "enemy_d";
     }
 
+    /**
+     * Gets direction.
+     *
+     * @return the direction
+     */
     public Directions getDirection() {
         return this.direction;
     }

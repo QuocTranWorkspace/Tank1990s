@@ -10,9 +10,17 @@ import java.awt.event.KeyListener;
 import java.io.IOException;
 import java.util.Objects;
 
+/**
+ * The type Start menu.
+ */
 public class StartMenu extends BaseScene implements KeyListener {
     private final transient Image title = new ImageIcon(Objects.requireNonNull(getClass().getResource("../../resource/img/gameScreen/start_screen.png"))).getImage();
 
+    /**
+     * Instantiates a new Start menu.
+     *
+     * @throws IOException the io exception
+     */
     public StartMenu() throws IOException {
         sceneIndex = 1;
         setPreferredSize(new Dimension(FRAME_WIDTH, FRAME_HEIGHT));

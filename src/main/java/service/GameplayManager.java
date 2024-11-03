@@ -18,10 +18,19 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Iterator;
 
+/**
+ * The type Gameplay manager.
+ */
 public class GameplayManager extends BaseScene implements ActionListener, KeyListener {
     private int currentLevel = 0;
     private PlayerTank player;
+    /**
+     * The Player tank spawner.
+     */
     TankSpawner playerTankSpawner = new TankSpawner();
+    /**
+     * The Enemy tank spawner.
+     */
     TankSpawner enemyTankSpawner = new TankSpawner();
 
     @Override
@@ -29,6 +38,12 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
         drawComponents(g);
     }
     private TankManager tankManager;
+
+    /**
+     * Instantiates a new Gameplay manager.
+     *
+     * @throws Exception the exception
+     */
     public GameplayManager() throws Exception {
         Timer gameLoop = TimerManager.getSharedTimer();
         player = new PlayerTank(new Point2D(10, 10));
@@ -42,6 +57,9 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
         gameLoop.start();
     }
 
+    /**
+     * Update game logic.
+     */
     public void updateGameLogic() {
         for (EnemyTank tank : tankManager.getTankList()) {
             if (tank.isDisplay()) {
@@ -75,7 +93,12 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
         }
     }
 
-    // Render method to only handle drawing
+    /**
+     * Draw components.
+     *
+     * @param g the g
+     */
+// Render method to only handle drawing
     public void drawComponents(Graphics g) {
         playerTankSpawner.drawTank(g, player);
 

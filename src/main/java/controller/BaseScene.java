@@ -8,30 +8,72 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyListener;
 
+/**
+ * The type Base scene.
+ */
 public abstract class BaseScene extends JPanel implements ActionListener, KeyListener {
-    // Scene index fo loading scene
+    /**
+     * The Scene index.
+     */
+// Scene index fo loading scene
     int sceneIndex;
 
-    // Tank font
+    /**
+     * The Tank font.
+     */
+// Tank font
     Font tankFont = SceneManager.getTankFont();
 
-    // JFrame size
+    /**
+     * The constant FRAME_WIDTH.
+     */
+// JFrame size
     static final int FRAME_WIDTH = App.FRAME_WIDTH;
+    /**
+     * The Frame height.
+     */
     static final int FRAME_HEIGHT = App.FRAME_HEIGHT;
 
-    // Physics 2D
+    /**
+     * The Velocity x.
+     */
+// Physics 2D
     int velocityX = 3;
+    /**
+     * The Velocity y.
+     */
     int velocityY = 0;
+    /**
+     * The Gravity.
+     */
     static final int GRAVITY = 1;
 
-    // Component's asset
+    /**
+     * The Player img.
+     */
+// Component's asset
     transient Image playerImg = null;
+    /**
+     * The Background img.
+     */
     transient Image backgroundImg = null;
 
-    // Game timer
+    /**
+     * The Game loop.
+     */
+// Game timer
     transient Timer gameLoop = null;
+    /**
+     * The Is lose.
+     */
     boolean isLose = false;
+    /**
+     * The Is first.
+     */
     boolean isFirst = true;
+    /**
+     * The Is start.
+     */
     /*
      * @Problem: Exist 2 or more time loops on initiation
      * 
@@ -40,22 +82,45 @@ public abstract class BaseScene extends JPanel implements ActionListener, KeyLis
      */
     boolean isStart = false;
 
-    // Move method
+    /**
+     * Move.
+     */
+// Move method
     public void move() {
     }
 
+    /**
+     * Gets scene index.
+     *
+     * @return the scene index
+     */
     public int getSceneIndex() {
         return sceneIndex;
     }
 
+    /**
+     * Sets scene index.
+     *
+     * @param sceneIndex the scene index
+     */
     public void setSceneIndex(int sceneIndex) {
         this.sceneIndex = sceneIndex;
     }
 
+    /**
+     * Gets is start.
+     *
+     * @return the is start
+     */
     public boolean getIsStart() {
         return isStart;
     }
 
+    /**
+     * Sets is start.
+     *
+     * @param isStart the is start
+     */
     public void setIsStart(boolean isStart) {
         this.isStart = isStart;
         if (isStart && gameLoop != null) {
@@ -63,8 +128,18 @@ public abstract class BaseScene extends JPanel implements ActionListener, KeyLis
             }
     }
 
+    /**
+     * Gets game loop.
+     *
+     * @return the game loop
+     */
     public Timer getGameLoop() { return this.gameLoop; }
 
+    /**
+     * Customize button.
+     *
+     * @param button the button
+     */
     protected void customizeButton(JButton button) {
         button.setForeground(Color.WHITE);
         button.setContentAreaFilled(false);

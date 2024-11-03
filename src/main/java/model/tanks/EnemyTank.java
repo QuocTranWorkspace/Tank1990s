@@ -5,10 +5,25 @@ import main.java.model.Point2D;
 import javax.swing.*;
 import java.util.Objects;
 
+/**
+ * The type Enemy tank.
+ */
 public class EnemyTank extends BaseTank {
     private final Timer directionTimer;
     private Directions currentDirection = Directions.getRandomType();
 
+    /**
+     * Instantiates a new Enemy tank.
+     *
+     * @param name          the name
+     * @param position      the position
+     * @param point         the point
+     * @param health        the health
+     * @param movementSpeed the movement speed
+     * @param bulletSpeed   the bullet speed
+     * @param description   the description
+     * @throws Exception the exception
+     */
     public EnemyTank(String name, Point2D position, int point, int health, int movementSpeed, int bulletSpeed, String description) throws Exception {
         super(name, position, point, health, movementSpeed, bulletSpeed, description);
         // Update the direction randomly every 2 seconds
