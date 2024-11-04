@@ -12,6 +12,14 @@ import java.util.List;
  * The type Base tank.
  */
 public abstract class BaseTank extends TankFunction {
+    /**
+     * The Current image.
+     */
+    protected String currentImage = "";
+    /**
+     * The Bullet list.
+     */
+    protected List<Bullet> bulletList = new ArrayList<>();
     private String name;
     private Point2D position;
     private Directions direction;
@@ -23,8 +31,6 @@ public abstract class BaseTank extends TankFunction {
     private String description;
     private int bullet;
     private Image image;
-    protected String currentImage = "";
-    protected List<Bullet> bulletList = new ArrayList<>();
     private int width = 32;
     private int height = 32;
     private boolean isDisplay = false;
@@ -43,7 +49,7 @@ public abstract class BaseTank extends TankFunction {
      * @throws Exception the exception
      */
     protected BaseTank(String name, Point2D position, int point, int health, int movementSpeed, int bulletSpeed,
-            String description) throws Exception {
+                       String description) throws Exception {
         if (!isValidName(name)) {
             throw new Exception("Invalid tank name!");
         }
@@ -434,10 +440,20 @@ public abstract class BaseTank extends TankFunction {
         isDisplay = display;
     }
 
+    /**
+     * Is shooting boolean.
+     *
+     * @return the boolean
+     */
     public boolean isShooting() {
         return bulletList.isEmpty();
     }
 
+    /**
+     * Sets shooting.
+     *
+     * @param isShooting the is shooting
+     */
     public void setShooting(boolean isShooting) {
         this.isShooting = isShooting;
     }

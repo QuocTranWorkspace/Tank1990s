@@ -99,6 +99,9 @@ public class EnemyTank extends BaseTank {
         changeImage(currentImage + "_left.png");
     }
 
+    /**
+     * Shoot.
+     */
     public void shoot() {
         if (isShooting()) {
             setShooting(!isShooting());

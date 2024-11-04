@@ -32,6 +32,15 @@ public class GameplayMenu extends BaseScene {
         initPanels();
     }
 
+    /**
+     * Toggle pause.
+     *
+     * @param panel the panel
+     */
+    public static void togglePause(JPanel panel) {
+        panel.setVisible(!pausePanel.isVisible());
+    }
+
     private void setUpPausePanel(JPanel pausePanel) {
         pausePanel.setPreferredSize(new Dimension(FRAME_WIDTH / 5, FRAME_HEIGHT / 4));
         pausePanel.setBackground(Color.BLACK);
@@ -121,15 +130,6 @@ public class GameplayMenu extends BaseScene {
         add(containerPanel, BorderLayout.CENTER);
         mainPanel.setLayout(new GridBagLayout());
         mainPanel.add(pausePanel);
-    }
-
-    /**
-     * Toggle pause.
-     *
-     * @param panel the panel
-     */
-    public static void togglePause(JPanel panel) {
-        panel.setVisible(!pausePanel.isVisible());
     }
 
     private void requestFocusOnGameplayManager() {

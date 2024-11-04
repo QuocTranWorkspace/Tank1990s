@@ -4,7 +4,6 @@ import main.java.model.tanks.BaseTank;
 import main.java.model.tanks.Directions;
 
 import javax.swing.*;
-import java.util.List;
 import java.util.Objects;
 
 /**

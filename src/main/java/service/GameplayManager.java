@@ -22,19 +22,19 @@ import java.util.Iterator;
  * The type Gameplay manager.
  */
 public class GameplayManager extends BaseScene implements ActionListener, KeyListener {
-    private int currentLevel = 0;
+    /**
+     * The constant VELOCITY_MOVE.
+     */
+    public static final int VELOCITY_MOVE = 2;
+    /**
+     * The constant VELOCITY_SHOOT.
+     */
+    public static final int VELOCITY_SHOOT = 3;
     private final transient PlayerTank player;
     private final transient TankManager tankManager;
     private final transient TankSpawner playerTankSpawner = new TankSpawner();
     private final transient TankSpawner enemyTankSpawner = new TankSpawner();
-
-    public static final int VELOCITY_MOVE = 2;
-    public static final int VELOCITY_SHOOT = 3;
-
-    @Override
-    public void paintComponent(Graphics g) {
-        drawComponents(g);
-    }
+    private int currentLevel = 0;
 
     /**
      * Instantiates a new Gameplay manager.
@@ -54,6 +54,11 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
         gameLoop.start();
     }
 
+    @Override
+    public void paintComponent(Graphics g) {
+        drawComponents(g);
+    }
+
     /**
      * Update game logic.
      */
@@ -62,6 +67,9 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
         updatePlayerBullet();
     }
 
+    /**
+     * Update enemy tank.
+     */
     public void updateEnemyTank() {
         for (EnemyTank tank : tankManager.getTankList()) {
             if (tank.isDisplay()) {
@@ -74,6 +82,12 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
         }
     }
 
+    /**
+     * Update enemy bullet.
+     *
+     * @param tank the tank
+     * @param g    the g
+     */
     public void updateEnemyBullet(EnemyTank tank, Graphics g) {
         Iterator<Bullet> bulletIterator = tank.getBulletList().iterator();
         while (bulletIterator.hasNext()) {
@@ -81,13 +95,15 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
             if (bullet.isActive()) {
                 g.drawImage(bullet.getImage(), bullet.getX(), bullet.getY(), bullet.getWidth(), bullet.getHeight(), null);
                 bullet.move();
-            }
-            else {
+            } else {
                 bulletIterator.remove();
             }
         }
     }
 
+    /**
+     * Update player bullet.
+     */
     public void updatePlayerBullet() {
         Iterator<Bullet> bulletIterator = player.getBulletList().iterator();
         while (bulletIterator.hasNext()) {
@@ -107,8 +123,7 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
                         break;
                     }
                 }
-            }
-            else {
+            } else {
                 bulletIterator.remove();
             }
         }
@@ -191,7 +206,7 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
         }
 
         if (player.isShooting() && e.getKeyCode() == KeyEvent.VK_SPACE) {
-                player.shoot();
+            player.shoot();
         }
 
         if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {

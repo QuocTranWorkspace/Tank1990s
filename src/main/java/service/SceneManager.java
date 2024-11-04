@@ -17,18 +17,17 @@ import java.util.logging.Logger;
  * The type Scene manager.
  */
 public class SceneManager {
-    private Class<?>[] classes;
-    private final List<Component> sceneList = new ArrayList<>();
-    private final JFrame frame;
-    private static int sceneCount = 0;
-    private Component currentScene;
     private static final String START_TIMER = "setIsStart";
     private static final Logger LOGGER = Logger.getLogger(SceneManager.class.getName());
-
     /**
      * The Tank font.
      */
     static Font tankFont;
+    private static int sceneCount = 0;
+    private final List<Component> sceneList = new ArrayList<>();
+    private final JFrame frame;
+    private Class<?>[] classes;
+    private Component currentScene;
 
     /**
      * Instantiates a new Scene manager.
@@ -40,6 +39,77 @@ public class SceneManager {
         loadClasses();
         initializeScenes();
         setUpFont();
+    }
+
+    /**
+     * Sets up font.
+     */
+    public static void setUpFont() {
+        File fontSource = new File("src/main/resource/font/tank_font.ttf");
+
+        if (fontSource.exists()) {
+            System.out.println("Font file exists: " + fontSource.getAbsolutePath());
+            try {
+                SceneManager.tankFont = Font.createFont(Font.TRUETYPE_FONT, fontSource).deriveFont(16f);
+            } catch (FontFormatException | IOException e) {
+                Logger.getLogger(e.getMessage());
+            }
+        } else {
+            System.out.println("Font file does not exist at: " + fontSource.getAbsolutePath());
+        }
+    }
+
+    /**
+     * Gets scene num.
+     *
+     * @return the scene num
+     */
+    public static int getSceneNum() {
+        return sceneCount;
+    }
+
+    // QuickSort and Partition logic for sorting classes based on `getSceneIndex`
+    private static void quickSort(Class<?>[] arr, int low, int high) throws Exception {
+        if (low < high) {
+            int pi = partition(arr, low, high);
+            quickSort(arr, low, pi - 1);
+            quickSort(arr, pi + 1, high);
+        }
+    }
+
+    private static int partition(Class<?>[] arr, int low, int high) throws Exception {
+        Object o = arr[high].getDeclaredConstructor().newInstance();
+        Method method = arr[high].getMethod("getSceneIndex");
+        int pivot = (int) method.invoke(o);
+
+        int i = low - 1;
+        for (int j = low; j <= high - 1; j++) {
+            Object o1 = arr[j].getDeclaredConstructor().newInstance();
+            Method method1 = arr[j].getMethod("getSceneIndex");
+            int sceneIndex = (int) method1.invoke(o1);
+
+            if (sceneIndex < pivot) {
+                i++;
+                swap(arr, i, j);
+            }
+        }
+        swap(arr, i + 1, high);
+        return i + 1;
+    }
+
+    private static void swap(Class<?>[] arr, int i, int j) {
+        Class<?> temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+    }
+
+    /**
+     * Gets tank font.
+     *
+     * @return the tank font
+     */
+    public static Font getTankFont() {
+        return tankFont;
     }
 
     private void loadClasses() {
@@ -111,82 +181,10 @@ public class SceneManager {
     }
 
     /**
-     * Sets up font.
-     */
-    public static void setUpFont() {
-        File fontSource = new File("src/main/resource/font/tank_font.ttf");
-
-        if (fontSource.exists()) {
-            System.out.println("Font file exists: " + fontSource.getAbsolutePath());
-            try {
-                SceneManager.tankFont = Font.createFont(Font.TRUETYPE_FONT, fontSource).deriveFont(16f);
-            } catch (FontFormatException | IOException e) {
-                Logger.getLogger(e.getMessage());
-            }
-        } else {
-            System.out.println("Font file does not exist at: " + fontSource.getAbsolutePath());
-        }
-    }
-
-
-    /**
-     * Gets scene num.
-     *
-     * @return the scene num
-     */
-    public static int getSceneNum() {
-        return sceneCount;
-    }
-
-    /**
      * Close app.
      */
     public void closeApp() {
         frame.dispose();
         System.exit(0);
-    }
-
-    // QuickSort and Partition logic for sorting classes based on `getSceneIndex`
-    private static void quickSort(Class<?>[] arr, int low, int high) throws Exception {
-        if (low < high) {
-            int pi = partition(arr, low, high);
-            quickSort(arr, low, pi - 1);
-            quickSort(arr, pi + 1, high);
-        }
-    }
-
-    private static int partition(Class<?>[] arr, int low, int high) throws Exception {
-        Object o = arr[high].getDeclaredConstructor().newInstance();
-        Method method = arr[high].getMethod("getSceneIndex");
-        int pivot = (int) method.invoke(o);
-
-        int i = low - 1;
-        for (int j = low; j <= high - 1; j++) {
-            Object o1 = arr[j].getDeclaredConstructor().newInstance();
-            Method method1 = arr[j].getMethod("getSceneIndex");
-            int sceneIndex = (int) method1.invoke(o1);
-
-            if (sceneIndex < pivot) {
-                i++;
-                swap(arr, i, j);
-            }
-        }
-        swap(arr, i + 1, high);
-        return i + 1;
-    }
-
-    private static void swap(Class<?>[] arr, int i, int j) {
-        Class<?> temp = arr[i];
-        arr[i] = arr[j];
-        arr[j] = temp;
-    }
-
-    /**
-     * Gets tank font.
-     *
-     * @return the tank font
-     */
-    public static Font getTankFont() {
-        return tankFont;
     }
 }

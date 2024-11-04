@@ -6,9 +6,9 @@ import main.java.model.tanks.BaseTank;
  * The type Power ups.
  */
 public class PowerUps {
+    private final Type type;
     private int x;
     private int y;
-    private final Type type;
 
     /**
      * Instantiates a new Power ups.

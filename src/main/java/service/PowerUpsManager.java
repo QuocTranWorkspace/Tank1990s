@@ -10,8 +10,8 @@ import java.util.Random;
  * The type Power ups manager.
  */
 public class PowerUpsManager {
-    private PowerUps currentPowerUp;
     private final Random random;
+    private PowerUps currentPowerUp;
 
     /**
      * Instantiates a new Power ups manager.

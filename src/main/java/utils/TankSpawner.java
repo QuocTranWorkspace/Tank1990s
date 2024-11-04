@@ -19,11 +19,19 @@ public class TankSpawner {
     private final Map<BaseTank, Integer> spawnAnimationSteps;
     private final Map<BaseTank, Timer> spawnAnimationTimers;
 
+    /**
+     * Instantiates a new Tank spawner.
+     */
     public TankSpawner() {
         spawnAnimationSteps = new HashMap<>();
         spawnAnimationTimers = new HashMap<>();
     }
 
+    /**
+     * Start spawn animation.
+     *
+     * @param tank the tank
+     */
     public void startSpawnAnimation(BaseTank tank) {
         spawnAnimationSteps.put(tank, 0);
 
@@ -47,6 +55,12 @@ public class TankSpawner {
         spawnAnimationTimers.put(tank, spawnAnimationTimer);
     }
 
+    /**
+     * Draw tank.
+     *
+     * @param g    the g
+     * @param tank the tank
+     */
     public void drawTank(Graphics g, BaseTank tank) {
         if (spawnAnimationSteps.containsKey(tank)) {
             int step = spawnAnimationSteps.get(tank);

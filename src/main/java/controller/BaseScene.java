@@ -13,18 +13,6 @@ import java.awt.event.KeyListener;
  */
 public abstract class BaseScene extends JPanel implements ActionListener, KeyListener {
     /**
-     * The Scene index.
-     */
-// Scene index fo loading scene
-    int sceneIndex;
-
-    /**
-     * The Tank font.
-     */
-// Tank font
-    Font tankFont = SceneManager.getTankFont();
-
-    /**
      * The constant FRAME_WIDTH.
      */
 // JFrame size
@@ -33,7 +21,20 @@ public abstract class BaseScene extends JPanel implements ActionListener, KeyLis
      * The Frame height.
      */
     static final int FRAME_HEIGHT = App.FRAME_HEIGHT;
-
+    /**
+     * The Gravity.
+     */
+    static final int GRAVITY = 1;
+    /**
+     * The Scene index.
+     */
+// Scene index fo loading scene
+    int sceneIndex;
+    /**
+     * The Tank font.
+     */
+// Tank font
+    Font tankFont = SceneManager.getTankFont();
     /**
      * The Velocity x.
      */
@@ -43,11 +44,6 @@ public abstract class BaseScene extends JPanel implements ActionListener, KeyLis
      * The Velocity y.
      */
     int velocityY = 0;
-    /**
-     * The Gravity.
-     */
-    static final int GRAVITY = 1;
-
     /**
      * The Player img.
      */
@@ -76,7 +72,7 @@ public abstract class BaseScene extends JPanel implements ActionListener, KeyLis
      */
     /*
      * @Problem: Exist 2 or more time loops on initiation
-     * 
+     *
      * @Solution: Check if started to start the time loop, else top the time loop of
      * previous scene
      */
@@ -124,8 +120,8 @@ public abstract class BaseScene extends JPanel implements ActionListener, KeyLis
     public void setIsStart(boolean isStart) {
         this.isStart = isStart;
         if (isStart && gameLoop != null) {
-                gameLoop.start();
-            }
+            gameLoop.start();
+        }
     }
 
     /**
@@ -133,7 +129,9 @@ public abstract class BaseScene extends JPanel implements ActionListener, KeyLis
      *
      * @return the game loop
      */
-    public Timer getGameLoop() { return this.gameLoop; }
+    public Timer getGameLoop() {
+        return this.gameLoop;
+    }
 
     /**
      * Customize button.
