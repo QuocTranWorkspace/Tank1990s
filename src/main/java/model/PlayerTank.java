@@ -1,5 +1,6 @@
 package main.java.model;
 
+import main.java.App;
 import main.java.model.tanks.BaseTank;
 import main.java.model.tanks.Directions;
 
@@ -12,6 +13,8 @@ import java.util.Objects;
 public class PlayerTank extends BaseTank {
     private Directions direction;
     private Point2D position;
+    private boolean shield = false;
+    private int tier;
 
     /**
      * Instantiates a new Player tank.
@@ -20,9 +23,10 @@ public class PlayerTank extends BaseTank {
      * @throws Exception the exception
      */
     public PlayerTank(Point2D position) throws Exception {
-        super("PlayerTank", position, 0, 2, 2, 3, "Desc");
+        super("PlayerTank", position, 0, 2, 2, 2, "Desc");
         this.direction = Directions.UP;
         this.position = position;
+        this.tier = 1;
         this.setImage(new ImageIcon(Objects.requireNonNull(getClass().getResource("../../resource/img/player/player_up_1.png"))).getImage());
     }
 
@@ -63,7 +67,7 @@ public class PlayerTank extends BaseTank {
         int currentX = this.getPosition().getX();
         int currentY = this.getPosition().getY();
         int newY = currentY + velocity * this.getMovementSpeed();
-        this.setPosition(new Point2D(currentX, newY));
+        this.setPosition(new Point2D(clampToBounds(currentX), clampToBounds(newY)));
         this.direction = Directions.DOWN;
         changeImage("player_down");
     }
@@ -72,7 +76,7 @@ public class PlayerTank extends BaseTank {
         int currentX = this.getPosition().getX();
         int currentY = this.getPosition().getY();
         int newY = currentY - velocity * this.getMovementSpeed();
-        this.setPosition(new Point2D(currentX, newY));
+        this.setPosition(new Point2D(clampToBounds(currentX), clampToBounds(newY)));
         this.direction = Directions.UP;
         changeImage("player_up");
     }
@@ -81,7 +85,7 @@ public class PlayerTank extends BaseTank {
         int currentX = this.getPosition().getX();
         int currentY = this.getPosition().getY();
         int newX = currentX + velocity * this.getMovementSpeed();
-        this.setPosition(new Point2D(newX, currentY));
+        this.setPosition(new Point2D(clampToBounds(newX), clampToBounds(currentY)));
         this.direction = Directions.RIGHT;
         changeImage("player_right");
     }
@@ -90,7 +94,7 @@ public class PlayerTank extends BaseTank {
         int currentX = this.getPosition().getX();
         int currentY = this.getPosition().getY();
         int newX = currentX - velocity * this.getMovementSpeed();
-        this.setPosition(new Point2D(newX, currentY));
+        this.setPosition(new Point2D(clampToBounds(newX), clampToBounds(currentY)));
         this.direction = Directions.LEFT;
         changeImage("player_left");
     }
@@ -100,16 +104,15 @@ public class PlayerTank extends BaseTank {
      */
     public void shoot() {
         if (isShooting()) {
-            setShooting(!isShooting());
-            Bullet bullet = null;
+            Bullet bullet = new Bullet(0 , 0, getBulletSpeed(), direction);
             if (direction == Directions.DOWN) {
-                bullet = new Bullet(this.position.getX() + this.getWidth() / 2, this.getPosition().getY() + this.getHeight(), getBulletSpeed(), direction);
+                bullet = new Bullet(this.position.getX() + this.getWidth() / 2 - bullet.getHeight() / 2, this.getPosition().getY() + this.getHeight(), getBulletSpeed(), direction);
             } else if (direction == Directions.UP) {
-                bullet = new Bullet(this.position.getX() + this.getWidth() / 2, this.getPosition().getY(), getBulletSpeed(), direction);
+                bullet = new Bullet(this.position.getX() + this.getWidth() / 2 - bullet.getHeight() / 2, this.getPosition().getY(), getBulletSpeed(), direction);
             } else if (direction == Directions.LEFT) {
-                bullet = new Bullet(this.position.getX(), this.getPosition().getY() + this.getHeight() / 2, getBulletSpeed(), direction);
+                bullet = new Bullet(this.position.getX(), this.getPosition().getY() + this.getHeight() / 2 - bullet.getHeight() / 2, getBulletSpeed(), direction);
             } else if (direction == Directions.RIGHT) {
-                bullet = new Bullet(this.position.getX() + this.getWidth(), this.getPosition().getY() + this.getHeight() / 2, getBulletSpeed(), direction);
+                bullet = new Bullet(this.position.getX() + this.getWidth(), this.getPosition().getY() + this.getHeight() / 2 - bullet.getHeight() / 2, getBulletSpeed(), direction);
             }
             bulletList.add(bullet);
         }
@@ -137,6 +140,22 @@ public class PlayerTank extends BaseTank {
     @Override
     public void setDirection(Directions direction) {
         this.direction = direction;
+    }
+
+    public boolean isShield() {
+        return shield;
+    }
+
+    public void setShield(boolean shield) {
+        this.shield = shield;
+    }
+
+    public int getTier() {
+        return tier;
+    }
+
+    public void setTier(int tier) {
+        this.tier = tier;
     }
 
     @Override

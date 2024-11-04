@@ -31,10 +31,9 @@ public abstract class BaseTank extends TankFunction {
     private String description;
     private int bullet;
     private Image image;
-    private int width = 32;
-    private int height = 32;
+    private int width = App.FRAME_HEIGHT / 13;
+    private int height = App.FRAME_HEIGHT / 13;
     private boolean isDisplay = false;
-    private boolean isShooting = true;
 
     /**
      * Instantiates a new Base tank.
@@ -450,15 +449,6 @@ public abstract class BaseTank extends TankFunction {
     }
 
     /**
-     * Sets shooting.
-     *
-     * @param isShooting the is shooting
-     */
-    public void setShooting(boolean isShooting) {
-        this.isShooting = isShooting;
-    }
-
-    /**
      * Gets bullet list.
      *
      * @return the bullet list
@@ -474,5 +464,9 @@ public abstract class BaseTank extends TankFunction {
      */
     public void setBulletList(List<Bullet> bulletList) {
         this.bulletList = bulletList;
+    }
+
+    public int clampToBounds(int value) {
+        return Math.max(0, Math.min(App.FRAME_HEIGHT - App.FRAME_HEIGHT / 13, value));
     }
 }

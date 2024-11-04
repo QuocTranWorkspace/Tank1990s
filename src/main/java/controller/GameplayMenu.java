@@ -16,7 +16,7 @@ public class GameplayMenu extends BaseScene {
     /**
      * The constant pausePanel.
      */
-    public static JPanel pausePanel;
+    public static JPanel pausePanel = new JPanel();
 
     /**
      * Instantiates a new Gameplay menu.
@@ -39,12 +39,17 @@ public class GameplayMenu extends BaseScene {
      */
     public static void togglePause(JPanel panel) {
         panel.setVisible(!pausePanel.isVisible());
+        if (TimerManager.getSharedTimer().isRunning()) {
+            TimerManager.getSharedTimer().stop();
+        } else {
+            TimerManager.getSharedTimer().start();
+        }
     }
 
     private void setUpPausePanel(JPanel pausePanel) {
         pausePanel.setPreferredSize(new Dimension(FRAME_WIDTH / 5, FRAME_HEIGHT / 4));
-        pausePanel.setBackground(Color.BLACK);
-        pausePanel.setBorder(BorderFactory.createLineBorder(Color.WHITE));
+        pausePanel.setBackground(Color.WHITE);
+        pausePanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         pausePanel.add(new JLabel("Paused", SwingConstants.CENTER));
         pausePanel.setVisible(false);
         pausePanel.setLayout(new BoxLayout(pausePanel, BoxLayout.Y_AXIS));
@@ -52,17 +57,20 @@ public class GameplayMenu extends BaseScene {
         // Add Buttons to Pause Panel
         JButton continueButton = new JButton("Continue");
         customizeButton(continueButton);
+        continueButton.setForeground(Color.BLACK);
         continueButton.addActionListener(actionEvent -> {
             togglePause(pausePanel);
         });
-        JButton playButton = new JButton("Save");
-        customizeButton(playButton);
-        playButton.addActionListener(actionEvent -> {
+        JButton saveButton = new JButton("Save");
+        customizeButton(saveButton);
+        saveButton.setForeground(Color.BLACK);
+        saveButton.addActionListener(actionEvent -> {
             togglePause(pausePanel);
             App.sceneManager.loadScene(0);
         });
         JButton exitButton = new JButton("Exit");
         customizeButton(exitButton);
+        exitButton.setForeground(Color.BLACK);
         exitButton.addActionListener(actionEvent -> {
             togglePause(pausePanel);
             App.sceneManager.loadScene(0);
@@ -73,7 +81,7 @@ public class GameplayMenu extends BaseScene {
         pausePanel.add(Box.createVerticalGlue());
         pausePanel.add(continueButton);
         pausePanel.add(Box.createVerticalStrut(20));
-        pausePanel.add(playButton);
+        pausePanel.add(saveButton);
         pausePanel.add(Box.createVerticalStrut(20));
         pausePanel.add(exitButton);
         pausePanel.add(Box.createVerticalGlue());
@@ -89,10 +97,11 @@ public class GameplayMenu extends BaseScene {
         JPanel leftSidebar = new JPanel();
         leftSidebar.setLayout(new FlowLayout(FlowLayout.LEFT));
         leftSidebar.setPreferredSize(new Dimension(sidebarWidth, FRAME_HEIGHT));
-        leftSidebar.setBackground(Color.BLACK);
+        leftSidebar.setBackground(Color.GRAY);
 
         JButton pauseButton = new JButton("| |");
-        pauseButton.setPreferredSize(new Dimension(50, 50));
+        pauseButton.setFont(new Font("Arial", Font.BOLD, FRAME_HEIGHT / 30 - FRAME_HEIGHT / 60));
+        pauseButton.setPreferredSize(new Dimension(FRAME_HEIGHT / 30, FRAME_HEIGHT / 30));
         pauseButton.setBackground(Color.BLACK);
         pauseButton.setForeground(Color.WHITE);
         pauseButton.setBorder(BorderFactory.createLineBorder(Color.WHITE));
@@ -107,26 +116,22 @@ public class GameplayMenu extends BaseScene {
             throw new RuntimeException(e);
         }
         mainPanel.setPreferredSize(new Dimension(FRAME_HEIGHT, FRAME_HEIGHT));
-        mainPanel.setBackground(Color.DARK_GRAY);
+        mainPanel.setBackground(Color.BLACK);
 
-        // Request focus on GameplayManager to capture key events
         mainPanel.setFocusable(true);
         mainPanel.requestFocusInWindow();
 
         // Right Sidebar
         JPanel rightSidebar = new JPanel();
         rightSidebar.setPreferredSize(new Dimension(sidebarWidth, FRAME_HEIGHT));
-        rightSidebar.setBackground(Color.BLACK);
+        rightSidebar.setBackground(Color.GRAY);
 
-        // Pause Panel
-        pausePanel = new JPanel();
         setUpPausePanel(pausePanel);
 
         containerPanel.add(leftSidebar);
         containerPanel.add(mainPanel);
         containerPanel.add(rightSidebar);
 
-        // Add container panel to the main frame
         add(containerPanel, BorderLayout.CENTER);
         mainPanel.setLayout(new GridBagLayout());
         mainPanel.add(pausePanel);

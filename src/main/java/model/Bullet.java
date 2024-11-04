@@ -18,8 +18,8 @@ public class Bullet {
     private Directions direction;
     private boolean isActive = true;
     private Image image;
-    private int width = 8;
-    private int height = 8;
+    private int width = App.FRAME_HEIGHT / 13 / 4;
+    private int height = App.FRAME_HEIGHT / 13 / 4;
 
     /**
      * Instantiates a new Bullet.

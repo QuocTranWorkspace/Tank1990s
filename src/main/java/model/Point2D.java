@@ -21,7 +21,7 @@ public final class Point2D {
     }
 
     private int clampToBounds(int value) {
-        return Math.max(0, Math.min(App.FRAME_HEIGHT - 32, value));
+        return Math.max(0, Math.min(App.FRAME_HEIGHT, value));
     }
 
     /**

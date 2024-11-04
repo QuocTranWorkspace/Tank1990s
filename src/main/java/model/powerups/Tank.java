@@ -1,15 +1,17 @@
 package main.java.model.powerups;
 
+import main.java.model.PlayerTank;
+
 /**
  * The type Tank.
  */
 public class Tank {
-    private main.java.model.tanks.BaseTank player;
+    private final PlayerTank player;
 
     /**
      * Instantiates a new Tank.
      */
-    public Tank() {
+    public Tank(PlayerTank player) {
         this.player = player;
     }
 

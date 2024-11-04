@@ -20,7 +20,7 @@ public class TankManager {
      * @throws Exception the exception
      */
     public TankManager() throws Exception {
-        int maxTank = 16;
+        int maxTank = 1;
         for (int i = 0; i < maxTank; i++) {
             Random random = new Random();
             Point2D position = new Point2D(random.nextInt(App.FRAME_HEIGHT - 40) + 1, random.nextInt(App.FRAME_HEIGHT - 40) + 1);
@@ -31,6 +31,12 @@ public class TankManager {
                 case ARMOR_TANK -> tankList.add(new ArmorTank(position));
                 case POWER_TANK -> tankList.add(new PowerTank(position));
             }
+        }
+    }
+
+    public void stopAllTimer() {
+        for (EnemyTank enemy: tankList) {
+            enemy.stopAllTimer();
         }
     }
 

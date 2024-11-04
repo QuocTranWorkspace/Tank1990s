@@ -1,5 +1,6 @@
 package main.java.service;
 
+import main.java.model.PlayerTank;
 import main.java.model.powerups.PowerUps;
 import main.java.model.powerups.Type;
 import main.java.model.tanks.BaseTank;
@@ -34,7 +35,7 @@ public class PowerUpsManager {
      *
      * @param tank the tank
      */
-    public void collectPowerUp(BaseTank tank) {
+    public void collectPowerUp(PlayerTank tank) {
         if (currentPowerUp != null) {
             tank.addPoints(500);
             currentPowerUp.activate(tank);

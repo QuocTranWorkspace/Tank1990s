@@ -1,18 +1,16 @@
 package main.java.model.powerups;
 
+import main.java.model.PlayerTank;
 import main.java.model.tanks.BaseTank;
 
 /**
  * The type Star.
  */
 public class Star {
-    private int tier;
+    private final PlayerTank player;
 
-    /**
-     * Instantiates a new Star.
-     */
-    public Star() {
-        this.tier = 1;
+    public Star(PlayerTank player) {
+        this.player = player;
     }
 
     /**
@@ -21,16 +19,13 @@ public class Star {
      * @param tank the tank
      */
     public void activate(BaseTank tank) {
-        if (tier < 4) {
-            tier++;
+        if (player.getTier() < 4) {
+            player.setTier(player.getTier() + 1);
         }
-        switch (tier) {
-            case 2:
-                tank.setBulletSpeed(3);
-            case 3:
-                tank.setBullet(2);
-            case 4:
-
+        switch (player.getTier()) {
+            case 2 -> tank.setBulletSpeed(3);
+            case 3 -> tank.setBullet(2);
+            case 4 -> {}
         }
     }
 }

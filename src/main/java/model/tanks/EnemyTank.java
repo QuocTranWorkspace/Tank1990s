@@ -5,6 +5,7 @@ import main.java.model.Point2D;
 import main.java.service.GameplayManager;
 
 import javax.swing.*;
+import java.awt.event.ActionListener;
 import java.util.Objects;
 
 /**
@@ -67,7 +68,7 @@ public class EnemyTank extends BaseTank {
         int currentX = this.getPosition().getX();
         int currentY = this.getPosition().getY();
         int newY = currentY + GameplayManager.VELOCITY_MOVE * this.getMovementSpeed();
-        this.setPosition(new Point2D(currentX, newY));
+        this.setPosition(new Point2D(clampToBounds(currentX), clampToBounds(newY)));
         this.setDirection(Directions.DOWN);
         changeImage(currentImage + "_down.png");
     }
@@ -76,7 +77,7 @@ public class EnemyTank extends BaseTank {
         int currentX = this.getPosition().getX();
         int currentY = this.getPosition().getY();
         int newY = currentY - GameplayManager.VELOCITY_MOVE * this.getMovementSpeed();
-        this.setPosition(new Point2D(currentX, newY));
+        this.setPosition(new Point2D(clampToBounds(currentX), clampToBounds(newY)));
         this.setDirection(Directions.UP);
         changeImage(currentImage + "_up.png");
     }
@@ -85,7 +86,7 @@ public class EnemyTank extends BaseTank {
         int currentX = this.getPosition().getX();
         int currentY = this.getPosition().getY();
         int newX = currentX + GameplayManager.VELOCITY_MOVE * this.getMovementSpeed();
-        this.setPosition(new Point2D(newX, currentY));
+        this.setPosition(new Point2D(clampToBounds(newX), clampToBounds(currentY)));
         this.setDirection(Directions.RIGHT);
         changeImage(currentImage + "_right.png");
     }
@@ -94,7 +95,7 @@ public class EnemyTank extends BaseTank {
         int currentX = this.getPosition().getX();
         int currentY = this.getPosition().getY();
         int newX = currentX - GameplayManager.VELOCITY_MOVE * this.getMovementSpeed();
-        this.setPosition(new Point2D(newX, currentY));
+        this.setPosition(new Point2D(clampToBounds(newX), clampToBounds(currentY)));
         this.setDirection(Directions.LEFT);
         changeImage(currentImage + "_left.png");
     }
@@ -104,18 +105,26 @@ public class EnemyTank extends BaseTank {
      */
     public void shoot() {
         if (isShooting()) {
-            setShooting(!isShooting());
-            Bullet bullet = null;
+            Bullet bullet = new Bullet(0 , 0, getBulletSpeed(), currentDirection);
             if (currentDirection == Directions.DOWN) {
-                bullet = new Bullet(this.getPosition().getX() + this.getWidth() / 2, this.getPosition().getY() + this.getHeight(), getBulletSpeed(), currentDirection);
+                bullet = new Bullet(this.getPosition().getX() + this.getWidth() / 2 - bullet.getHeight() / 2, this.getPosition().getY() + this.getHeight(), getBulletSpeed(), currentDirection);
             } else if (currentDirection == Directions.UP) {
-                bullet = new Bullet(this.getPosition().getX() + this.getWidth() / 2, this.getPosition().getY(), getBulletSpeed(), currentDirection);
+                bullet = new Bullet(this.getPosition().getX() + this.getWidth() / 2 - bullet.getHeight() / 2, this.getPosition().getY(), getBulletSpeed(), currentDirection);
             } else if (currentDirection == Directions.LEFT) {
-                bullet = new Bullet(this.getPosition().getX(), this.getPosition().getY() + this.getHeight() / 2, getBulletSpeed(), currentDirection);
+                bullet = new Bullet(this.getPosition().getX(), this.getPosition().getY() + this.getHeight() / 2 - bullet.getHeight() / 2, getBulletSpeed(), currentDirection);
             } else if (currentDirection == Directions.RIGHT) {
-                bullet = new Bullet(this.getPosition().getX() + this.getWidth(), this.getPosition().getY() + this.getHeight() / 2, getBulletSpeed(), currentDirection);
+                bullet = new Bullet(this.getPosition().getX() + this.getWidth(), this.getPosition().getY() + this.getHeight() / 2 - bullet.getHeight() / 2, getBulletSpeed(), currentDirection);
             }
             bulletList.add(bullet);
+        }
+    }
+
+    public void stopAllTimer() {
+        if (directionTimer != null && directionTimer.isRunning()) {
+            this.directionTimer.stop();
+        }
+        if (shootingTimer != null && shootingTimer.isRunning()) {
+            this.shootingTimer.stop();
         }
     }
 

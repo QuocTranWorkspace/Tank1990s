@@ -2,16 +2,18 @@ package main.java.model.powerups;
 
 import main.java.model.tanks.EnemyTank;
 
+import java.util.List;
+
 /**
  * The type Timer.
  */
 public class Timer {
-    private EnemyTank enemyTanks;
+    private final List<EnemyTank> enemyTanks;
 
     /**
      * Instantiates a new Timer.
      */
-    public Timer() {
+    public Timer(List<EnemyTank> enemyTanks) {
         this.enemyTanks = enemyTanks;
     }
 
@@ -19,6 +21,8 @@ public class Timer {
      * Activate.
      */
     public void activate() {
-        enemyTanks.setPosition(enemyTanks.getPosition());
+        for (EnemyTank enemy : enemyTanks) {
+            enemy.setMovementSpeed(0);
+        }
     }
 }

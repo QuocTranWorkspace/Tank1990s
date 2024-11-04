@@ -1,6 +1,10 @@
 package main.java.model.powerups;
 
+import main.java.model.PlayerTank;
 import main.java.model.tanks.BaseTank;
+import main.java.model.tanks.EnemyTank;
+
+import java.util.List;
 
 /**
  * The type Power ups.
@@ -29,14 +33,19 @@ public class PowerUps {
      *
      * @param tank the tank
      */
-    public void activate(BaseTank tank) {
+    public void activate(PlayerTank tank) {
         switch (type) {
-            case GRENADE -> new Grenade();
             case HELMET -> new Helmet(tank);
             case SHOVEL -> new Shovel();
-            case STAR -> new Star();
-            case TANK -> new Tank();
-            case TIMER -> new Timer();
+            case STAR -> new Star(tank).activate(tank);
+            case TANK -> new Tank(tank);
+        }
+    }
+
+    public void activate(List<EnemyTank> tanks) {
+        switch (type) {
+            case GRENADE -> new Grenade(tanks).activate();
+            case TIMER -> new Timer(tanks).activate();
         }
     }
 

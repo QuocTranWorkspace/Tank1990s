@@ -9,12 +9,13 @@ import java.util.List;
  * The type Grenade.
  */
 public class Grenade {
-    /**
-     * Activate.
-     *
-     * @param enemyTanks the enemy tanks
-     */
-    public void activate(List<EnemyTank> enemyTanks) {
+    private final List<EnemyTank> enemyTanks;
+
+    public Grenade(List<EnemyTank> enemyTanks) {
+        this.enemyTanks = enemyTanks;
+    }
+
+    public void activate() {
         Iterator<EnemyTank> enemyTanksIterator = enemyTanks.iterator();
         while (enemyTanksIterator.hasNext()) {
             enemyTanksIterator.remove();
