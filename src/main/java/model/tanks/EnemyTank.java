@@ -32,7 +32,7 @@ public class EnemyTank extends BaseTank {
         super(name, position, point, health, movementSpeed, bulletSpeed, description);
         // Update the direction randomly every 2 seconds
         directionTimer = new Timer(2000, e -> currentDirection = Directions.getRandomType());
-        shootingTimer = new Timer(2000, event -> shoot());
+        shootingTimer = new Timer(1000, event -> shoot());
     }
 
     private void changeImage(String image) {
@@ -42,6 +42,7 @@ public class EnemyTank extends BaseTank {
 
     @Override
     public void move() {
+        updatePreviousPosition();
         Directions direction = currentDirection;
 
         switch (direction) {

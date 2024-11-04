@@ -23,7 +23,7 @@ public class TankManager {
         int maxTank = 1;
         for (int i = 0; i < maxTank; i++) {
             Random random = new Random();
-            Point2D position = new Point2D(random.nextInt(App.FRAME_HEIGHT - 40) + 1, random.nextInt(App.FRAME_HEIGHT - 40) + 1);
+            Point2D position = new Point2D(0, 0);
             TankType tankType = TankType.getRandomType();
             switch (tankType) {
                 case FAST_TANK -> tankList.add(new FastTank(position));

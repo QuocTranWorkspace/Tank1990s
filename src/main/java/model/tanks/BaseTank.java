@@ -12,13 +12,7 @@ import java.util.List;
  * The type Base tank.
  */
 public abstract class BaseTank extends TankFunction {
-    /**
-     * The Current image.
-     */
     protected String currentImage = "";
-    /**
-     * The Bullet list.
-     */
     protected List<Bullet> bulletList = new ArrayList<>();
     private String name;
     private Point2D position;
@@ -34,50 +28,20 @@ public abstract class BaseTank extends TankFunction {
     private int width = App.FRAME_HEIGHT / 13;
     private int height = App.FRAME_HEIGHT / 13;
     private boolean isDisplay = false;
+    private Point2D previousPosition;
 
     /**
-     * Instantiates a new Base tank.
-     *
-     * @param name          the name
-     * @param position      the position
-     * @param point         the point
-     * @param health        the health
-     * @param movementSpeed the movement speed
-     * @param bulletSpeed   the bullet speed
-     * @param description   the description
-     * @throws Exception the exception
+     * Instantiates a new Base tank without throwing exceptions.
      */
-    protected BaseTank(String name, Point2D position, int point, int health, int movementSpeed, int bulletSpeed,
-                       String description) throws Exception {
-        if (!isValidName(name)) {
-            throw new Exception("Invalid tank name!");
-        }
-        if (!isValidPosition(position)) {
-            throw new Exception("Invalid tank position!");
-        }
-        // TODO: add validation
-
-        if (!isValidPoint(point)) {
-            throw new Exception("Invalid point value!");
-        }
-        if (!isValidHealth(health)) {
-            throw new Exception("Invalid health value!");
-        }
-        if (!isValidMovementSpeed(movementSpeed)) {
-            throw new Exception("Invalid movement speed value!");
-        }
-        if (!isValidBulletSpeed(bulletSpeed)) {
-            throw new Exception("Invalid bullet speed value!");
-        }
-
-        this.name = name;
-        this.position = position;
-        this.direction = Directions.UP;
-        this.point = point;
-        this.health = health;
-        this.movementSpeed = movementSpeed;
-        this.bulletSpeed = bulletSpeed;
+    protected BaseTank(String name, Point2D position, int point, int health, int movementSpeed, int bulletSpeed, String description) {
+        this.name = isValidName(name) ? name : "DefaultTank";
+        this.position = isValidPosition(position) ? position : new Point2D(0, 0);
+        this.point = isValidPoint(point) ? point : 0;
+        this.health = isValidHealth(health) ? health : 1;
+        this.movementSpeed = isValidMovementSpeed(movementSpeed) ? movementSpeed : 1;
+        this.bulletSpeed = isValidBulletSpeed(bulletSpeed) ? bulletSpeed : 1;
         this.description = description;
+        this.direction = Directions.UP;
     }
 
     /**
@@ -243,10 +207,10 @@ public abstract class BaseTank extends TankFunction {
     }
 
     private boolean isValidPosition(Point2D position2) {
-        int minX = 1;
-        int maxX = App.FRAME_HEIGHT;
-        int minY = 1;
-        int maxY = App.FRAME_HEIGHT;
+        int minX = 0;
+        int maxX = App.FRAME_HEIGHT - width;
+        int minY = 0;
+        int maxY = App.FRAME_HEIGHT - width;
 
         if (position2 == null) {
             return false;
@@ -318,22 +282,6 @@ public abstract class BaseTank extends TankFunction {
 
     @Override
     public void move() throws Exception {
-        switch (direction) {
-            case UP:
-                position = new Point2D(position.getX(), position.getY() - movementSpeed);
-                break;
-            case DOWN:
-                position = new Point2D(position.getX(), position.getY() + movementSpeed);
-                break;
-            case LEFT:
-                position = new Point2D(position.getX() - movementSpeed, position.getY());
-                break;
-            case RIGHT:
-                position = new Point2D(position.getX() + movementSpeed, position.getY());
-                break;
-            default:
-                throw new IllegalStateException("Unexpected direction: " + direction);
-        }
     }
 
     /**
@@ -468,5 +416,13 @@ public abstract class BaseTank extends TankFunction {
 
     public int clampToBounds(int value) {
         return Math.max(0, Math.min(App.FRAME_HEIGHT - App.FRAME_HEIGHT / 13, value));
+    }
+
+    public void updatePreviousPosition() {
+        previousPosition = new Point2D(getPosition().getX(), getPosition().getY());
+    }
+
+    public void revertToPreviousPosition() {
+        setPosition(previousPosition);
     }
 }

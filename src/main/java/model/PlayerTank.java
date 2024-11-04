@@ -37,6 +37,7 @@ public class PlayerTank extends BaseTank {
      * @param velocity  the velocity
      */
     public void move(Directions direction, int velocity) {
+        updatePreviousPosition();
         switch (direction) {
             case DOWN:
                 moveDown(velocity);

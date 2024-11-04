@@ -15,6 +15,7 @@ public abstract class Environment {
     private boolean isWalkable;
     private int width = Math.round((float) App.FRAME_HEIGHT / 26);
     private int height = Math.round((float) App.FRAME_HEIGHT / 26);
+    private int health = 99999;
 
     public Image getImage() {
         return image;
@@ -62,5 +63,13 @@ public abstract class Environment {
 
     public void setHeight(int height) {
         this.height = height;
+    }
+
+    public int getHealth() {
+        return health;
+    }
+
+    public void setHealth(int health) {
+        this.health = health;
     }
 }

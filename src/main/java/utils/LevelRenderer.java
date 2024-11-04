@@ -64,6 +64,7 @@ public class LevelRenderer {
                             case '-' -> environment = new Ice(new Point2D(currentX * (App.FRAME_HEIGHT /26), currentY * (App.FRAME_HEIGHT /26)));
                         }
                         currentX++;
+//                        System.out.println(environment.isDestroyable());
                         map.add(environment);
                     }
                     currentX = 0;

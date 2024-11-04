@@ -6,7 +6,9 @@ import main.java.controller.GameplayMenu;
 import main.java.model.Bullet;
 import main.java.model.PlayerTank;
 import main.java.model.Point2D;
+import main.java.model.environments.BrickWall;
 import main.java.model.environments.Environment;
+import main.java.model.environments.SteelWall;
 import main.java.model.environments.Tree;
 import main.java.model.tanks.BaseTank;
 import main.java.model.tanks.Directions;
@@ -50,7 +52,7 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
      */
     public GameplayManager() throws Exception {
         Timer gameLoop = TimerManager.getSharedTimer();
-        player = new PlayerTank(new Point2D(10, 10));
+        player = new PlayerTank(new Point2D(4 * App.FRAME_HEIGHT / 13, 12 * App.FRAME_HEIGHT / 13));
         setFocusable(true);
         requestFocusInWindow();
         addKeyListener(this);
@@ -82,7 +84,7 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
         if (currentLevel < nextLevel) {
             tankManager.stopAllTimer();
             try {
-                player = new PlayerTank(new Point2D(30, 30));
+                player = new PlayerTank(new Point2D(4 * App.FRAME_HEIGHT / 13, 12 * App.FRAME_HEIGHT / 13));
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -107,6 +109,17 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
                     tank.move();
                 } catch (Exception e) {
                     e.printStackTrace();
+                }
+
+                Iterator<Environment> environmentIterator = map.iterator();
+                while (environmentIterator.hasNext()) {
+                    Environment environment = environmentIterator.next();
+                    if (environment != null && !environment.isWalkable()) {
+                        if (collision2D(tank, environment)) {
+                            tank.revertToPreviousPosition();
+                            break;
+                        }
+                    }
                 }
             }
         }
@@ -138,6 +151,22 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
                     }
                     break;
                 }
+
+                Iterator<Environment> environmentIterator = map.iterator();
+                while ((environmentIterator.hasNext())) {
+                    Environment environment = environmentIterator.next();
+                    if (environment != null) {
+                        if (environment.isDestroyable() && collision2D(bullet, environment)) {
+                            environment.setHealth(environment.getHealth() - 1);
+                            bulletIterator.remove();
+                            if (environment.getHealth() <= 0) {
+                                environmentIterator.remove();
+                                break;
+                            }
+                            break;
+                        }
+                    }
+                }
             } else {
                 bulletIterator.remove();
             }
@@ -159,12 +188,36 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
                     EnemyTank tank = tankIterator.next();
                     if (tank.isDisplay() && collision2D(bullet, tank)) {
                         bulletIterator.remove();
-                        tank.setHealth(tank.getHealth() - 1);
+                        tank.takeDamage(1);
                         if (tank.getHealth() <= 0) {
                             player.addPoints(tank.getPoint());
                             tankIterator.remove();
                         }
                         break;
+                    }
+                }
+
+                Iterator<Environment> environmentIterator = map.iterator();
+                while ((environmentIterator.hasNext())) {
+                    Environment environment = environmentIterator.next();
+                    if (environment != null) {
+                        if (environment.isDestroyable() && collision2D(bullet, environment)) {
+                            if (player.getTier() == 4) {
+                                if ( environment instanceof SteelWall) {
+                                    environment.setHealth(environment.getHealth() - 50000);
+                                } else if (environment instanceof BrickWall) {
+                                    environment.setHealth(environment.getHealth() - 2);
+                                }
+                            } else {
+                                environment.setHealth(environment.getHealth() - 1);
+                            }
+                            bulletIterator.remove();
+                            if (environment.getHealth() <= 0) {
+                                environmentIterator.remove();
+                                break;
+                            }
+                            break;
+                        }
                     }
                 }
             } else {
@@ -239,6 +292,29 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
                 && bullet.getY() + bullet.getHeight() > tank.getPosition().getY();
     }
 
+    private boolean collision2D(Bullet bullet, Environment environment) {
+        return bullet.getX() <= environment.getPosition().getX() + environment.getWidth()
+                && bullet.getX() + bullet.getWidth() >= environment.getPosition().getX()
+                && bullet.getY() <= environment.getPosition().getY() + environment.getHeight()
+                && bullet.getY() + bullet.getHeight() >= environment.getPosition().getY();
+    }
+
+    private boolean collision2D(BaseTank tank, Environment environment) {
+        int tolerance = 4;
+
+        int tankLeft = tank.getPosition().getX() + tolerance;
+        int tankRight = tank.getPosition().getX() + tank.getWidth() - tolerance;
+        int tankTop = tank.getPosition().getY() + tolerance;
+        int tankBottom = tank.getPosition().getY() + tank.getHeight() - tolerance;
+
+        int envLeft = environment.getPosition().getX();
+        int envRight = environment.getPosition().getX() + environment.getWidth();
+        int envTop = environment.getPosition().getY();
+        int envBottom = environment.getPosition().getY() + environment.getHeight();
+
+        return tankRight > envLeft && tankLeft < envRight && tankBottom > envTop && tankTop < envBottom;
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
         revalidate();
@@ -264,6 +340,16 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
         }
 
         if (direction != null) {
+            Iterator<Environment> environmentIterator = map.iterator();
+            while (environmentIterator.hasNext()) {
+                Environment environment = environmentIterator.next();
+                if (environment != null && !environment.isWalkable()) {
+                    if (collision2D(player, environment)) {
+                        player.revertToPreviousPosition();
+                        break;
+                    }
+                }
+            }
             try {
                 player.move(direction, VELOCITY_MOVE);
             } catch (Exception ex) {
