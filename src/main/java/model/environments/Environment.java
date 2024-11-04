@@ -5,9 +5,6 @@ import main.java.model.Point2D;
 
 import java.awt.*;
 
-/**
- * The interface Environment.
- */
 public abstract class Environment {
     private Image image;
     private Point2D position;

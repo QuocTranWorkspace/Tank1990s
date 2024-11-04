@@ -9,23 +9,11 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 
-/**
- * The type Accessing all classes in package.
- */
 public class AccessingAllClassesInPackage {
     private AccessingAllClassesInPackage() {
         throw new IllegalStateException("Utility class");
     }
 
-    /**
-     * Get filtered classes class [ ].
-     *
-     * @param packageName the package name
-     * @param filterClass the filter class
-     * @return the class [ ]
-     * @throws ClassNotFoundException the class not found exception
-     * @throws IOException            the io exception
-     */
     public static Class<?>[] getFilteredClasses(String packageName, String filterClass)
             throws ClassNotFoundException, IOException {
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();

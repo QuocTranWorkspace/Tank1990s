@@ -5,29 +5,13 @@ import main.java.model.Point2D;
 import main.java.service.GameplayManager;
 
 import javax.swing.*;
-import java.awt.event.ActionListener;
 import java.util.Objects;
 
-/**
- * The type Enemy tank.
- */
 public class EnemyTank extends BaseTank {
     private final Timer directionTimer;
     private final Timer shootingTimer;
     private Directions currentDirection = Directions.getRandomType();
 
-    /**
-     * Instantiates a new Enemy tank.
-     *
-     * @param name          the name
-     * @param position      the position
-     * @param point         the point
-     * @param health        the health
-     * @param movementSpeed the movement speed
-     * @param bulletSpeed   the bullet speed
-     * @param description   the description
-     * @throws Exception the exception
-     */
     public EnemyTank(String name, Point2D position, int point, int health, int movementSpeed, int bulletSpeed, String description) throws Exception {
         super(name, position, point, health, movementSpeed, bulletSpeed, description);
         // Update the direction randomly every 2 seconds
@@ -101,12 +85,9 @@ public class EnemyTank extends BaseTank {
         changeImage(currentImage + "_left.png");
     }
 
-    /**
-     * Shoot.
-     */
     public void shoot() {
         if (isShooting()) {
-            Bullet bullet = new Bullet(0 , 0, getBulletSpeed(), currentDirection);
+            Bullet bullet = new Bullet(0, 0, getBulletSpeed(), currentDirection);
             if (currentDirection == Directions.DOWN) {
                 bullet = new Bullet(this.getPosition().getX() + this.getWidth() / 2 - bullet.getHeight() / 2, this.getPosition().getY() + this.getHeight(), getBulletSpeed(), currentDirection);
             } else if (currentDirection == Directions.UP) {

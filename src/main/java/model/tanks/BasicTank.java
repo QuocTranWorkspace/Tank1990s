@@ -5,18 +5,9 @@ import main.java.model.Point2D;
 import javax.swing.*;
 import java.util.Objects;
 
-/**
- * The type Basic tank.
- */
 public class BasicTank extends EnemyTank {
     private Directions direction;
 
-    /**
-     * Instantiates a new Basic tank.
-     *
-     * @param position the position
-     * @throws Exception the exception
-     */
     public BasicTank(Point2D position) throws Exception {
         super("BasicTank", position, 100, 1, 1, 1, "Desc");
         this.direction = Directions.DOWN;
@@ -24,11 +15,6 @@ public class BasicTank extends EnemyTank {
         this.currentImage = "enemy_a";
     }
 
-    /**
-     * Gets direction.
-     *
-     * @return the direction
-     */
     public Directions getDirection() {
         return this.direction;
     }

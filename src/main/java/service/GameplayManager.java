@@ -24,32 +24,18 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Iterator;
 
-/**
- * The type Gameplay manager.
- */
 public class GameplayManager extends BaseScene implements ActionListener, KeyListener {
-    /**
-     * The constant VELOCITY_MOVE.
-     */
     public static final int VELOCITY_MOVE = 3;
-    /**
-     * The constant VELOCITY_SHOOT.
-     */
     public static final int VELOCITY_SHOOT = 3;
-    private  transient PlayerTank player;
-    private  transient TankManager tankManager;
     private final transient TankSpawner playerTankSpawner = new TankSpawner();
     private final transient TankSpawner enemyTankSpawner = new TankSpawner();
+    private transient PlayerTank player;
+    private transient TankManager tankManager;
     private int currentLevel = 0;
     private int nextLevel = currentLevel;
     private transient LevelRenderer levelRenderer = new LevelRenderer(currentLevel);
     private transient java.util.List<Environment> map = levelRenderer.getMap();
 
-    /**
-     * Instantiates a new Gameplay manager.
-     *
-     * @throws Exception the exception
-     */
     public GameplayManager() throws Exception {
         Timer gameLoop = TimerManager.getSharedTimer();
         player = new PlayerTank(new Point2D(4 * App.FRAME_HEIGHT / 13, 12 * App.FRAME_HEIGHT / 13));
@@ -68,9 +54,6 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
         drawComponents(g);
     }
 
-    /**
-     * Update game logic.
-     */
     public void updateGameLogic() {
         updateEnemyTank();
         updatePlayerBullet();
@@ -99,9 +82,6 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
         }
     }
 
-    /**
-     * Update enemy tank.
-     */
     public void updateEnemyTank() {
         for (EnemyTank tank : tankManager.getTankList()) {
             if (tank.isDisplay()) {
@@ -125,12 +105,6 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
         }
     }
 
-    /**
-     * Update enemy bullet.
-     *
-     * @param tank the tank
-     * @param g    the g
-     */
     public void updateEnemyBullet(EnemyTank tank, Graphics g) {
         Iterator<Bullet> bulletIterator = tank.getBulletList().iterator();
         while (bulletIterator.hasNext()) {
@@ -142,8 +116,7 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
                     bulletIterator.remove();
                     if (player.isShield()) {
                         player.setShield(false);
-                    }
-                    else {
+                    } else {
                         player.setHealth(tank.getHealth() - 1);
                         if (player.getHealth() <= 0) {
                             System.out.println("hehe");
@@ -173,9 +146,6 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
         }
     }
 
-    /**
-     * Update player bullet.
-     */
     public void updatePlayerBullet() {
         Iterator<Bullet> bulletIterator = player.getBulletList().iterator();
         while (bulletIterator.hasNext()) {
@@ -203,7 +173,7 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
                     if (environment != null) {
                         if (environment.isDestroyable() && collision2D(bullet, environment)) {
                             if (player.getTier() == 4) {
-                                if ( environment instanceof SteelWall) {
+                                if (environment instanceof SteelWall) {
                                     environment.setHealth(environment.getHealth() - 50000);
                                 } else if (environment instanceof BrickWall) {
                                     environment.setHealth(environment.getHealth() - 2);
@@ -226,17 +196,12 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
         }
     }
 
-    /**
-     * Draw components.
-     *
-     * @param g the g
-     */
     public void drawComponents(Graphics g) {
         this.setBackground(Color.BLACK);
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, App.FRAME_HEIGHT, App.FRAME_HEIGHT);
 
-        for (Environment environment: map) {
+        for (Environment environment : map) {
             if (environment == null) {
                 continue;
             }
@@ -275,7 +240,7 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
             }
         }
 
-        for (Environment environment: map) {
+        for (Environment environment : map) {
             if (environment == null) {
                 continue;
             }

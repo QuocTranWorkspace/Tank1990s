@@ -3,12 +3,8 @@ package main.java.model.environments;
 import main.java.model.Point2D;
 
 import javax.swing.*;
-import java.awt.*;
 import java.util.Objects;
 
-/**
- * The type Brick wall.
- */
 public class BrickWall extends Environment {
     public BrickWall(Point2D position) {
         this.setHealth(4);

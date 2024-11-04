@@ -4,7 +4,6 @@ import main.java.App;
 import main.java.model.Point2D;
 import main.java.model.environments.*;
 
-import java.awt.*;
 import java.io.*;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -17,9 +16,9 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class LevelRenderer {
+    private final int level;
     List<Path> levelList = new ArrayList<>();
     List<Environment> map = new ArrayList<>();
-    private final int level;
 
     public LevelRenderer(int level) {
         levelList = listFilesInResourceDirectory("level");
@@ -57,11 +56,16 @@ public class LevelRenderer {
                         char c = line.charAt(i);
                         Environment environment = null;
                         switch (c) {
-                            case '#' -> environment = new BrickWall(new Point2D(currentX * (App.FRAME_HEIGHT /26), currentY * (App.FRAME_HEIGHT /26)));
-                            case '@' -> environment = new SteelWall(new Point2D(currentX * (App.FRAME_HEIGHT /26), currentY * (App.FRAME_HEIGHT /26)));
-                            case '%' -> environment = new Tree(new Point2D(currentX * (App.FRAME_HEIGHT /26), currentY * (App.FRAME_HEIGHT /26)));
-                            case '~' -> environment = new Water(new Point2D(currentX * (App.FRAME_HEIGHT /26), currentY * (App.FRAME_HEIGHT /26)));
-                            case '-' -> environment = new Ice(new Point2D(currentX * (App.FRAME_HEIGHT /26), currentY * (App.FRAME_HEIGHT /26)));
+                            case '#' ->
+                                    environment = new BrickWall(new Point2D(currentX * (App.FRAME_HEIGHT / 26), currentY * (App.FRAME_HEIGHT / 26)));
+                            case '@' ->
+                                    environment = new SteelWall(new Point2D(currentX * (App.FRAME_HEIGHT / 26), currentY * (App.FRAME_HEIGHT / 26)));
+                            case '%' ->
+                                    environment = new Tree(new Point2D(currentX * (App.FRAME_HEIGHT / 26), currentY * (App.FRAME_HEIGHT / 26)));
+                            case '~' ->
+                                    environment = new Water(new Point2D(currentX * (App.FRAME_HEIGHT / 26), currentY * (App.FRAME_HEIGHT / 26)));
+                            case '-' ->
+                                    environment = new Ice(new Point2D(currentX * (App.FRAME_HEIGHT / 26), currentY * (App.FRAME_HEIGHT / 26)));
                         }
                         currentX++;
 //                        System.out.println(environment.isDestroyable());

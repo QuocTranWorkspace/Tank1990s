@@ -5,18 +5,9 @@ import main.java.model.Point2D;
 import javax.swing.*;
 import java.util.Objects;
 
-/**
- * The type Fast tank.
- */
 public class FastTank extends EnemyTank {
     private Directions direction;
 
-    /**
-     * Instantiates a new Fast tank.
-     *
-     * @param position the position
-     * @throws Exception the exception
-     */
     public FastTank(Point2D position) throws Exception {
         super("FastTank", position, 200, 1, 3, 2, "Desc");
         this.direction = Directions.DOWN;
@@ -24,11 +15,6 @@ public class FastTank extends EnemyTank {
         this.currentImage = "enemy_b";
     }
 
-    /**
-     * Gets direction.
-     *
-     * @return the direction
-     */
     public Directions getDirection() {
         return this.direction;
     }

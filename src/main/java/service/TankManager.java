@@ -1,6 +1,5 @@
 package main.java.service;
 
-import main.java.App;
 import main.java.model.Point2D;
 import main.java.model.tanks.*;
 
@@ -8,17 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-/**
- * The type Tank manager.
- */
 public class TankManager {
     private final List<EnemyTank> tankList = new ArrayList<>();
 
-    /**
-     * Instantiates a new Tank manager.
-     *
-     * @throws Exception the exception
-     */
     public TankManager() throws Exception {
         int maxTank = 1;
         for (int i = 0; i < maxTank; i++) {
@@ -35,16 +26,11 @@ public class TankManager {
     }
 
     public void stopAllTimer() {
-        for (EnemyTank enemy: tankList) {
+        for (EnemyTank enemy : tankList) {
             enemy.stopAllTimer();
         }
     }
 
-    /**
-     * Gets tank list.
-     *
-     * @return the tank list
-     */
     public List<EnemyTank> getTankList() {
         return tankList;
     }

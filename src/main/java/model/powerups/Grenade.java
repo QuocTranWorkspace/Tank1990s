@@ -5,9 +5,6 @@ import main.java.model.tanks.EnemyTank;
 import java.util.Iterator;
 import java.util.List;
 
-/**
- * The type Grenade.
- */
 public class Grenade {
     private final List<EnemyTank> enemyTanks;
 

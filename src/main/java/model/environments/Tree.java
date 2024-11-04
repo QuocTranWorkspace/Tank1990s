@@ -5,9 +5,6 @@ import main.java.model.Point2D;
 import javax.swing.*;
 import java.util.Objects;
 
-/**
- * The type Trees.
- */
 public class Tree extends Environment {
     public Tree(Point2D position) {
         this.setImage(new ImageIcon(Objects.requireNonNull(getClass().getResource("../../../resource/img/environment/bush.png"))).getImage());

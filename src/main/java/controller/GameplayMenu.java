@@ -9,18 +9,9 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 
-/**
- * The type Gameplay menu.
- */
 public class GameplayMenu extends BaseScene {
-    /**
-     * The constant pausePanel.
-     */
     public static JPanel pausePanel = new JPanel();
 
-    /**
-     * Instantiates a new Gameplay menu.
-     */
     public GameplayMenu() {
         sceneIndex = 2;
         setPreferredSize(new Dimension(FRAME_WIDTH, FRAME_HEIGHT));
@@ -32,11 +23,6 @@ public class GameplayMenu extends BaseScene {
         initPanels();
     }
 
-    /**
-     * Toggle pause.
-     *
-     * @param panel the panel
-     */
     public static void togglePause(JPanel panel) {
         panel.setVisible(!pausePanel.isVisible());
         if (TimerManager.getSharedTimer().isRunning()) {
@@ -152,11 +138,6 @@ public class GameplayMenu extends BaseScene {
         drawComponents(g);
     }
 
-    /**
-     * Draw components.
-     *
-     * @param g the g
-     */
     public void drawComponents(Graphics g) {
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, FRAME_WIDTH, FRAME_HEIGHT);
