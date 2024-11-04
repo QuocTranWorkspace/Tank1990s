@@ -2,6 +2,7 @@ package main.java.model.powerups;
 
 import main.java.model.tanks.EnemyTank;
 
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -14,8 +15,9 @@ public class Grenade {
      * @param enemyTanks the enemy tanks
      */
     public void activate(List<EnemyTank> enemyTanks) {
-        for (EnemyTank tank : enemyTanks) {
-            tank.takeDamage(1);
+        Iterator<EnemyTank> enemyTanksIterator = enemyTanks.iterator();
+        while (enemyTanksIterator.hasNext()) {
+            enemyTanksIterator.remove();
         }
     }
 }

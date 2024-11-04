@@ -23,21 +23,18 @@ import java.util.Iterator;
  */
 public class GameplayManager extends BaseScene implements ActionListener, KeyListener {
     private int currentLevel = 0;
-    private PlayerTank player;
-    /**
-     * The Player tank spawner.
-     */
-    TankSpawner playerTankSpawner = new TankSpawner();
-    /**
-     * The Enemy tank spawner.
-     */
-    TankSpawner enemyTankSpawner = new TankSpawner();
+    private final transient PlayerTank player;
+    private final transient TankManager tankManager;
+    private final transient TankSpawner playerTankSpawner = new TankSpawner();
+    private final transient TankSpawner enemyTankSpawner = new TankSpawner();
+
+    public static final int VELOCITY_MOVE = 2;
+    public static final int VELOCITY_SHOOT = 3;
 
     @Override
     public void paintComponent(Graphics g) {
         drawComponents(g);
     }
-    private TankManager tankManager;
 
     /**
      * Instantiates a new Gameplay manager.
@@ -61,6 +58,11 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
      * Update game logic.
      */
     public void updateGameLogic() {
+        updateEnemyTank();
+        updatePlayerBullet();
+    }
+
+    public void updateEnemyTank() {
         for (EnemyTank tank : tankManager.getTankList()) {
             if (tank.isDisplay()) {
                 try {
@@ -70,7 +72,23 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
                 }
             }
         }
+    }
 
+    public void updateEnemyBullet(EnemyTank tank, Graphics g) {
+        Iterator<Bullet> bulletIterator = tank.getBulletList().iterator();
+        while (bulletIterator.hasNext()) {
+            Bullet bullet = bulletIterator.next();
+            if (bullet.isActive()) {
+                g.drawImage(bullet.getImage(), bullet.getX(), bullet.getY(), bullet.getWidth(), bullet.getHeight(), null);
+                bullet.move();
+            }
+            else {
+                bulletIterator.remove();
+            }
+        }
+    }
+
+    public void updatePlayerBullet() {
         Iterator<Bullet> bulletIterator = player.getBulletList().iterator();
         while (bulletIterator.hasNext()) {
             Bullet bullet = bulletIterator.next();
@@ -86,9 +104,12 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
                         if (tank.getHealth() <= 0) {
                             tankIterator.remove();
                         }
-                        break; // Exit loop after collision to avoid unnecessary checks
+                        break;
                     }
                 }
+            }
+            else {
+                bulletIterator.remove();
             }
         }
     }
@@ -98,22 +119,28 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
      *
      * @param g the g
      */
-// Render method to only handle drawing
     public void drawComponents(Graphics g) {
+        if (!player.isDisplay()) {
+            playerTankSpawner.startSpawnAnimation(player);
+            player.setDisplay(true);
+        }
         playerTankSpawner.drawTank(g, player);
 
         int tankOnMap = 0;
         int enemyLeft = Math.min(4, tankManager.getTankList().size());
+
         while (tankOnMap < enemyLeft) {
             EnemyTank tank = tankManager.getTankList().get(tankOnMap);
-            tank.setDisplay(true);
-            try {
-//                tank.move("enemy_a");
-            } catch (Exception e) {
-                throw new RuntimeException(e);
+
+            if (!tank.isDisplay()) {
+                enemyTankSpawner.startSpawnAnimation(tank);
+                tank.setDisplay(true);
             }
+
             enemyTankSpawner.drawTank(g, tank);
             tankOnMap++;
+
+            updateEnemyBullet(tank, g);
         }
 
         // Draw active bullets
@@ -140,7 +167,7 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
 
     @Override
     public void keyTyped(KeyEvent e) {
-
+        //
     }
 
     @Override
@@ -157,14 +184,14 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
 
         if (direction != null) {
             try {
-                player.move(direction, 2);
+                player.move(direction, VELOCITY_MOVE);
             } catch (Exception ex) {
                 throw new RuntimeException("Movement error: " + ex.getMessage(), ex);
             }
         }
 
-        if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-            player.shoot();
+        if (player.isShooting() && e.getKeyCode() == KeyEvent.VK_SPACE) {
+                player.shoot();
         }
 
         if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
@@ -179,5 +206,6 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
 
     @Override
     public void keyReleased(KeyEvent e) {
+        //
     }
 }

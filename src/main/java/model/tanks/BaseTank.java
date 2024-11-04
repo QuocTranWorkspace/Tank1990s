@@ -23,17 +23,12 @@ public abstract class BaseTank extends TankFunction {
     private String description;
     private int bullet;
     private Image image;
-    /**
-     * The Current image.
-     */
     protected String currentImage = "";
-    /**
-     * The Bullet list.
-     */
     protected List<Bullet> bulletList = new ArrayList<>();
     private int width = 32;
     private int height = 32;
     private boolean isDisplay = false;
+    private boolean isShooting = true;
 
     /**
      * Instantiates a new Base tank.
@@ -347,8 +342,6 @@ public abstract class BaseTank extends TankFunction {
 
     @Override
     public void shoot(BaseTank tank) {
-        // TODO Auto-generated method stub
-
     }
 
     /**
@@ -439,5 +432,31 @@ public abstract class BaseTank extends TankFunction {
      */
     public void setDisplay(boolean display) {
         isDisplay = display;
+    }
+
+    public boolean isShooting() {
+        return bulletList.isEmpty();
+    }
+
+    public void setShooting(boolean isShooting) {
+        this.isShooting = isShooting;
+    }
+
+    /**
+     * Gets bullet list.
+     *
+     * @return the bullet list
+     */
+    public List<Bullet> getBulletList() {
+        return bulletList;
+    }
+
+    /**
+     * Sets bullet list.
+     *
+     * @param bulletList the bullet list
+     */
+    public void setBulletList(List<Bullet> bulletList) {
+        this.bulletList = bulletList;
     }
 }

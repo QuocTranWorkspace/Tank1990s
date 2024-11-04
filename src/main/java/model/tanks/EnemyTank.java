@@ -1,6 +1,8 @@
 package main.java.model.tanks;
 
+import main.java.model.Bullet;
 import main.java.model.Point2D;
+import main.java.service.GameplayManager;
 
 import javax.swing.*;
 import java.util.Objects;
@@ -10,6 +12,7 @@ import java.util.Objects;
  */
 public class EnemyTank extends BaseTank {
     private final Timer directionTimer;
+    private final Timer shootingTimer;
     private Directions currentDirection = Directions.getRandomType();
 
     /**
@@ -28,6 +31,7 @@ public class EnemyTank extends BaseTank {
         super(name, position, point, health, movementSpeed, bulletSpeed, description);
         // Update the direction randomly every 2 seconds
         directionTimer = new Timer(2000, e -> currentDirection = Directions.getRandomType());
+        shootingTimer = new Timer(2000, event -> shoot());
     }
 
     private void changeImage(String image) {
@@ -41,16 +45,16 @@ public class EnemyTank extends BaseTank {
 
         switch (direction) {
             case DOWN:
-                moveDown(getMovementSpeed());
+                moveDown();
                 break;
             case UP:
-                moveUp(getMovementSpeed());
+                moveUp();
                 break;
             case LEFT:
-                moveLeft(getMovementSpeed());
+                moveLeft();
                 break;
             case RIGHT:
-                moveRight(getMovementSpeed());
+                moveRight();
                 break;
         }
 
@@ -59,39 +63,62 @@ public class EnemyTank extends BaseTank {
         }
     }
 
-    private void moveDown(int velocity) {
+    private void moveDown() {
         int currentX = this.getPosition().getX();
         int currentY = this.getPosition().getY();
-        int newY = currentY + velocity * this.getMovementSpeed();
+        int newY = currentY + GameplayManager.VELOCITY_MOVE * this.getMovementSpeed();
         this.setPosition(new Point2D(currentX, newY));
         this.setDirection(Directions.DOWN);
         changeImage(currentImage + "_down.png");
     }
 
-    private void moveUp(int velocity) {
+    private void moveUp() {
         int currentX = this.getPosition().getX();
         int currentY = this.getPosition().getY();
-        int newY = currentY - velocity * this.getMovementSpeed();
+        int newY = currentY - GameplayManager.VELOCITY_MOVE * this.getMovementSpeed();
         this.setPosition(new Point2D(currentX, newY));
         this.setDirection(Directions.UP);
         changeImage(currentImage + "_up.png");
     }
 
-    private void moveRight(int velocity) {
+    private void moveRight() {
         int currentX = this.getPosition().getX();
         int currentY = this.getPosition().getY();
-        int newX = currentX + velocity * this.getMovementSpeed();
+        int newX = currentX + GameplayManager.VELOCITY_MOVE * this.getMovementSpeed();
         this.setPosition(new Point2D(newX, currentY));
         this.setDirection(Directions.RIGHT);
         changeImage(currentImage + "_right.png");
     }
 
-    private void moveLeft(int velocity) {
+    private void moveLeft() {
         int currentX = this.getPosition().getX();
         int currentY = this.getPosition().getY();
-        int newX = currentX - velocity * this.getMovementSpeed();
+        int newX = currentX - GameplayManager.VELOCITY_MOVE * this.getMovementSpeed();
         this.setPosition(new Point2D(newX, currentY));
         this.setDirection(Directions.LEFT);
         changeImage(currentImage + "_left.png");
+    }
+
+    public void shoot() {
+        if (isShooting()) {
+            setShooting(!isShooting());
+            Bullet bullet = null;
+            if (currentDirection == Directions.DOWN) {
+                bullet = new Bullet(this.getPosition().getX() + this.getWidth() / 2, this.getPosition().getY() + this.getHeight(), getBulletSpeed(), currentDirection);
+            } else if (currentDirection == Directions.UP) {
+                bullet = new Bullet(this.getPosition().getX() + this.getWidth() / 2, this.getPosition().getY(), getBulletSpeed(), currentDirection);
+            } else if (currentDirection == Directions.LEFT) {
+                bullet = new Bullet(this.getPosition().getX(), this.getPosition().getY() + this.getHeight() / 2, getBulletSpeed(), currentDirection);
+            } else if (currentDirection == Directions.RIGHT) {
+                bullet = new Bullet(this.getPosition().getX() + this.getWidth(), this.getPosition().getY() + this.getHeight() / 2, getBulletSpeed(), currentDirection);
+            }
+            bulletList.add(bullet);
+        }
+    }
+
+    @Override
+    public void setDisplay(boolean display) {
+        super.setDisplay(display);
+        shootingTimer.start();
     }
 }

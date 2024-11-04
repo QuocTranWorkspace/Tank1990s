@@ -4,49 +4,54 @@ import main.java.model.tanks.BaseTank;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * The type Tank spawner.
  */
 public class TankSpawner {
-    private int spawnAnimationStep = 0;
-    private Timer spawnDelayTimer;
-    private Timer spawnAnimationTimer;
-    private boolean isSpawning = false;
+    private static final int SPAWN_ANIMATION_STEPS = 20;
+    private static final int SPAWN_DELAY = 1000; // 1-second delay before spawn animation starts
+    private static final int ANIMATION_INTERVAL = 50; // Animation interval for smooth transition
 
-    /**
-     * Instantiates a new Tank spawner.
-     */
+    // Map to track each tank’s spawn animation progress
+    private final Map<BaseTank, Integer> spawnAnimationSteps;
+    private final Map<BaseTank, Timer> spawnAnimationTimers;
+
     public TankSpawner() {
-        spawnDelayTimer = new Timer(1000, e -> {
-            isSpawning = true;
-            spawnAnimationStep = 0;
-            spawnAnimationTimer.start();
-            spawnDelayTimer.stop();
-        });
+        spawnAnimationSteps = new HashMap<>();
+        spawnAnimationTimers = new HashMap<>();
+    }
 
-        spawnAnimationTimer = new Timer(50, e -> {
-            spawnAnimationStep++;
+    public void startSpawnAnimation(BaseTank tank) {
+        spawnAnimationSteps.put(tank, 0);
 
-            if (spawnAnimationStep >= 20) {
-                spawnAnimationTimer.stop();
-                isSpawning = false;
+        Timer spawnAnimationTimer = new Timer(ANIMATION_INTERVAL, e -> {
+            int step = spawnAnimationSteps.get(tank);
+            spawnAnimationSteps.put(tank, ++step);
+
+            if (step >= SPAWN_ANIMATION_STEPS) {
+                ((Timer) e.getSource()).stop();
+                spawnAnimationSteps.remove(tank);
             }
         });
 
+        // Delay before starting animation
+        Timer spawnDelayTimer = new Timer(SPAWN_DELAY, e -> {
+            spawnAnimationTimer.start();
+            ((Timer) e.getSource()).stop();
+        });
+
         spawnDelayTimer.start();
+        spawnAnimationTimers.put(tank, spawnAnimationTimer);
     }
 
-    /**
-     * Draw tank.
-     *
-     * @param g    the g
-     * @param tank the tank
-     */
     public void drawTank(Graphics g, BaseTank tank) {
-        if (isSpawning) {
+        if (spawnAnimationSteps.containsKey(tank)) {
+            int step = spawnAnimationSteps.get(tank);
+            float alpha = (float) step / SPAWN_ANIMATION_STEPS;
             Graphics2D g2d = (Graphics2D) g.create();
-            float alpha = (float) spawnAnimationStep / 20;
             g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha));
             g2d.drawImage(tank.getImage(), tank.getPosition().getX(), tank.getPosition().getY(), tank.getWidth(), tank.getHeight(), null);
             g2d.dispose();

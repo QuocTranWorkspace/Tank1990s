@@ -15,7 +15,7 @@ public class TimerManager {
      */
     public static Timer getSharedTimer() {
         if (timer == null) {
-            timer = new Timer(1000 / 60, e -> {
+            timer = new Timer(1000 / 90, e -> {
             });
         }
         return timer;

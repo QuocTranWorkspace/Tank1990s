@@ -2,6 +2,7 @@ package main.java.model;
 
 import main.java.App;
 import main.java.model.tanks.Directions;
+import main.java.service.GameplayManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -39,21 +40,22 @@ public class Bullet {
      * Move.
      */
     public void move() {
+        int defaultSpeed = GameplayManager.VELOCITY_SHOOT;
         switch (direction) {
             case UP -> {
-                y -= speed;
+                y -= speed * 2 * defaultSpeed;
                 this.image = new ImageIcon(Objects.requireNonNull(getClass().getResource("../../resource/img/gameplay/bullet_up.png"))).getImage();
             }
             case DOWN -> {
-                y += speed;
+                y += speed * 2 * defaultSpeed;
                 this.image = new ImageIcon(Objects.requireNonNull(getClass().getResource("../../resource/img/gameplay/bullet_down.png"))).getImage();
             }
             case LEFT -> {
-                x -= speed;
+                x -= speed * 2 * defaultSpeed;
                 this.image = new ImageIcon(Objects.requireNonNull(getClass().getResource("../../resource/img/gameplay/bullet_left.png"))).getImage();
             }
             case RIGHT -> {
-                x += speed;
+                x += speed * 2 * defaultSpeed;
                 this.image = new ImageIcon(Objects.requireNonNull(getClass().getResource("../../resource/img/gameplay/bullet_right.png"))).getImage();
             }
         }
