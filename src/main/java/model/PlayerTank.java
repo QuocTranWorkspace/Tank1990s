@@ -23,19 +23,21 @@ public class PlayerTank extends BaseTank {
     @Override
     public void move(int velocity) {
         updatePreviousPosition();
-        switch (direction) {
-            case DOWN:
-                moveDown(velocity);
-                break;
-            case UP:
-                moveUp(velocity);
-                break;
-            case LEFT:
-                moveLeft(velocity);
-                break;
-            case RIGHT:
-                moveRight(velocity);
-                break;
+        if (isMovable()) {
+            switch (direction) {
+                case DOWN:
+                    moveDown(velocity);
+                    break;
+                case UP:
+                    moveUp(velocity);
+                    break;
+                case LEFT:
+                    moveLeft(velocity);
+                    break;
+                case RIGHT:
+                    moveRight(velocity);
+                    break;
+            }
         }
     }
 
@@ -86,7 +88,7 @@ public class PlayerTank extends BaseTank {
     }
 
     public void shoot() {
-        if (isShooting()) {
+        if (!isShooting() && isShootable()) {
             Bullet bullet = new Bullet(0, 0, getBulletSpeed(), direction);
             if (direction == Directions.DOWN) {
                 bullet = new Bullet(this.position.getX() + this.getWidth() / 2 - bullet.getHeight() / 2, this.getPosition().getY() + 2 * this.getHeight() / 3, getBulletSpeed(), direction);

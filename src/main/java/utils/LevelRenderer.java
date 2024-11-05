@@ -57,18 +57,19 @@ public class LevelRenderer {
                         Environment environment = null;
                         switch (c) {
                             case '#' ->
-                                    environment = new BrickWall(new Point2D(currentX * (App.FRAME_HEIGHT / 26), currentY * (App.FRAME_HEIGHT / 26)));
+                                    environment = new BrickWall(new Point2D((int) (currentX * (App.FRAME_HEIGHT / 27.9)), (int) (currentY * (App.FRAME_HEIGHT / 27.9))));
                             case '@' ->
-                                    environment = new SteelWall(new Point2D(currentX * (App.FRAME_HEIGHT / 26), currentY * (App.FRAME_HEIGHT / 26)));
+                                    environment = new SteelWall(new Point2D((int) (currentX * (App.FRAME_HEIGHT / 27.9)), (int) (currentY * (App.FRAME_HEIGHT / 27.9))));
                             case '%' ->
-                                    environment = new Tree(new Point2D(currentX * (App.FRAME_HEIGHT / 26), currentY * (App.FRAME_HEIGHT / 26)));
+                                    environment = new Tree(new Point2D((int) (currentX * (App.FRAME_HEIGHT / 27.9)), (int) (currentY * (App.FRAME_HEIGHT / 27.9))));
                             case '~' ->
-                                    environment = new Water(new Point2D(currentX * (App.FRAME_HEIGHT / 26), currentY * (App.FRAME_HEIGHT / 26)));
+                                    environment = new Water(new Point2D((int) (currentX * (App.FRAME_HEIGHT / 27.9)), (int) (currentY * (App.FRAME_HEIGHT / 27.9))));
                             case '-' ->
-                                    environment = new Ice(new Point2D(currentX * (App.FRAME_HEIGHT / 26), currentY * (App.FRAME_HEIGHT / 26)));
+                                    environment = new Ice(new Point2D((int) (currentX * (App.FRAME_HEIGHT / 27.9)), (int) (currentY * (App.FRAME_HEIGHT / 27.9))));
+                            case '?' ->
+                                    environment = new Border(new Point2D((int) (currentX * (App.FRAME_HEIGHT / 27.9)), (int) (currentY * (App.FRAME_HEIGHT / 27.9))));
                         }
                         currentX++;
-//                        System.out.println(environment.isDestroyable());
                         map.add(environment);
                     }
                     currentX = 0;

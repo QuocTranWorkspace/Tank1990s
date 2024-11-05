@@ -17,8 +17,8 @@ public class Home {
         this.isAlive = true;
         this.position = position;
         this.image = new ImageIcon(Objects.requireNonNull(getClass().getResource("../../resource/img/gameplay/home.png"))).getImage();
-        this.width = App.FRAME_HEIGHT / 13;
-        this.height = App.FRAME_HEIGHT / 13;
+        this.width = App.FRAME_HEIGHT / 14;
+        this.height = App.FRAME_HEIGHT / 14;
     }
 
     public boolean isAlive() {

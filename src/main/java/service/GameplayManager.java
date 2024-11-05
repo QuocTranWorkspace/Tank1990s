@@ -15,38 +15,49 @@ import main.java.utils.LevelRenderer;
 import main.java.utils.TankSpawner;
 
 import javax.swing.*;
+import javax.swing.Timer;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class GameplayManager extends BaseScene implements ActionListener, KeyListener {
     public static int SLIPPERY = App.FRAME_HEIGHT / 150;
     public static final int VELOCITY_MOVE = App.FRAME_HEIGHT / 280;
     public static final int VELOCITY_SHOOT = App.FRAME_HEIGHT / 280;
-    private final transient TankSpawner playerTankSpawner = new TankSpawner();
-    private final transient TankSpawner enemyTankSpawner = new TankSpawner();
+
+    private final transient TankSpawner playerTankSpawner;
+    private final transient TankSpawner enemyTankSpawner;
     private transient PlayerTank player;
     private transient TankManager tankManager;
-    private int currentLevel = 28;
+    private final transient java.util.List<Image> spawnImages = new ArrayList<>();
+
+    private int currentLevel = 0;
     private int nextLevel = currentLevel;
     private transient LevelRenderer levelRenderer = new LevelRenderer(currentLevel);
     private transient java.util.List<Environment> map = levelRenderer.getMap();
-    private transient Home home = new Home(new Point2D(6 * App.FRAME_HEIGHT / 13, 12 * App.FRAME_HEIGHT / 13));
+
+    private transient Home home = new Home(new Point2D((int) (13 * App.FRAME_HEIGHT / 27.9), (int) (25 * App.FRAME_HEIGHT / 27.9)));
+    private boolean isLose = false;
 
     public GameplayManager() throws Exception {
         Timer gameLoop = TimerManager.getSharedTimer();
-        player = new PlayerTank(new Point2D(4 * App.FRAME_HEIGHT / 13, 12 * App.FRAME_HEIGHT / 13));
+        player = new PlayerTank(new Point2D((int) (10 * App.FRAME_HEIGHT / 27.9), (int) (25 * App.FRAME_HEIGHT / 27.9)));
         setFocusable(true);
         requestFocusInWindow();
         addKeyListener(this);
 
         tankManager = new TankManager();
+
+        for (int i = 1; i <= 10; i++) {
+            spawnImages.add(new ImageIcon(Objects.requireNonNull(getClass().getResource("../../resource/img/spawning/spawn_" + i + ".png"))).getImage());
+        }
+
+        playerTankSpawner = new TankSpawner(spawnImages);
+        enemyTankSpawner = new TankSpawner(spawnImages);
 
         gameLoop.addActionListener(this);
         gameLoop.start();
@@ -61,6 +72,16 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
         updateEnemyTank();
         updatePlayerBullet();
         updateLevel();
+        updateGameState();
+    }
+
+    private void updateGameState() {
+        if (player.getHealth() <= 0 || !home.isAlive()) {
+            isLose = true;
+        }
+        if (isLose) {
+            // TODO: do something
+        }
     }
 
     private void updateLevel() {
@@ -70,7 +91,7 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
         if (currentLevel < nextLevel) {
             tankManager.stopAllTimer();
             try {
-                player = new PlayerTank(new Point2D(4 * App.FRAME_HEIGHT / 13, 12 * App.FRAME_HEIGHT / 13));
+                player = new PlayerTank(new Point2D(4 * App.FRAME_HEIGHT / 14, 12 * App.FRAME_HEIGHT / 14));
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -144,7 +165,7 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
     }
 
     private boolean handlePlayerCollision(Bullet bullet, Iterator<Bullet> bulletIterator) {
-        if (collision2D(bullet, player)) {
+        if (collision2D(bullet, player) && !player.isInvincible()) {
             bulletIterator.remove();
 
             if (player.isShield()) {
@@ -209,7 +230,7 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
         while (tankIterator.hasNext()) {
             EnemyTank tank = tankIterator.next();
 
-            if (tank.isDisplay() && collision2D(bullet, tank)) {
+            if (tank.isDisplay() && collision2D(bullet, tank) && !tank.isInvincible()) {
                 bulletIterator.remove();
                 tank.takeDamage(1);
 
@@ -312,7 +333,6 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
             }
         }
     }
-
 
     private boolean collision2D(Bullet bullet, BaseTank tank) {
         return bullet.getX() < tank.getPosition().getX() + tank.getWidth()
@@ -430,7 +450,7 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
             }
         }
     
-        if (player.isShooting() && e.getKeyCode() == KeyEvent.VK_SPACE) {
+        if (!player.isShooting() && e.getKeyCode() == KeyEvent.VK_SPACE) {
             player.shoot();
         }
     

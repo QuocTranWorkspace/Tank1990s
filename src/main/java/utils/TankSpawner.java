@@ -4,33 +4,39 @@ import main.java.model.tanks.BaseTank;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class TankSpawner {
-    private static final int SPAWN_ANIMATION_STEPS = 20;
-    private static final int SPAWN_DELAY = 1000; // 1-second delay before spawn animation starts
-    private static final int ANIMATION_INTERVAL = 50; // Animation interval for smooth transition
+    private static final int SPAWN_DELAY = 50;
+    private static final int ANIMATION_INTERVAL = 100;
+    private java.util.List<Image> spawnImages = new ArrayList<>();
 
-    // Map to track each tank’s spawn animation progress
     private final Map<BaseTank, Integer> spawnAnimationSteps;
     private final Map<BaseTank, Timer> spawnAnimationTimers;
 
-    public TankSpawner() {
+    public TankSpawner(java.util.List<Image> spawnImages) {
         spawnAnimationSteps = new HashMap<>();
         spawnAnimationTimers = new HashMap<>();
+        this.spawnImages = spawnImages;
     }
 
     public void startSpawnAnimation(BaseTank tank) {
-        spawnAnimationSteps.put(tank, 0);
+        spawnAnimationSteps.putIfAbsent(tank, 0);
 
         Timer spawnAnimationTimer = new Timer(ANIMATION_INTERVAL, e -> {
-            int step = spawnAnimationSteps.get(tank);
-            spawnAnimationSteps.put(tank, ++step);
+            if (spawnAnimationSteps.containsKey(tank)) {
+                int step = spawnAnimationSteps.get(tank);
 
-            if (step >= SPAWN_ANIMATION_STEPS) {
+                spawnAnimationSteps.put(tank, step + 1);
+
+                if (step >= spawnImages.size() - 1) {
+                    ((Timer) e.getSource()).stop();
+                    spawnAnimationSteps.remove(tank);
+                }
+            } else {
                 ((Timer) e.getSource()).stop();
-                spawnAnimationSteps.remove(tank);
             }
         });
 
@@ -40,19 +46,25 @@ public class TankSpawner {
         });
 
         spawnDelayTimer.start();
+
         spawnAnimationTimers.put(tank, spawnAnimationTimer);
     }
+
+
 
     public void drawTank(Graphics g, BaseTank tank) {
         if (spawnAnimationSteps.containsKey(tank)) {
             int step = spawnAnimationSteps.get(tank);
-            float alpha = (float) step / SPAWN_ANIMATION_STEPS;
-            Graphics2D g2d = (Graphics2D) g.create();
-            g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha));
-            g2d.drawImage(tank.getImage(), tank.getPosition().getX(), tank.getPosition().getY(), tank.getWidth(), tank.getHeight(), null);
-            g2d.dispose();
+
+            Image spawnImage = spawnImages.get(step);
+            g.drawImage(spawnImage, tank.getPosition().getX(), tank.getPosition().getY(), tank.getWidth(), tank.getHeight(), null);
+            tank.setMovable(false);
+            tank.setShootable(false);
         } else {
+            tank.setMovable(true);
+            tank.setShootable(true);
             g.drawImage(tank.getImage(), tank.getPosition().getX(), tank.getPosition().getY(), tank.getWidth(), tank.getHeight(), null);
         }
     }
+
 }

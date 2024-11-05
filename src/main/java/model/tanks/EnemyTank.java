@@ -29,19 +29,21 @@ public class EnemyTank extends BaseTank {
         updatePreviousPosition();
         Directions direction = currentDirection;
 
-        switch (direction) {
-            case DOWN:
-                moveDown(velocity);
-                break;
-            case UP:
-                moveUp(velocity);
-                break;
-            case LEFT:
-                moveLeft(velocity);
-                break;
-            case RIGHT:
-                moveRight(velocity);
-                break;
+        if (isMovable()) {
+            switch (direction) {
+                case DOWN:
+                    moveDown(velocity);
+                    break;
+                case UP:
+                    moveUp(velocity);
+                    break;
+                case LEFT:
+                    moveLeft(velocity);
+                    break;
+                case RIGHT:
+                    moveRight(velocity);
+                    break;
+            }
         }
 
         if (isDisplay()) {
@@ -86,7 +88,7 @@ public class EnemyTank extends BaseTank {
     }
 
     public void shoot() {
-        if (isShooting()) {
+        if (!isShooting() && isShootable()) {
             Bullet bullet = new Bullet(0, 0, getBulletSpeed(), currentDirection);
             if (currentDirection == Directions.DOWN) {
                 bullet = new Bullet(this.getPosition().getX() + this.getWidth() / 2 - bullet.getHeight() / 2, this.getPosition().getY() + 2 * this.getHeight() / 3, getBulletSpeed(), currentDirection);

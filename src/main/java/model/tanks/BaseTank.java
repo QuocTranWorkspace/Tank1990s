@@ -22,10 +22,13 @@ public abstract class BaseTank extends TankFunction {
     private String description;
     private int bullet;
     private Image image;
-    private int width = App.FRAME_HEIGHT / 13;
-    private int height = App.FRAME_HEIGHT / 13;
+    private int width = (int) (2 * App.FRAME_HEIGHT / 27.9);
+    private int height = (int) (2 * App.FRAME_HEIGHT / 27.9);
     private boolean isDisplay = false;
     private Point2D previousPosition;
+    private boolean isMovable = true;
+    private boolean isShootable = true;
+    private boolean isInvincible = false;
 
     protected BaseTank(String name, Point2D position, int point, int health, int movementSpeed, int bulletSpeed, String description) {
         this.name = isValidName(name) ? name : "DefaultTank";
@@ -213,7 +216,7 @@ public abstract class BaseTank extends TankFunction {
     }
 
     public boolean isShooting() {
-        return bulletList.isEmpty();
+        return !bulletList.isEmpty();
     }
 
     public List<Bullet> getBulletList() {
@@ -238,5 +241,29 @@ public abstract class BaseTank extends TankFunction {
 
     public Directions getDirection() {
         return direction;
+    }
+
+    public boolean isMovable() {
+        return isMovable;
+    }
+
+    public void setMovable(boolean movable) {
+        isMovable = movable;
+    }
+
+    public boolean isShootable() {
+        return isShootable;
+    }
+
+    public void setShootable(boolean shootable) {
+        isShootable = shootable;
+    }
+
+    public boolean isInvincible() {
+        return isInvincible;
+    }
+
+    public void setInvincible(boolean invincible) {
+        isInvincible = invincible;
     }
 }
