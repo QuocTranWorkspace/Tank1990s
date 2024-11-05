@@ -8,6 +8,7 @@ import main.java.model.Home;
 import main.java.model.PlayerTank;
 import main.java.model.Point2D;
 import main.java.model.environments.*;
+import main.java.model.powerups.PowerUps;
 import main.java.model.tanks.BaseTank;
 import main.java.model.tanks.Directions;
 import main.java.model.tanks.EnemyTank;
@@ -22,6 +23,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.*;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class GameplayManager extends BaseScene implements ActionListener, KeyListener {
@@ -43,6 +45,9 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
     private transient Home home = new Home(new Point2D((int) (13 * App.FRAME_HEIGHT / 27.9), (int) (25 * App.FRAME_HEIGHT / 27.9)));
     private boolean isLose = false;
 
+    public static Set<EnemyTank> currentEnemies = new HashSet<>();
+    private PowerUpsManager powerUpsManager;
+
     public GameplayManager() throws Exception {
         Timer gameLoop = TimerManager.getSharedTimer();
         player = new PlayerTank(new Point2D((int) (10 * App.FRAME_HEIGHT / 27.9), (int) (25 * App.FRAME_HEIGHT / 27.9)));
@@ -51,6 +56,8 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
         addKeyListener(this);
 
         tankManager = new TankManager();
+
+        powerUpsManager = new PowerUpsManager();
 
         for (int i = 1; i <= 10; i++) {
             spawnImages.add(new ImageIcon(Objects.requireNonNull(getClass().getResource("../../resource/img/spawning/spawn_" + i + ".png"))).getImage());
@@ -80,7 +87,8 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
             isLose = true;
         }
         if (isLose) {
-            // TODO: do something
+            //TODO: save game or return
+            TimerManager.getSharedTimer().stop();
         }
     }
 
@@ -91,7 +99,7 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
         if (currentLevel < nextLevel) {
             tankManager.stopAllTimer();
             try {
-                player = new PlayerTank(new Point2D(4 * App.FRAME_HEIGHT / 14, 12 * App.FRAME_HEIGHT / 14));
+                player = new PlayerTank(new Point2D((int) (10 * App.FRAME_HEIGHT / 27.9), (int) (25 * App.FRAME_HEIGHT / 27.9)));
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -156,6 +164,11 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
             g.drawImage(bullet.getImage(), bullet.getX(), bullet.getY(), bullet.getWidth(), bullet.getHeight(), null);
             bullet.move();
 
+            if (collision2D(bullet, home)) {
+                isLose = true;
+                break;
+            }
+
             if (player.isDisplay() && handlePlayerCollision(bullet, bulletIterator)) {
                 continue;
             }
@@ -173,7 +186,7 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
             } else {
                 player.setHealth(player.getHealth() - 1);
                 if (player.getHealth() <= 0) {
-                    System.out.println("Player destroyed");
+                    isLose = true;
                 }
             }
             return true;
@@ -214,6 +227,11 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
                 continue;
             }
 
+            if (collision2D(bullet, home)) {
+                isLose = true;
+                break;
+            }
+
             bullet.move();
 
             isHandled = handleTankCollision(bullet, bulletIterator);
@@ -236,6 +254,7 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
 
                 if (tank.getHealth() <= 0) {
                     player.addPoints(tank.getPoint());
+                    currentEnemies.remove(tank);
                     tankIterator.remove();
                 }
                 return true;
@@ -282,6 +301,13 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
         drawBullets(g);
         drawEnvironment(g, true);
         drawHome(g);
+
+        List<PowerUps> powerUps = powerUpsManager.getActivePowerUps();
+        Iterator<PowerUps> powerUpsIterator = powerUps.iterator();
+        while (powerUpsIterator.hasNext()) {
+            PowerUps powerUp = powerUpsIterator.next();
+            g.drawImage(powerUp.getImage(), powerUp.getX(), powerUp.getY(), powerUp.getWidth(), powerUp.getHeight(), null);
+        }
     }
 
     private void drawEnvironment(Graphics g, boolean treesOnly) {
@@ -319,6 +345,8 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
                 enemyTankSpawner.startSpawnAnimation(tank);
                 tank.setDisplay(true);
             }
+
+            currentEnemies.add(tank);
 
             enemyTankSpawner.drawTank(g, tank);
             updateEnemyBullet(tank, g);
@@ -362,6 +390,13 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
         int envBottom = environment.getPosition().getY() + environment.getHeight();
 
         return tankRight > envLeft && tankLeft < envRight && tankBottom > envTop && tankTop < envBottom;
+    }
+
+    private boolean collision2D(Bullet bullet, Home home) {
+        return bullet.getX() <= home.getPosition().getX() + home.getWidth()
+                && bullet.getX() + bullet.getWidth() >= home.getPosition().getX()
+                && bullet.getY() <= home.getPosition().getY() + home.getHeight()
+                && bullet.getY() + bullet.getHeight() >= home.getPosition().getY();
     }
 
     private final Map<BaseTank, Timer> slidingTimers = new HashMap<>();

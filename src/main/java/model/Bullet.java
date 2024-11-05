@@ -46,7 +46,7 @@ public class Bullet {
             }
         }
         // Set isActive to false if bullet moves outside the panel
-        if (x < 0 || x > App.FRAME_HEIGHT || y < 0 || y > App.FRAME_HEIGHT) {
+        if (x < App.FRAME_HEIGHT / 27.9 || x >  26.5 * App.FRAME_HEIGHT / 27.9 || y < App.FRAME_HEIGHT / 27.9 || y > 26.5 * App.FRAME_HEIGHT / 27.9) {
             isActive = false;
         }
     }
