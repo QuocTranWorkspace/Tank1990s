@@ -34,14 +34,14 @@ public class SceneManager {
         File fontSource = new File("src/main/resource/font/tank_font.ttf");
 
         if (fontSource.exists()) {
-            System.out.println("Font file exists: " + fontSource.getAbsolutePath());
             try {
                 SceneManager.tankFont = Font.createFont(Font.TRUETYPE_FONT, fontSource).deriveFont(16f);
             } catch (FontFormatException | IOException e) {
                 Logger.getLogger(e.getMessage());
             }
         } else {
-            System.out.println("Font file does not exist at: " + fontSource.getAbsolutePath());
+            Logger logger = Logger.getLogger(SceneManager.class.getName());
+            logger.severe("Font file does not exist at: " + fontSource.getAbsolutePath());
         }
     }
 

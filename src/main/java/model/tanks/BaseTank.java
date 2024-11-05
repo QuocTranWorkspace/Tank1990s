@@ -161,7 +161,7 @@ public abstract class BaseTank extends TankFunction {
     }
 
     @Override
-    public void move() throws Exception {
+    public void move(int velocity) throws Exception {
     }
 
     public void setDirection(Directions direction) {
@@ -234,5 +234,9 @@ public abstract class BaseTank extends TankFunction {
 
     public void revertToPreviousPosition() {
         setPosition(previousPosition);
+    }
+
+    public Directions getDirection() {
+        return direction;
     }
 }

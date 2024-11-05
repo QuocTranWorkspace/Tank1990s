@@ -12,7 +12,7 @@ public class PlayerTank extends BaseTank {
     private boolean shield = false;
     private int tier;
 
-    public PlayerTank(Point2D position) throws Exception {
+    public PlayerTank(Point2D position) {
         super("PlayerTank", position, 0, 2, 2, 2, "Desc");
         this.direction = Directions.UP;
         this.position = position;
@@ -20,7 +20,8 @@ public class PlayerTank extends BaseTank {
         this.setImage(new ImageIcon(Objects.requireNonNull(getClass().getResource("../../resource/img/player/player_up_1.png"))).getImage());
     }
 
-    public void move(Directions direction, int velocity) {
+    @Override
+    public void move(int velocity) {
         updatePreviousPosition();
         switch (direction) {
             case DOWN:
@@ -88,13 +89,13 @@ public class PlayerTank extends BaseTank {
         if (isShooting()) {
             Bullet bullet = new Bullet(0, 0, getBulletSpeed(), direction);
             if (direction == Directions.DOWN) {
-                bullet = new Bullet(this.position.getX() + this.getWidth() / 2 - bullet.getHeight() / 2, this.getPosition().getY() + this.getHeight(), getBulletSpeed(), direction);
+                bullet = new Bullet(this.position.getX() + this.getWidth() / 2 - bullet.getHeight() / 2, this.getPosition().getY() + 2 * this.getHeight() / 3, getBulletSpeed(), direction);
             } else if (direction == Directions.UP) {
                 bullet = new Bullet(this.position.getX() + this.getWidth() / 2 - bullet.getHeight() / 2, this.getPosition().getY(), getBulletSpeed(), direction);
             } else if (direction == Directions.LEFT) {
-                bullet = new Bullet(this.position.getX(), this.getPosition().getY() + this.getHeight() / 2 - bullet.getHeight() / 2, getBulletSpeed(), direction);
+                bullet = new Bullet(this.position.getX() + bullet.getWidth(), this.getPosition().getY() + this.getHeight() / 2 - bullet.getHeight() / 2, getBulletSpeed(), direction);
             } else if (direction == Directions.RIGHT) {
-                bullet = new Bullet(this.position.getX() + this.getWidth(), this.getPosition().getY() + this.getHeight() / 2 - bullet.getHeight() / 2, getBulletSpeed(), direction);
+                bullet = new Bullet(this.position.getX() + 2 * this.getWidth() / 3, this.getPosition().getY() + this.getHeight() / 2 - bullet.getHeight() / 2, getBulletSpeed(), direction);
             }
             bulletList.add(bullet);
         }

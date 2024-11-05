@@ -9,7 +9,7 @@ public class Ice extends Environment {
     public Ice(Point2D position) {
         this.setImage(new ImageIcon(Objects.requireNonNull(getClass().getResource("../../../resource/img/environment/ice.png"))).getImage());
         this.setDestroyable(false);
-        this.setWalkable(false);
+        this.setWalkable(true);
         this.setPosition(position);
     }
 }

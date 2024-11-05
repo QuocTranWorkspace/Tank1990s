@@ -34,7 +34,6 @@ public class TankSpawner {
             }
         });
 
-        // Delay before starting animation
         Timer spawnDelayTimer = new Timer(SPAWN_DELAY, e -> {
             spawnAnimationTimer.start();
             ((Timer) e.getSource()).stop();
