@@ -2,10 +2,9 @@ package main.java.model.powerups;
 
 import main.java.App;
 import main.java.model.PlayerTank;
-import main.java.model.tanks.EnemyTank;
+import main.java.service.TankManager;
 
 import java.awt.*;
-import java.util.List;
 
 public class PowerUps {
     private final Type type;
@@ -15,11 +14,14 @@ public class PowerUps {
     private int width = (int) (2 * App.FRAME_HEIGHT / 27.9);
     private int height = (int) (2 * App.FRAME_HEIGHT / 27.9);
 
-    public PowerUps(int x, int y, Type type) {
+    private TankManager tankManager;
+
+    public PowerUps(int x, int y, Type type, TankManager tankManager) {
         this.x = x;
         this.y = y;
         this.type = type;
         setImage(type);
+        this.tankManager = tankManager;
     }
 
     private void setImage(Type type) {
@@ -35,12 +37,12 @@ public class PowerUps {
 
     public void activate(PlayerTank tank) {
         switch (type) {
-            case HELMET -> new Helmet(tank);
-            case SHOVEL -> new Shovel();
+            case HELMET -> new Helmet(tank).activate();
+            case SHOVEL -> new Shovel().activate();
             case STAR -> new Star(tank).activate(tank);
-            case TANK -> new Tank(tank);
-            case GRENADE -> new Grenade().activate();
-            case TIMER -> new Timer().activate();
+            case TANK -> new Tank(tank).activate();
+            case GRENADE -> new Grenade().activate(tankManager);
+            case TIMER -> new Timer().activate(tankManager);
         }
     }
 
@@ -82,5 +84,9 @@ public class PowerUps {
 
     public void setHeight(int height) {
         this.height = height;
+    }
+
+    public Type getType() {
+        return type;
     }
 }

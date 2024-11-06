@@ -9,7 +9,7 @@ public class ArmorTank extends EnemyTank {
     private Directions direction;
 
     public ArmorTank(Point2D position) throws Exception {
-        super("ArmorTank", position, 400, 4, 2, 1, "Desc");
+        super("ArmorTank", position, 400, 4, 1, 1, "Desc");
         this.direction = Directions.DOWN;
         this.setImage(new ImageIcon(Objects.requireNonNull(getClass().getResource("../../../resource/img/enemy/enemy_d_down.png"))).getImage());
         this.currentImage = "enemy_d";

@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class TankSpawner {
-    private static final int SPAWN_DELAY = 50;
     private static final int ANIMATION_INTERVAL = 100;
     private java.util.List<Image> spawnImages = new ArrayList<>();
 
@@ -23,34 +22,25 @@ public class TankSpawner {
     }
 
     public void startSpawnAnimation(BaseTank tank) {
+        tank.setMovable(false);
+        tank.setShootable(false);
         spawnAnimationSteps.putIfAbsent(tank, 0);
 
         Timer spawnAnimationTimer = new Timer(ANIMATION_INTERVAL, e -> {
-            if (spawnAnimationSteps.containsKey(tank)) {
-                int step = spawnAnimationSteps.get(tank);
+            int step = spawnAnimationSteps.getOrDefault(tank, 0);
+            spawnAnimationSteps.put(tank, step + 1);
 
-                spawnAnimationSteps.put(tank, step + 1);
-
-                if (step >= spawnImages.size() - 1) {
-                    ((Timer) e.getSource()).stop();
-                    spawnAnimationSteps.remove(tank);
-                }
-            } else {
+            if (step >= spawnImages.size() - 1) {
                 ((Timer) e.getSource()).stop();
+                spawnAnimationSteps.remove(tank);
+                tank.setMovable(true);
+                tank.setShootable(true);
             }
         });
 
-        Timer spawnDelayTimer = new Timer(SPAWN_DELAY, e -> {
-            spawnAnimationTimer.start();
-            ((Timer) e.getSource()).stop();
-        });
-
-        spawnDelayTimer.start();
-
+        spawnAnimationTimer.start();
         spawnAnimationTimers.put(tank, spawnAnimationTimer);
     }
-
-
 
     public void drawTank(Graphics g, BaseTank tank) {
         if (spawnAnimationSteps.containsKey(tank)) {
@@ -58,11 +48,7 @@ public class TankSpawner {
 
             Image spawnImage = spawnImages.get(step);
             g.drawImage(spawnImage, tank.getPosition().getX(), tank.getPosition().getY(), tank.getWidth(), tank.getHeight(), null);
-            tank.setMovable(false);
-            tank.setShootable(false);
         } else {
-            tank.setMovable(true);
-            tank.setShootable(true);
             g.drawImage(tank.getImage(), tank.getPosition().getX(), tank.getPosition().getY(), tank.getWidth(), tank.getHeight(), null);
         }
     }

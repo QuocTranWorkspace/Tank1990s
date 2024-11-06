@@ -2,6 +2,7 @@ package main.java.model.powerups;
 
 import main.java.model.PlayerTank;
 
+import javax.swing.Timer;
 import javax.swing.*;
 import java.awt.*;
 import java.util.Objects;
@@ -16,6 +17,10 @@ public class Helmet {
 
     public void activate() {
         player.setShield(true);
+
+        Timer timer = new Timer(3000, e -> player.setShield(false));
+        timer.setRepeats(false);
+        timer.stop();
     }
 
     public Image getImage() {

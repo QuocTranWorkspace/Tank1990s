@@ -7,7 +7,10 @@ import main.java.model.Bullet;
 import main.java.model.Home;
 import main.java.model.PlayerTank;
 import main.java.model.Point2D;
-import main.java.model.environments.*;
+import main.java.model.environments.Environment;
+import main.java.model.environments.Ice;
+import main.java.model.environments.SteelWall;
+import main.java.model.environments.Tree;
 import main.java.model.powerups.PowerUps;
 import main.java.model.tanks.BaseTank;
 import main.java.model.tanks.Directions;
@@ -15,15 +18,15 @@ import main.java.model.tanks.EnemyTank;
 import main.java.utils.LevelRenderer;
 import main.java.utils.TankSpawner;
 
-import javax.swing.*;
 import javax.swing.Timer;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class GameplayManager extends BaseScene implements ActionListener, KeyListener {
@@ -34,7 +37,7 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
     private final transient TankSpawner playerTankSpawner;
     private final transient TankSpawner enemyTankSpawner;
     private transient PlayerTank player;
-    private transient TankManager tankManager;
+    private TankManager tankManager;
     private final transient java.util.List<Image> spawnImages = new ArrayList<>();
 
     private int currentLevel = 0;
@@ -57,7 +60,7 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
 
         tankManager = new TankManager();
 
-        powerUpsManager = new PowerUpsManager();
+        powerUpsManager = new PowerUpsManager(tankManager);
 
         for (int i = 1; i <= 10; i++) {
             spawnImages.add(new ImageIcon(Objects.requireNonNull(getClass().getResource("../../resource/img/spawning/spawn_" + i + ".png"))).getImage());
@@ -98,6 +101,7 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
         }
         if (currentLevel < nextLevel) {
             tankManager.stopAllTimer();
+            powerUpsManager.stopAllTimer();
             try {
                 player = new PlayerTank(new Point2D((int) (10 * App.FRAME_HEIGHT / 27.9), (int) (25 * App.FRAME_HEIGHT / 27.9)));
             } catch (Exception e) {
@@ -108,6 +112,8 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
+
+            powerUpsManager = new PowerUpsManager(tankManager);
             currentLevel = nextLevel;
             levelRenderer = new LevelRenderer(currentLevel);
             map = levelRenderer.getMap();
@@ -133,7 +139,6 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
     private void handleEnvironmentCollisions(EnemyTank tank) {
         for (Environment environment : map) {
             if (environment == null || !collision2D(tank, environment)) continue;
-
             if (!environment.isWalkable()) {
                 tank.revertToPreviousPosition();
                 return;
@@ -254,7 +259,7 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
 
                 if (tank.getHealth() <= 0) {
                     player.addPoints(tank.getPoint());
-                    currentEnemies.remove(tank);
+//                    currentEnemies.remove(tank);
                     tankIterator.remove();
                 }
                 return true;
@@ -301,11 +306,12 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
         drawBullets(g);
         drawEnvironment(g, true);
         drawHome(g);
+        drawPowerUps(g);
+    }
 
+    private void drawPowerUps(Graphics g) {
         List<PowerUps> powerUps = powerUpsManager.getActivePowerUps();
-        Iterator<PowerUps> powerUpsIterator = powerUps.iterator();
-        while (powerUpsIterator.hasNext()) {
-            PowerUps powerUp = powerUpsIterator.next();
+        for (PowerUps powerUp : powerUps) {
             g.drawImage(powerUp.getImage(), powerUp.getX(), powerUp.getY(), powerUp.getWidth(), powerUp.getHeight(), null);
         }
     }
@@ -399,6 +405,13 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
                 && bullet.getY() + bullet.getHeight() >= home.getPosition().getY();
     }
 
+    private boolean collision2D(PlayerTank tank, PowerUps powerUp) {
+        return powerUp.getX() <= tank.getPosition().getX() + tank.getWidth()
+                && powerUp.getX() + powerUp.getWidth() >= tank.getPosition().getX()
+                && powerUp.getY() <= tank.getPosition().getY() + tank.getHeight()
+                && powerUp.getY() + powerUp.getHeight() >= tank.getPosition().getY();
+    }
+
     private final Map<BaseTank, Timer> slidingTimers = new HashMap<>();
 
     public void startSlidingEffect(BaseTank tank) {
@@ -468,15 +481,10 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
 
         if (direction != null) {
             Iterator<Environment> environmentIterator = map.iterator();
-            while (environmentIterator.hasNext()) {
-                Environment environment = environmentIterator.next();
-                if (environment != null && collision2D(player, environment)) {
-                    if (!environment.isWalkable()) {
-                        player.revertToPreviousPosition();
-                        break;
-                    }
-                }
-            }
+            handleEnvironmentCollision(player, environmentIterator);
+
+            Iterator<PowerUps> powerUpsIterator = powerUpsManager.getActivePowerUps().iterator();
+            handlePowerUpCollision(player, powerUpsIterator);
             try {
                 player.setDirection(direction);
                 player.move(VELOCITY_MOVE);
@@ -491,6 +499,28 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
     
         if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
             GameplayMenu.togglePause(GameplayMenu.pausePanel);
+        }
+    }
+
+    private void handleEnvironmentCollision(PlayerTank player, Iterator<Environment> environmentIterator) {
+        while (environmentIterator.hasNext()) {
+            Environment environment = environmentIterator.next();
+            if (environment != null && collision2D(player, environment) && !environment.isWalkable()) {
+                player.revertToPreviousPosition();
+                break;
+            }
+        }
+    }
+
+    private void handlePowerUpCollision(PlayerTank player, Iterator<PowerUps> powerUpsIterator) {
+        while (powerUpsIterator.hasNext()) {
+            PowerUps powerUp = powerUpsIterator.next();
+            if (powerUp != null && collision2D(player, powerUp)) {
+                System.out.println("hehe");
+                System.out.println(powerUp.getType());
+                powerUpsManager.collectPowerUp(player, powerUp);
+                break;
+            }
         }
     }
 

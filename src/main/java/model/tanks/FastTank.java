@@ -9,7 +9,7 @@ public class FastTank extends EnemyTank {
     private Directions direction;
 
     public FastTank(Point2D position) throws Exception {
-        super("FastTank", position, 200, 1, 3, 2, "Desc");
+        super("FastTank", position, 200, 1, 1, 2, "Desc");
         this.direction = Directions.DOWN;
         this.setImage(new ImageIcon(Objects.requireNonNull(getClass().getResource("../../../resource/img/enemy/enemy_b_down.png"))).getImage());
         this.currentImage = "enemy_b";

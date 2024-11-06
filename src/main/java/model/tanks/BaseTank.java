@@ -231,12 +231,19 @@ public abstract class BaseTank extends TankFunction {
         return Math.max(0, Math.min(App.FRAME_HEIGHT - App.FRAME_HEIGHT / 13, value));
     }
 
+    private boolean reverted = false;
+
     public void updatePreviousPosition() {
-        previousPosition = new Point2D(getPosition().getX(), getPosition().getY());
+        if (!reverted) {
+            previousPosition = new Point2D(getPosition().getX(), getPosition().getY());
+        } else {
+            reverted = false;
+        }
     }
 
     public void revertToPreviousPosition() {
         setPosition(previousPosition);
+        reverted = true;
     }
 
     public Directions getDirection() {
