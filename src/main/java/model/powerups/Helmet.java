@@ -20,7 +20,7 @@ public class Helmet {
 
         Timer timer = new Timer(3000, e -> player.setShield(false));
         timer.setRepeats(false);
-        timer.stop();
+        timer.start();
     }
 
     public Image getImage() {

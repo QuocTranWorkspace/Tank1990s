@@ -13,6 +13,8 @@ public class Home {
     private int width;
     private int height;
 
+    public static Image deathImage = new ImageIcon(Objects.requireNonNull(Home.class.getResource("../../resource/img/gameplay/home_lose.png"))).getImage();
+
     public Home(Point2D position) {
         this.isAlive = true;
         this.position = position;

@@ -12,14 +12,10 @@ public abstract class BaseScene extends JPanel implements ActionListener, KeyLis
     // JFrame size
     static final int FRAME_WIDTH = App.FRAME_WIDTH;
     static final int FRAME_HEIGHT = App.FRAME_HEIGHT;
-    static final int GRAVITY = 1;
-    // Scene index fo loading scene
+    // Scene index for loading scene
     int sceneIndex;
     // Tank font
-    Font tankFont = SceneManager.getTankFont();
-    // Physics 2D
-    int velocityX = 3;
-    int velocityY = 0;
+    Font tankFont = SceneManager.tankFont;
     // Component's asset
     transient Image playerImg = null;
     transient Image backgroundImg = null;

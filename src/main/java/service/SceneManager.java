@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 public class SceneManager {
     private static final String START_TIMER = "setIsStart";
     private static final Logger LOGGER = Logger.getLogger(SceneManager.class.getName());
-    static Font tankFont;
+    public static Font tankFont;
     private static int sceneCount = 0;
     private final List<Component> sceneList = new ArrayList<>();
     private final JFrame frame;
@@ -24,10 +24,10 @@ public class SceneManager {
     private Component currentScene;
 
     public SceneManager(JFrame frame) {
+        setUpFont();
         this.frame = frame;
         loadClasses();
         initializeScenes();
-        setUpFont();
     }
 
     public static void setUpFont() {
@@ -82,10 +82,6 @@ public class SceneManager {
         Class<?> temp = arr[i];
         arr[i] = arr[j];
         arr[j] = temp;
-    }
-
-    public static Font getTankFont() {
-        return tankFont;
     }
 
     private void loadClasses() {

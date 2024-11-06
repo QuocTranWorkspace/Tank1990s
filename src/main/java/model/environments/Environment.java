@@ -10,8 +10,8 @@ public abstract class Environment {
     private Point2D position;
     private boolean isDestroyable;
     private boolean isWalkable;
-    private int width = Math.round((float) App.FRAME_HEIGHT / 28);
-    private int height = Math.round((float) App.FRAME_HEIGHT / 28);
+    private int width = (int) (App.FRAME_HEIGHT / 27.9);
+    private int height = (int) (App.FRAME_HEIGHT / 27.9);
     private int health = 99999;
 
     public Image getImage() {

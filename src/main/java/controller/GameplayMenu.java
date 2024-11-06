@@ -33,44 +33,66 @@ public class GameplayMenu extends BaseScene {
     }
 
     private void setUpPausePanel(JPanel pausePanel) {
-        pausePanel.setPreferredSize(new Dimension(FRAME_WIDTH / 5, FRAME_HEIGHT / 4));
-        pausePanel.setBackground(Color.WHITE);
-        pausePanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        pausePanel.add(new JLabel("Paused", SwingConstants.CENTER));
-        pausePanel.setVisible(false);
-        pausePanel.setLayout(new BoxLayout(pausePanel, BoxLayout.Y_AXIS));
+        pausePanel.removeAll();
 
-        // Add Buttons to Pause Panel
-        JButton continueButton = new JButton("Continue");
-        customizeButton(continueButton);
-        continueButton.setForeground(Color.BLACK);
-        continueButton.addActionListener(actionEvent -> {
-            togglePause(pausePanel);
-        });
-        JButton saveButton = new JButton("Save");
-        customizeButton(saveButton);
-        saveButton.setForeground(Color.BLACK);
-        saveButton.addActionListener(actionEvent -> {
-            togglePause(pausePanel);
-            App.sceneManager.loadScene(0);
-        });
-        JButton exitButton = new JButton("Exit");
-        customizeButton(exitButton);
-        exitButton.setForeground(Color.BLACK);
-        exitButton.addActionListener(actionEvent -> {
-            togglePause(pausePanel);
-            App.sceneManager.loadScene(0);
-            this.gameLoop.stop();
-            this.gameLoop.removeActionListener(this);
-        });
+        pausePanel.setPreferredSize(new Dimension(FRAME_WIDTH / 5, FRAME_HEIGHT / 4));
+        pausePanel.setBackground(new Color(40, 40, 40));
+        pausePanel.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200), 2));
+        pausePanel.setLayout(new BoxLayout(pausePanel, BoxLayout.Y_AXIS));
+        pausePanel.setVisible(false);
+
+        JLabel titleLabel = new JLabel("Paused", SwingConstants.CENTER);
+        titleLabel.setFont(tankFont.deriveFont(Font.BOLD, (float) FRAME_HEIGHT / 40));
+        titleLabel.setForeground(Color.WHITE);
+        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        pausePanel.add(Box.createVerticalStrut(FRAME_HEIGHT / 40));
+        pausePanel.add(titleLabel);
+
+        JButton continueButton = createPauseButton("Continue", pausePanel);
+        JButton saveButton = createPauseButton("Save", pausePanel);
+        JButton exitButton = createPauseButton("Exit", pausePanel);
 
         pausePanel.add(Box.createVerticalGlue());
         pausePanel.add(continueButton);
-        pausePanel.add(Box.createVerticalStrut(20));
+        pausePanel.add(Box.createVerticalStrut(FRAME_HEIGHT / 40));
         pausePanel.add(saveButton);
-        pausePanel.add(Box.createVerticalStrut(20));
+        pausePanel.add(Box.createVerticalStrut(FRAME_HEIGHT / 40));
         pausePanel.add(exitButton);
         pausePanel.add(Box.createVerticalGlue());
+
+        pausePanel.revalidate();
+        pausePanel.repaint();
+    }
+
+    private JButton createPauseButton(String text, JPanel pausePanel) {
+        JButton button = new JButton(text);
+        button.setFont(tankFont.deriveFont(Font.PLAIN, (float) FRAME_HEIGHT / 45));
+        button.setBackground(new Color(80, 80, 80));
+        button.setForeground(Color.WHITE);
+        button.setFocusPainted(false);
+        button.setBorder(BorderFactory.createLineBorder(new Color(160, 160, 160), 1));
+        button.setAlignmentX(Component.CENTER_ALIGNMENT);
+        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+        button.addActionListener(actionEvent -> {
+            switch (text) {
+                case "Continue" -> togglePause(pausePanel);
+                case "Save" -> {
+                    togglePause(pausePanel);
+                    App.sceneManager.loadScene(0);
+                }
+                case "Exit" -> {
+                    togglePause(pausePanel);
+                    App.sceneManager.loadScene(0);
+                    this.gameLoop.stop();
+                    this.gameLoop.removeActionListener(this);
+                }
+                default -> {
+                    //
+                }
+            }
+        });
+        return button;
     }
 
     private void initPanels() {
@@ -122,6 +144,7 @@ public class GameplayMenu extends BaseScene {
         mainPanel.setLayout(new GridBagLayout());
         mainPanel.add(pausePanel);
     }
+
 
     private void requestFocusOnGameplayManager() {
         for (Component component : ((JPanel) getComponent(0)).getComponents()) {

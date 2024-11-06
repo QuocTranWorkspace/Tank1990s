@@ -216,7 +216,7 @@ public abstract class BaseTank extends TankFunction {
     }
 
     public boolean isShooting() {
-        return !bulletList.isEmpty();
+        return bulletList.isEmpty();
     }
 
     public List<Bullet> getBulletList() {

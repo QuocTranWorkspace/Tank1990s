@@ -22,30 +22,42 @@ public class StartMenu extends BaseScene implements KeyListener {
 
     private void setUpGUI() {
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        this.setBackground(Color.BLACK);
         this.add(Box.createVerticalGlue());
-        // Create Play button
+
         JButton playButton = new JButton("Play");
         customizeButton(playButton);
-        playButton.addActionListener(actionEvent ->
-                App.sceneManager.loadScene(1)
-        );
+        playButton.setFont(tankFont.deriveFont(Font.BOLD, (float) FRAME_HEIGHT / 40));
+        playButton.setForeground(Color.WHITE);
+        playButton.setBackground(new Color(0x00A86B));
+        playButton.setOpaque(true);  // Ensure the background color is applied
+        playButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        playButton.setFocusPainted(false);
+        playButton.addActionListener(actionEvent -> App.sceneManager.loadScene(1));
 
-        // Create Exit button
         JButton exitButton = new JButton("Exit");
         customizeButton(exitButton);
-        exitButton.addActionListener(actionEvent -> {
-            App.sceneManager.closeApp();
-        });
+        exitButton.setFont(tankFont.deriveFont(Font.BOLD, (float) FRAME_HEIGHT / 40));
+        exitButton.setForeground(Color.WHITE);
+        exitButton.setBackground(new Color(0xB22222));
+        exitButton.setOpaque(true);  // Ensure the background color is applied
+        exitButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        exitButton.setFocusPainted(false);
+        exitButton.addActionListener(actionEvent -> App.sceneManager.closeApp());
 
         this.add(Box.createVerticalGlue());
         this.add(playButton);
-        this.add(Box.createVerticalStrut(20));
+        this.add(Box.createVerticalStrut(FRAME_HEIGHT / 40));
         this.add(exitButton);
         this.add(Box.createVerticalGlue());
+
+        this.revalidate();
+        this.repaint();
     }
 
     @Override
     public void paintComponent(Graphics g) {
+        super.paintComponent(g);
         drawComponents(g);
     }
 
@@ -54,7 +66,7 @@ public class StartMenu extends BaseScene implements KeyListener {
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, FRAME_WIDTH, FRAME_HEIGHT);
 
-        g.drawImage(title, FRAME_WIDTH / 4, 100, FRAME_WIDTH / 2, FRAME_HEIGHT / 4, null);
+        g.drawImage(title, FRAME_WIDTH / 4, FRAME_HEIGHT / 8, FRAME_WIDTH / 2, FRAME_HEIGHT / 4, null);
     }
 
     @Override

@@ -88,7 +88,7 @@ public class EnemyTank extends BaseTank {
     }
 
     public void shoot() {
-        if (!isShooting() && isShootable()) {
+        if (isShooting() && isShootable()) {
             Bullet bullet = new Bullet(0, 0, getBulletSpeed(), currentDirection);
             if (currentDirection == Directions.DOWN) {
                 bullet = new Bullet(this.getPosition().getX() + this.getWidth() / 2 - bullet.getHeight() / 2, this.getPosition().getY() + 2 * this.getHeight() / 3, getBulletSpeed(), currentDirection);

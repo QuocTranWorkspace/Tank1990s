@@ -52,5 +52,4 @@ public class TankSpawner {
             g.drawImage(tank.getImage(), tank.getPosition().getX(), tank.getPosition().getY(), tank.getWidth(), tank.getHeight(), null);
         }
     }
-
 }
