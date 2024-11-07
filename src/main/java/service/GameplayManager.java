@@ -131,6 +131,10 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
         if (tankManager.getTankList().isEmpty() && isGameActive) {
             enemyLeft = 0;
             nextLevel = currentLevel + 1;
+            if (nextLevel > 35) {
+                Random random = new Random();
+                nextLevel = random.nextInt(35);
+            }
         }
 
         if (currentLevel < nextLevel && isGameActive) {
