@@ -8,8 +8,8 @@ import java.awt.*;
 import java.util.Objects;
 
 public class Helmet {
-    private final PlayerTank player;
     public static final Image image = new ImageIcon(Objects.requireNonNull(Helmet.class.getResource("../../../resource/img/bonus/bonus_helmet.png"))).getImage();
+    private final PlayerTank player;
 
     public Helmet(PlayerTank tank) {
         this.player = tank;

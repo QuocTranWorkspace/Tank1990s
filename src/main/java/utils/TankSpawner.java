@@ -10,10 +10,9 @@ import java.util.Map;
 
 public class TankSpawner {
     private static final int ANIMATION_INTERVAL = 100;
-    private java.util.List<Image> spawnImages = new ArrayList<>();
-
     private final Map<BaseTank, Integer> spawnAnimationSteps;
     private final Map<BaseTank, Timer> spawnAnimationTimers;
+    private java.util.List<Image> spawnImages = new ArrayList<>();
 
     public TankSpawner(java.util.List<Image> spawnImages) {
         spawnAnimationSteps = new HashMap<>();

@@ -97,7 +97,7 @@ public class EnemyTank extends BaseTank {
             } else if (currentDirection == Directions.LEFT) {
                 bullet = new Bullet(this.getPosition().getX() + bullet.getWidth(), this.getPosition().getY() + this.getHeight() / 2 - bullet.getHeight() / 2, getBulletSpeed(), currentDirection);
             } else if (currentDirection == Directions.RIGHT) {
-                bullet = new Bullet(this.getPosition().getX() +  2 * this.getWidth() / 3, this.getPosition().getY() + this.getHeight() / 2 - bullet.getHeight() / 2, getBulletSpeed(), currentDirection);
+                bullet = new Bullet(this.getPosition().getX() + 2 * this.getWidth() / 3, this.getPosition().getY() + this.getHeight() / 2 - bullet.getHeight() / 2, getBulletSpeed(), currentDirection);
             }
             bulletList.add(bullet);
         }

@@ -7,10 +7,7 @@ import main.java.utils.SaveGame;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 public class ScoreBoardMenu extends BaseScene {
@@ -36,7 +33,7 @@ public class ScoreBoardMenu extends BaseScene {
     private JButton createEscapeButton() {
         JButton escapeButton = new JButton("Escape");
 
-            escapeButton.setFont(tankFont.deriveFont(Font.BOLD, (float) FRAME_HEIGHT / 40));
+        escapeButton.setFont(tankFont.deriveFont(Font.BOLD, (float) FRAME_HEIGHT / 40));
 
         escapeButton.setForeground(Color.WHITE);
         escapeButton.setBackground(new Color(70, 70, 70));

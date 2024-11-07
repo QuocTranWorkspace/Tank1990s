@@ -31,34 +31,32 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class GameplayManager extends BaseScene implements ActionListener, KeyListener {
-    public static int SLIPPERY = App.FRAME_HEIGHT / 150;
     public static final int VELOCITY_MOVE = App.FRAME_HEIGHT / 280;
     public static final int VELOCITY_SHOOT = App.FRAME_HEIGHT / 280;
-
-    private transient TankSpawner playerTankSpawner;
-    private transient TankSpawner enemyTankSpawner;
+    public static int SLIPPERY = App.FRAME_HEIGHT / 150;
     public static DestroyAnimation destroyTanks;
-    private transient DestroyAnimation destroyEnvironment;
-    private transient PlayerTank player;
-    private transient TankManager tankManager;
-    private transient PowerUpsManager powerUpsManager;
-
-    private static int currentLevel;
-    private int nextLevel = currentLevel;
     public static LevelRenderer levelRenderer;
-    private transient java.util.List<Environment> map = new ArrayList<>();
-
-    private transient Home home = new Home(new Point2D((int) (13 * App.FRAME_HEIGHT / 27.9), (int) (25 * App.FRAME_HEIGHT / 27.9)));
-    private boolean isLose = false;
-
     public static Set<EnemyTank> currentEnemies = new HashSet<>();
-
     // Static variables for displaying
     public static int level = 0;
     public static int score = 0;
     public static int health = 2;
     public static int enemyLeft = 16;
-
+    private static int currentLevel;
+    private final Map<BaseTank, Timer> slidingTimers = new HashMap<>();
+    List<Image> spawnImages = new ArrayList<>();
+    List<Image> destroySmallImages = new ArrayList<>();
+    List<Image> destroyBigImages = new ArrayList<>();
+    private transient TankSpawner playerTankSpawner;
+    private transient TankSpawner enemyTankSpawner;
+    private transient DestroyAnimation destroyEnvironment;
+    private transient PlayerTank player;
+    private transient TankManager tankManager;
+    private transient PowerUpsManager powerUpsManager;
+    private int nextLevel = currentLevel;
+    private transient java.util.List<Environment> map = new ArrayList<>();
+    private transient Home home = new Home(new Point2D((int) (13 * App.FRAME_HEIGHT / 27.9), (int) (25 * App.FRAME_HEIGHT / 27.9)));
+    private boolean isLose = false;
     private boolean isGameActive;
 
     public GameplayManager() throws Exception {
@@ -81,10 +79,6 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
         gameLoop.start();
     }
 
-    List<Image> spawnImages = new ArrayList<>();
-    List<Image> destroySmallImages = new ArrayList<>();
-    List<Image> destroyBigImages = new ArrayList<>();
-
     private void setupComponents() throws Exception {
         player = new PlayerTank(new Point2D((int) (10 * App.FRAME_HEIGHT / 27.9), (int) (25 * App.FRAME_HEIGHT / 27.9)));
         tankManager = new TankManager();
@@ -106,8 +100,10 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
 
         for (int i = 1; i <= 10; i++) {
             spawnImages.add(new ImageIcon(Objects.requireNonNull(getClass().getResource("../../resource/img/spawning/spawn_" + i + ".png"))).getImage());
-            if (i <= 7) destroyBigImages.add(new ImageIcon(Objects.requireNonNull(getClass().getResource("../../resource/img/explode/explode_big_" + i + ".png"))).getImage());
-            if (i <= 5) destroySmallImages.add(new ImageIcon(Objects.requireNonNull(getClass().getResource("../../resource/img/explode/explode_small_" + i + ".png"))).getImage());
+            if (i <= 7)
+                destroyBigImages.add(new ImageIcon(Objects.requireNonNull(getClass().getResource("../../resource/img/explode/explode_big_" + i + ".png"))).getImage());
+            if (i <= 5)
+                destroySmallImages.add(new ImageIcon(Objects.requireNonNull(getClass().getResource("../../resource/img/explode/explode_small_" + i + ".png"))).getImage());
         }
     }
 
@@ -139,8 +135,8 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
         }
 
         if (currentLevel < nextLevel && isGameActive) {
-                currentLevel = nextLevel;
-                resetGameComponents();
+            currentLevel = nextLevel;
+            resetGameComponents();
         }
     }
 
@@ -413,14 +409,14 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
 
         health = player.getHealth();
 
-            if (player.isInvincible()) {
-                if (player.getCurrentInvincible() == PlayerTank.invincibleImage1) {
-                    player.setCurrentInvincible(PlayerTank.invincibleImage2);
-                } else {
-                    player.setCurrentInvincible(PlayerTank.invincibleImage1);
-                }
-                g.drawImage(player.getCurrentInvincible(), player.getPosition().getX(), player.getPosition().getY(), player.getWidth(), player.getHeight(), null);
+        if (player.isInvincible()) {
+            if (player.getCurrentInvincible() == PlayerTank.invincibleImage1) {
+                player.setCurrentInvincible(PlayerTank.invincibleImage2);
+            } else {
+                player.setCurrentInvincible(PlayerTank.invincibleImage1);
             }
+            g.drawImage(player.getCurrentInvincible(), player.getPosition().getX(), player.getPosition().getY(), player.getWidth(), player.getHeight(), null);
+        }
 
         updatePlayerBullet();
     }
@@ -498,8 +494,6 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
                 && powerUp.getY() <= tank.getPosition().getY() + tank.getHeight()
                 && powerUp.getY() + powerUp.getHeight() >= tank.getPosition().getY();
     }
-
-    private final Map<BaseTank, Timer> slidingTimers = new HashMap<>();
 
     public void startSlidingEffect(BaseTank tank) {
         if (slidingTimers.containsKey(tank) && slidingTimers.get(tank).isRunning()) {
@@ -584,11 +578,11 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
                 throw new RuntimeException("Movement error: " + ex.getMessage(), ex);
             }
         }
-    
+
         if (player.isShooting() && e.getKeyCode() == KeyEvent.VK_SPACE) {
             player.shoot();
         }
-    
+
         if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
             GameplayMenu.togglePause(GameplayMenu.pausePanel);
         }
@@ -619,7 +613,7 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
         if (e.getKeyCode() == KeyEvent.VK_W || e.getKeyCode() == KeyEvent.VK_A || e.getKeyCode() == KeyEvent.VK_S || e.getKeyCode() == KeyEvent.VK_D) {
             for (Environment environment : map) {
                 if (environment != null && collision2D(player, environment) && environment instanceof Ice)
-                        startSlidingEffect(player);
+                    startSlidingEffect(player);
             }
         }
     }

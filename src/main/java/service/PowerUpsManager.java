@@ -19,10 +19,8 @@ public class PowerUpsManager {
 
     private final List<PowerUps> activePowerUps;
     private final Random random;
-
-    Timer powerUpSpawnTimer;
-
     private final TankManager tankManager;
+    Timer powerUpSpawnTimer;
 
     public PowerUpsManager(TankManager tankManager) {
         activePowerUps = new ArrayList<>();

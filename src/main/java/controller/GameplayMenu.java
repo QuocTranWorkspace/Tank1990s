@@ -3,7 +3,6 @@ package main.java.controller;
 import main.java.App;
 import main.java.model.SaveDTO;
 import main.java.service.GameplayManager;
-import main.java.service.SceneManager;
 import main.java.service.TimerManager;
 import main.java.utils.SaveGame;
 
@@ -16,8 +15,13 @@ import java.util.Objects;
 
 public class GameplayMenu extends BaseScene {
     public static JPanel pausePanel = new JPanel();
+    public static JPanel gameOverPanel;
+    JLabel highScoreValue;
+    JLabel currentScoreValue;
+    JLabel enemyCountLabel;
+    JLabel healthValueLabel;
+    JLabel levelValueLabel;
     private List<SaveDTO> scoreBoard = SaveGame.loadScores();
-
     public GameplayMenu() {
         sceneIndex = 2;
         setPreferredSize(new Dimension(FRAME_WIDTH, FRAME_HEIGHT));
@@ -36,6 +40,24 @@ public class GameplayMenu extends BaseScene {
         } else {
             TimerManager.getSharedTimer().start();
         }
+    }
+
+    public static void displayGameOverPanel() {
+        gameOverPanel.setVisible(true);
+        pausePanel.setVisible(false);
+    }
+
+    private static JLabel getInstructionsLabel() {
+        JLabel instructionsLabel = new JLabel("<html>"
+                + "<div style='text-align:center; font-family:" + "rockwell" + "; font-weight:bold; font-size:" + (FRAME_HEIGHT / 60) + "px; color:white; margin-left: " + (FRAME_HEIGHT / 30) + "'>"
+                + "W - Move Up<br>"
+                + "A - Move Left&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;D - Move Right<br>"
+                + "S - Move Down<br><br>"
+                + "Space - Shoot<br><br>"
+                + "Esc - Pause"
+                + "</div></html>");
+        instructionsLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        return instructionsLabel;
     }
 
     private void setUpPausePanel(JPanel pausePanel) {
@@ -100,12 +122,6 @@ public class GameplayMenu extends BaseScene {
         });
         return button;
     }
-
-    JLabel highScoreValue;
-    JLabel currentScoreValue;
-    JLabel enemyCountLabel;
-    JLabel healthValueLabel;
-    JLabel levelValueLabel;
 
     private void initPanels() {
         JPanel containerPanel = new JPanel();
@@ -252,8 +268,6 @@ public class GameplayMenu extends BaseScene {
         mainPanel.add(gameOverPanel);
     }
 
-    public static JPanel gameOverPanel;
-
     private void setUpGameOverPanel() {
         gameOverPanel = new JPanel();
         gameOverPanel.add(Box.createVerticalStrut(FRAME_HEIGHT / 40));
@@ -306,24 +320,6 @@ public class GameplayMenu extends BaseScene {
         gameOverPanel.setVisible(false);
     }
 
-    public static void displayGameOverPanel() {
-        gameOverPanel.setVisible(true);
-        pausePanel.setVisible(false);
-    }
-
-    private static JLabel getInstructionsLabel() {
-        JLabel instructionsLabel = new JLabel("<html>"
-                + "<div style='text-align:center; font-family:" + "rockwell" + "; font-weight:bold; font-size:" + (FRAME_HEIGHT / 60) + "px; color:white; margin-left: " + (FRAME_HEIGHT / 30) + "'>"
-                + "W - Move Up<br>"
-                + "A - Move Left&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;D - Move Right<br>"
-                + "S - Move Down<br><br>"
-                + "Space - Shoot<br><br>"
-                + "Esc - Pause"
-                + "</div></html>");
-        instructionsLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        return instructionsLabel;
-    }
-
     private JButton getPauseButton() {
         JButton pauseButton = new JButton("| |");
         pauseButton.setFont(new Font("Arial", Font.BOLD, FRAME_HEIGHT / 45));
@@ -356,8 +352,7 @@ public class GameplayMenu extends BaseScene {
         g.fillRect(0, 0, FRAME_WIDTH, FRAME_HEIGHT);
         if (!scoreBoard.isEmpty()) {
             highScoreValue.setText(String.valueOf(scoreBoard.get(0).getScore()));
-        }
-        else {
+        } else {
             highScoreValue.setText(String.valueOf(0));
         }
         currentScoreValue.setText(String.valueOf(GameplayManager.score));

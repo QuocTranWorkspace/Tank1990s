@@ -8,8 +8,8 @@ import java.awt.*;
 import java.util.Objects;
 
 public class Star {
-    private final PlayerTank player;
     public static final Image image = new ImageIcon(Objects.requireNonNull(Star.class.getResource("../../../resource/img/bonus/bonus_star.png"))).getImage();
+    private final PlayerTank player;
 
     public Star(PlayerTank player) {
         this.player = player;

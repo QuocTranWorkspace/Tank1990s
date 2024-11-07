@@ -11,8 +11,8 @@ import java.util.Set;
 import static main.java.service.GameplayManager.currentEnemies;
 
 public class Timer {
-    private final Set<EnemyTank> enemyTanks = currentEnemies;
     public static final Image image = new ImageIcon(Objects.requireNonNull(Timer.class.getResource("../../../resource/img/bonus/bonus_clock.png"))).getImage();
+    private final Set<EnemyTank> enemyTanks = currentEnemies;
 
     public void activate(TankManager tankManager) {
         for (EnemyTank enemy : currentEnemies) {

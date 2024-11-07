@@ -1,21 +1,15 @@
 package main.java.utils;
 
-import main.java.App;
-import main.java.model.Bullet;
 import main.java.model.tanks.Directions;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class DestroyAnimation {
     private static final int ANIMATION_INTERVAL = 50;
-    private java.util.List<Image> destroyImages = new ArrayList<>();
-
     private final java.util.List<AnimationState> activeAnimations = new ArrayList<>();
+    private java.util.List<Image> destroyImages = new ArrayList<>();
 
     public DestroyAnimation(java.util.List<Image> destroyImages) {
         this.destroyImages = destroyImages;
@@ -40,8 +34,8 @@ public class DestroyAnimation {
         for (AnimationState animation : activeAnimations) {
             Image destroyImage = destroyImages.get(animation.getStep());
 
-            int offsetX = - explosionSize / 4;
-            int offsetY = - explosionSize / 4;
+            int offsetX = -explosionSize / 4;
+            int offsetY = -explosionSize / 4;
 
             int x = animation.getLocation().getX() + offsetX;
             int y = animation.getLocation().getY() + offsetY;

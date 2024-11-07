@@ -7,8 +7,8 @@ import java.awt.*;
 import java.util.Objects;
 
 public class Tank {
-    private final PlayerTank player;
     public static final Image image = new ImageIcon(Objects.requireNonNull(Tank.class.getResource("../../../resource/img/bonus/bonus_tank.png"))).getImage();
+    private final PlayerTank player;
 
     public Tank(PlayerTank player) {
         this.player = player;

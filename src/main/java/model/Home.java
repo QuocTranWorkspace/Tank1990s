@@ -7,13 +7,12 @@ import java.awt.*;
 import java.util.Objects;
 
 public class Home {
+    public static Image deathImage = new ImageIcon(Objects.requireNonNull(Home.class.getResource("../../resource/img/gameplay/home_lose.png"))).getImage();
     private boolean isAlive;
     private Point2D position;
     private Image image;
     private int width;
     private int height;
-
-    public static Image deathImage = new ImageIcon(Objects.requireNonNull(Home.class.getResource("../../resource/img/gameplay/home_lose.png"))).getImage();
 
     public Home(Point2D position) {
         this.isAlive = true;

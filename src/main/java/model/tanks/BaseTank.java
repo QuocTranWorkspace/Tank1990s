@@ -29,6 +29,7 @@ public abstract class BaseTank extends TankFunction {
     private boolean isMovable = true;
     private boolean isShootable = true;
     private boolean isInvincible = false;
+    private boolean reverted = false;
 
     protected BaseTank(String name, Point2D position, int point, int health, int movementSpeed, int bulletSpeed, String description) {
         this.name = isValidName(name) ? name : "DefaultTank";
@@ -167,10 +168,6 @@ public abstract class BaseTank extends TankFunction {
     public void move(int velocity) throws Exception {
     }
 
-    public void setDirection(Directions direction) {
-        this.direction = direction;
-    }
-
     @Override
     public void shoot(BaseTank tank) {
     }
@@ -231,8 +228,6 @@ public abstract class BaseTank extends TankFunction {
         return Math.max(0, Math.min(App.FRAME_HEIGHT - App.FRAME_HEIGHT / 13, value));
     }
 
-    private boolean reverted = false;
-
     public void updatePreviousPosition() {
         if (!reverted) {
             previousPosition = new Point2D(getPosition().getX(), getPosition().getY());
@@ -248,6 +243,10 @@ public abstract class BaseTank extends TankFunction {
 
     public Directions getDirection() {
         return direction;
+    }
+
+    public void setDirection(Directions direction) {
+        this.direction = direction;
     }
 
     public boolean isMovable() {

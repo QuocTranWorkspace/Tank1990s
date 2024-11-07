@@ -1,14 +1,17 @@
 package main.java.utils;
 
 import main.java.model.SaveDTO;
-import main.java.service.SceneManager;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Base64;
+import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -17,7 +20,7 @@ public class SaveGame {
     private static final Logger LOGGER = Logger.getLogger(SaveGame.class.getName());
 
     public static void saveScore(String name, String score) {
-        Date dNow = new Date( );
+        Date dNow = new Date();
         SimpleDateFormat ft = new SimpleDateFormat("E yyyy.MM.dd 'at' hh:mm:ss a zzz");
         SaveDTO saveDTO = new SaveDTO(name, Integer.parseInt(score), ft.format(dNow));
         String encodedEntry = encode(saveDTO.getName() + " " + saveDTO.getScore() + " " + saveDTO.getDate());

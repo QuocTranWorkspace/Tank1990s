@@ -1,7 +1,5 @@
 package main.java.model;
 
-import java.util.Date;
-
 public class SaveDTO {
     private String name;
     private int score;

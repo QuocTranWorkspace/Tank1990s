@@ -8,14 +8,13 @@ import java.awt.*;
 import java.util.Objects;
 
 public class PlayerTank extends BaseTank {
+    public static final Image shieldImage = new ImageIcon(Objects.requireNonNull(PlayerTank.class.getResource("../../resource/img/player/shield.png"))).getImage();
+    public static final Image invincibleImage1 = new ImageIcon(Objects.requireNonNull(PlayerTank.class.getResource("../../resource/img/player/invincible_1.png"))).getImage();
+    public static final Image invincibleImage2 = new ImageIcon(Objects.requireNonNull(PlayerTank.class.getResource("../../resource/img/player/invincible_2.png"))).getImage();
     private Directions direction;
     private Point2D position;
     private boolean shield = false;
     private int tier;
-
-    public static final Image shieldImage = new ImageIcon(Objects.requireNonNull(PlayerTank.class.getResource("../../resource/img/player/shield.png"))).getImage();
-    public static final Image invincibleImage1 = new ImageIcon(Objects.requireNonNull(PlayerTank.class.getResource("../../resource/img/player/invincible_1.png"))).getImage();
-    public static final Image invincibleImage2 = new ImageIcon(Objects.requireNonNull(PlayerTank.class.getResource("../../resource/img/player/invincible_2.png"))).getImage();
     private Image currentInvincible = PlayerTank.invincibleImage1;
 
     public PlayerTank(Point2D position) {

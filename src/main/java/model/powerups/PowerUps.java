@@ -8,13 +8,12 @@ import java.awt.*;
 
 public class PowerUps {
     private final Type type;
+    private final TankManager tankManager;
     private int x;
     private int y;
     private Image image;
     private int width = (int) (2 * App.FRAME_HEIGHT / 27.9);
     private int height = (int) (2 * App.FRAME_HEIGHT / 27.9);
-
-    private final TankManager tankManager;
 
     public PowerUps(int x, int y, Type type, TankManager tankManager) {
         this.x = x;
@@ -22,17 +21,6 @@ public class PowerUps {
         this.type = type;
         setImage(type);
         this.tankManager = tankManager;
-    }
-
-    private void setImage(Type type) {
-        switch (type) {
-            case HELMET -> this.image = Helmet.image;
-            case SHOVEL -> this.image = Shovel.image;
-            case STAR -> this.image = Star.image;
-            case TANK -> this.image = Tank.image;
-            case GRENADE -> this.image = Grenade.image;
-            case TIMER -> this.image = Timer.image;
-        }
     }
 
     public void activate(PlayerTank tank) {
@@ -70,6 +58,17 @@ public class PowerUps {
 
     public Image getImage() {
         return image;
+    }
+
+    private void setImage(Type type) {
+        switch (type) {
+            case HELMET -> this.image = Helmet.image;
+            case SHOVEL -> this.image = Shovel.image;
+            case STAR -> this.image = Star.image;
+            case TANK -> this.image = Tank.image;
+            case GRENADE -> this.image = Grenade.image;
+            case TIMER -> this.image = Timer.image;
+        }
     }
 
     public void setImage(Image image) {
