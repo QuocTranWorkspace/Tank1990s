@@ -49,9 +49,9 @@ public class GameplayMenu extends BaseScene {
         pausePanel.add(Box.createVerticalStrut(FRAME_HEIGHT / 40));
         pausePanel.add(titleLabel);
 
-        JButton continueButton = createPauseButton("Continue", pausePanel);
-        JButton saveButton = createPauseButton("Save", pausePanel);
-        JButton exitButton = createPauseButton("Exit", pausePanel);
+        JButton continueButton = createPauseButton(" Continue ", pausePanel);
+        JButton saveButton = createPauseButton("   Save   ", pausePanel);
+        JButton exitButton = createPauseButton("   Exit   ", pausePanel);
 
         pausePanel.add(Box.createVerticalGlue());
         pausePanel.add(continueButton);
@@ -77,12 +77,12 @@ public class GameplayMenu extends BaseScene {
 
         button.addActionListener(actionEvent -> {
             switch (text) {
-                case "Continue" -> togglePause(pausePanel);
-                case "Save" -> {
+                case " Continue " -> togglePause(pausePanel);
+                case "   Save   " -> {
                     togglePause(pausePanel);
                     App.sceneManager.loadScene(0);
                 }
-                case "Exit" -> {
+                case "   Exit   " -> {
                     togglePause(pausePanel);
                     App.sceneManager.loadScene(0);
                     this.gameLoop.stop();

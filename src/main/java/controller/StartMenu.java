@@ -30,7 +30,7 @@ public class StartMenu extends BaseScene implements KeyListener {
         playButton.setFont(tankFont.deriveFont(Font.BOLD, (float) FRAME_HEIGHT / 40));
         playButton.setForeground(Color.WHITE);
         playButton.setBackground(new Color(0x00A86B));
-        playButton.setOpaque(true);  // Ensure the background color is applied
+        playButton.setOpaque(true);
         playButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         playButton.setFocusPainted(false);
         playButton.addActionListener(actionEvent -> App.sceneManager.loadScene(1));
@@ -40,7 +40,7 @@ public class StartMenu extends BaseScene implements KeyListener {
         exitButton.setFont(tankFont.deriveFont(Font.BOLD, (float) FRAME_HEIGHT / 40));
         exitButton.setForeground(Color.WHITE);
         exitButton.setBackground(new Color(0xB22222));
-        exitButton.setOpaque(true);  // Ensure the background color is applied
+        exitButton.setOpaque(true);
         exitButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         exitButton.setFocusPainted(false);
         exitButton.addActionListener(actionEvent -> App.sceneManager.closeApp());

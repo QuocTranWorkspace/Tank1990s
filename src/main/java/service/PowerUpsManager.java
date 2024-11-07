@@ -4,6 +4,7 @@ import main.java.App;
 import main.java.model.PlayerTank;
 import main.java.model.Point2D;
 import main.java.model.powerups.PowerUps;
+import main.java.model.powerups.Shovel;
 import main.java.model.powerups.Type;
 
 import javax.swing.*;
@@ -61,6 +62,7 @@ public class PowerUpsManager {
         if (powerUpSpawnTimer.isRunning()) {
             powerUpSpawnTimer.stop();
         }
+        Shovel.getInstance().deactivate();
     }
 
     public List<PowerUps> getActivePowerUps() {

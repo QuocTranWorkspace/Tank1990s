@@ -14,7 +14,7 @@ public class PowerUps {
     private int width = (int) (2 * App.FRAME_HEIGHT / 27.9);
     private int height = (int) (2 * App.FRAME_HEIGHT / 27.9);
 
-    private TankManager tankManager;
+    private final TankManager tankManager;
 
     public PowerUps(int x, int y, Type type, TankManager tankManager) {
         this.x = x;
@@ -38,11 +38,17 @@ public class PowerUps {
     public void activate(PlayerTank tank) {
         switch (type) {
             case HELMET -> new Helmet(tank).activate();
-            case SHOVEL -> new Shovel().activate();
+            case SHOVEL -> Shovel.getInstance().activate();
             case STAR -> new Star(tank).activate(tank);
             case TANK -> new Tank(tank).activate();
             case GRENADE -> new Grenade().activate(tankManager);
             case TIMER -> new Timer().activate(tankManager);
+        }
+    }
+
+    public void deactivate() {
+        if (type == Type.SHOVEL) {
+            Shovel.getInstance().deactivate();
         }
     }
 

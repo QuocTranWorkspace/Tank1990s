@@ -43,9 +43,9 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
     private transient TankManager tankManager;
     private transient PowerUpsManager powerUpsManager;
 
-    private int currentLevel = 0;
+    private static int currentLevel = 0;
     private int nextLevel = currentLevel;
-    private transient LevelRenderer levelRenderer = new LevelRenderer(currentLevel);
+    public static LevelRenderer levelRenderer = new LevelRenderer(currentLevel);
     private transient java.util.List<Environment> map = levelRenderer.getMap();
 
     private transient Home home = new Home(new Point2D((int) (13 * App.FRAME_HEIGHT / 27.9), (int) (25 * App.FRAME_HEIGHT / 27.9)));
@@ -109,7 +109,7 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
         }
         if (isLose) {
             //TODO: save game or return
-//            TimerManager.getSharedTimer().stop();
+            TimerManager.getSharedTimer().stop();
             score = 0;
         }
     }
@@ -117,6 +117,7 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
     private void updateLevel() {
         level = currentLevel;
         if (tankManager.getTankList().isEmpty()) {
+            enemyLeft = 0;
             Timer nextLevelDelay = new Timer(3000, e -> {
                 if (tankManager.getTankList().isEmpty()) {
                     nextLevel++;
@@ -150,7 +151,6 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
 
     // Enemy tank
     public void updateEnemyTank() {
-        enemyLeft = tankManager.getTankList().size();
         for (EnemyTank tank : tankManager.getTankList()) {
             if (!tank.isDisplay()) continue;
             try {
@@ -220,7 +220,7 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
             if (player.isShield()) {
                 player.setShield(false);
             } else {
-                player.setHealth(player.getHealth() - 1);
+                player.setHealth(Math.max(0, player.getHealth() - 1));
                 if (player.getHealth() <= 0) {
                     destroyTanks.startDestroyAnimation(player.getPosition().getX(), player.getPosition().getY(), player.getDirection());
                     isLose = true;
@@ -417,6 +417,8 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
             enemyTankSpawner.drawTank(g, tank);
             updateEnemyBullet(tank, g);
             tankOnMap++;
+
+            enemyLeft = tankManager.getTankList().size();
         }
     }
 
