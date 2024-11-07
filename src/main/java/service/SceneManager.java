@@ -3,15 +3,11 @@ package main.java.service;
 import main.java.controller.GameplayMenu;
 import main.java.controller.ScoreBoardMenu;
 import main.java.controller.StartMenu;
-import main.java.utils.AccessingAllClassesInPackage;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -37,8 +33,7 @@ public class SceneManager {
                 Logger.getLogger(e.getMessage());
             }
         } else {
-            Logger logger = Logger.getLogger(SceneManager.class.getName());
-            logger.severe("Font file does not exist at: " + fontSource.getAbsolutePath());
+            LOGGER.severe("Font file does not exist at: " + fontSource.getAbsolutePath());
         }
     }
 

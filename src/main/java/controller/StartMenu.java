@@ -25,7 +25,7 @@ public class StartMenu extends BaseScene implements KeyListener {
         this.setBackground(Color.BLACK);
         this.add(Box.createVerticalGlue());
 
-        JButton playButton = new JButton("Play");
+        JButton playButton = new JButton("  Play  ");
         customizeButton(playButton);
         playButton.setFont(tankFont.deriveFont(Font.BOLD, (float) FRAME_HEIGHT / 40));
         playButton.setForeground(Color.WHITE);
@@ -35,7 +35,17 @@ public class StartMenu extends BaseScene implements KeyListener {
         playButton.setFocusPainted(false);
         playButton.addActionListener(actionEvent -> App.sceneManager.loadScene(1));
 
-        JButton exitButton = new JButton("Exit");
+        JButton scoreButton = new JButton("  Score ");
+        customizeButton(scoreButton);
+        scoreButton.setFont(tankFont.deriveFont(Font.BOLD, (float) FRAME_HEIGHT / 40));
+        scoreButton.setForeground(Color.WHITE);
+        scoreButton.setBackground(new Color(0xFFD700));
+        scoreButton.setOpaque(true);
+        scoreButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        scoreButton.setFocusPainted(false);
+        scoreButton.addActionListener(actionEvent -> App.sceneManager.loadScene(2));
+
+        JButton exitButton = new JButton("  Exit  ");
         customizeButton(exitButton);
         exitButton.setFont(tankFont.deriveFont(Font.BOLD, (float) FRAME_HEIGHT / 40));
         exitButton.setForeground(Color.WHITE);
@@ -47,6 +57,8 @@ public class StartMenu extends BaseScene implements KeyListener {
 
         this.add(Box.createVerticalGlue());
         this.add(playButton);
+        this.add(Box.createVerticalStrut(FRAME_HEIGHT / 40));
+        this.add(scoreButton);
         this.add(Box.createVerticalStrut(FRAME_HEIGHT / 40));
         this.add(exitButton);
         this.add(Box.createVerticalGlue());

@@ -43,10 +43,10 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
     private transient TankManager tankManager;
     private transient PowerUpsManager powerUpsManager;
 
-    private static int currentLevel = 0;
+    private static int currentLevel;
     private int nextLevel = currentLevel;
-    public static LevelRenderer levelRenderer = new LevelRenderer(currentLevel);
-    private transient java.util.List<Environment> map = levelRenderer.getMap();
+    public static LevelRenderer levelRenderer;
+    private transient java.util.List<Environment> map = new ArrayList<>();
 
     private transient Home home = new Home(new Point2D((int) (13 * App.FRAME_HEIGHT / 27.9), (int) (25 * App.FRAME_HEIGHT / 27.9)));
     private boolean isLose = false;
@@ -59,7 +59,7 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
     public static int health = 2;
     public static int enemyLeft = 16;
 
-    private boolean isGameActive = false;
+    private boolean isGameActive;
 
     public GameplayManager() throws Exception {
         // General setup
@@ -70,9 +70,12 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
         addKeyListener(this);
 
         resetGame();
-        isGameActive = true;
-
-        System.out.println("hello");
+        isGameActive = false;
+        Timer timer = new Timer(2000, e -> {
+            isGameActive = true;
+        });
+        timer.setRepeats(false);
+        timer.start();
 
         gameLoop.addActionListener(this);
         gameLoop.start();
@@ -135,22 +138,14 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
             nextLevel = currentLevel + 1;
         }
 
-        if (currentLevel < nextLevel) {
-            Timer timer = new Timer(2000,  e -> {
+        if (currentLevel < nextLevel && isGameActive) {
                 currentLevel = nextLevel;
                 resetGameComponents();
-            });
-
-            timer.setRepeats(false);
-            timer.start();
         }
     }
 
     private void updateGameState() {
-        if (player.getHealth() <= 0 || !home.isAlive()) {
-            isLose = true;
-        }
-        else {isLose = false;}
+        isLose = player.getHealth() <= 0 || !home.isAlive();
         if (isLose) {
             GameplayMenu.displayGameOverPanel();
         }
@@ -365,6 +360,7 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
     }
 
     public void drawComponents(Graphics g) {
+        updateGameLogic();
         setBackground(Color.BLACK);
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, App.FRAME_HEIGHT, App.FRAME_HEIGHT);
@@ -378,8 +374,6 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
         drawPowerUps(g);
         destroyEnvironment.drawAnimations(g, (int) (App.FRAME_HEIGHT / 27.9));
         destroyTanks.drawAnimations(g, (int) (3 * App.FRAME_HEIGHT / 27.9));
-
-        updateGameLogic();
     }
 
     private void drawPowerUps(Graphics g) {

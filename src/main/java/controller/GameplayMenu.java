@@ -1,18 +1,22 @@
 package main.java.controller;
 
 import main.java.App;
+import main.java.model.SaveDTO;
 import main.java.service.GameplayManager;
 import main.java.service.SceneManager;
 import main.java.service.TimerManager;
+import main.java.utils.SaveGame;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.util.List;
 import java.util.Objects;
 
 public class GameplayMenu extends BaseScene {
     public static JPanel pausePanel = new JPanel();
+    private List<SaveDTO> scoreBoard = SaveGame.loadScores();
 
     public GameplayMenu() {
         sceneIndex = 2;
@@ -250,7 +254,6 @@ public class GameplayMenu extends BaseScene {
 
     public static JPanel gameOverPanel;
 
-    // Inside initPanels or a separate method to create the game over panel
     private void setUpGameOverPanel() {
         gameOverPanel = new JPanel();
         gameOverPanel.add(Box.createVerticalStrut(FRAME_HEIGHT / 40));
@@ -278,7 +281,7 @@ public class GameplayMenu extends BaseScene {
 
         JTextField nameField = new JTextField(15);
         nameField.setMaximumSize(new Dimension(FRAME_HEIGHT / 3, FRAME_HEIGHT / 20));
-        nameField.setFont(tankFont.deriveFont(Font.PLAIN, (float) FRAME_HEIGHT / 40));
+        nameField.setFont(tankFont.deriveFont(Font.BOLD, (float) FRAME_HEIGHT / 40));
         nameField.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(Color.WHITE, 1),
                 BorderFactory.createEmptyBorder(5, 5, 5, 5)
@@ -294,7 +297,10 @@ public class GameplayMenu extends BaseScene {
         saveButton.setForeground(Color.WHITE);
         saveButton.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
         saveButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        saveButton.addActionListener(e -> App.sceneManager.loadScene(0));
+        saveButton.addActionListener(e -> {
+            SaveGame.saveScore(nameField.getText(), currentScoreValue.getText());
+            App.sceneManager.loadScene(0);
+        });
         gameOverPanel.add(saveButton);
 
         gameOverPanel.setVisible(false);
@@ -348,7 +354,12 @@ public class GameplayMenu extends BaseScene {
     public void drawComponents(Graphics g) {
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, FRAME_WIDTH, FRAME_HEIGHT);
-        highScoreValue.setText(String.valueOf(10));
+        if (!scoreBoard.isEmpty()) {
+            highScoreValue.setText(String.valueOf(scoreBoard.get(0).getScore()));
+        }
+        else {
+            highScoreValue.setText(String.valueOf(0));
+        }
         currentScoreValue.setText(String.valueOf(GameplayManager.score));
         healthValueLabel.setText(String.valueOf(GameplayManager.health));
         enemyCountLabel.setText(String.valueOf(GameplayManager.enemyLeft));
