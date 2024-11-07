@@ -2,6 +2,7 @@ package main.java.model.tanks;
 
 import main.java.model.Bullet;
 import main.java.model.Point2D;
+import main.java.utils.SoundEffect;
 
 import javax.swing.*;
 import java.util.Objects;
@@ -30,6 +31,7 @@ public class EnemyTank extends BaseTank {
         Directions direction = currentDirection;
 
         if (isMovable()) {
+            SoundEffect.nMovingSound();
             switch (direction) {
                 case DOWN:
                     moveDown(velocity);

@@ -3,6 +3,7 @@ package main.java.model.powerups;
 import main.java.App;
 import main.java.model.PlayerTank;
 import main.java.service.TankManager;
+import main.java.utils.SoundEffect;
 
 import java.awt.*;
 
@@ -24,6 +25,7 @@ public class PowerUps {
     }
 
     public void activate(PlayerTank tank) {
+        SoundEffect.bonusSound();
         switch (type) {
             case HELMET -> new Helmet(tank).activate();
             case SHOVEL -> Shovel.getInstance().activate();

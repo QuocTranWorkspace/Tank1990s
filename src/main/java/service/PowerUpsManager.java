@@ -36,7 +36,7 @@ public class PowerUpsManager {
     }
 
     public void spawnPowerUp() {
-        Point2D position = new Point2D(Math.max(0, Math.min((int) (25 * App.FRAME_HEIGHT / 27.9), random.nextInt((int) (25 * App.FRAME_HEIGHT / 27.9)))), Math.max(0, Math.min((int) (25 * App.FRAME_HEIGHT / 27.9), random.nextInt((int) (25 * App.FRAME_HEIGHT / 27.9)))));
+        Point2D position = new Point2D((int) Math.max(App.FRAME_HEIGHT / 27.9, Math.min((int) (25 * App.FRAME_HEIGHT / 27.9), random.nextInt((int) (25 * App.FRAME_HEIGHT / 27.9)))), (int) Math.max(App.FRAME_HEIGHT / 27.9, Math.min((int) (25 * App.FRAME_HEIGHT / 27.9), random.nextInt((int) (25 * App.FRAME_HEIGHT / 27.9)))));
         Type powerUpType = Type.getRandomType();
         PowerUps newPowerUp = new PowerUps(position.getX(), position.getY(), powerUpType, tankManager);
         activePowerUps.add(newPowerUp);

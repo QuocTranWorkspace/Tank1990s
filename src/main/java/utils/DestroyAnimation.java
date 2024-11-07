@@ -16,6 +16,7 @@ public class DestroyAnimation {
     }
 
     public void startDestroyAnimation(int x, int y, Directions direction) {
+        SoundEffect.fExplosionSound();
         AnimationState animation = new AnimationState(x, y, direction);
         activeAnimations.add(animation);
 

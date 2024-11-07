@@ -2,6 +2,7 @@ package main.java.model.powerups;
 
 import main.java.model.PlayerTank;
 import main.java.model.tanks.BaseTank;
+import main.java.utils.SoundEffect;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,14 +17,14 @@ public class Star {
     }
 
     public void activate(BaseTank tank) {
-        if (player.getTier() < 4) {
-            player.setTier(player.getTier() + 1);
-        }
+        SoundEffect.tBonusHitSound();
+        player.setTier(Math.min(player.getTier() + 1, 4));
         switch (player.getTier()) {
             case 2 -> tank.setBulletSpeed(3);
             case 3 -> tank.setBullet(2);
             case 4 -> {
             }
+            default -> {}
         }
     }
 

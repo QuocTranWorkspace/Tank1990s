@@ -5,6 +5,7 @@ import main.java.model.SaveDTO;
 import main.java.service.GameplayManager;
 import main.java.service.TimerManager;
 import main.java.utils.SaveGame;
+import main.java.utils.SoundEffect;
 
 import javax.swing.*;
 import java.awt.*;
@@ -27,13 +28,16 @@ public class GameplayMenu extends BaseScene {
         setPreferredSize(new Dimension(FRAME_WIDTH, FRAME_HEIGHT));
         gameLoop = TimerManager.getSharedTimer();
         gameLoop.addActionListener(this);
-        setFocusable(true); // Make this component focusable
-        addKeyListener(this); // Register the key listener
+        setFocusable(true);
+        addKeyListener(this);
 
         initPanels();
     }
 
     public static void togglePause(JPanel panel) {
+        if (!panel.isVisible()) {
+            SoundEffect.pauseSound();
+        }
         panel.setVisible(!pausePanel.isVisible());
         if (TimerManager.getSharedTimer().isRunning()) {
             TimerManager.getSharedTimer().stop();
@@ -77,11 +81,8 @@ public class GameplayMenu extends BaseScene {
         pausePanel.add(titleLabel);
 
         JButton continueButton = createPauseButton("Continue", pausePanel);
-        continueButton.setBorder(null);
-        JButton saveButton = createPauseButton("Save", pausePanel);
-        saveButton.setBorder(null);
-        JButton exitButton = createPauseButton("Exit", pausePanel);
-        exitButton.setBorder(null);
+        JButton saveButton = createPauseButton("  Save  ", pausePanel);
+        JButton exitButton = createPauseButton("  Exit  ", pausePanel);
 
         pausePanel.add(Box.createVerticalGlue());
         pausePanel.add(continueButton);
@@ -108,8 +109,8 @@ public class GameplayMenu extends BaseScene {
         button.addActionListener(actionEvent -> {
             switch (text) {
                 case "Continue" -> togglePause(pausePanel);
-                case "Save" -> displayGameOverPanel();
-                case "Exit" -> {
+                case "  Save  " -> displayGameOverPanel();
+                case "  Exit  " -> {
                     togglePause(pausePanel);
                     App.sceneManager.loadScene(0);
                     this.gameLoop.stop();
@@ -285,7 +286,7 @@ public class GameplayMenu extends BaseScene {
 
         gameOverPanel.add(Box.createVerticalStrut(FRAME_HEIGHT / 40));
 
-        JLabel finalScoreLabel = new JLabel("Your Score: " + currentScoreValue.getText());
+        JLabel finalScoreLabel = new JLabel("Your Score: " + GameplayManager.score);
         finalScoreLabel.setFont(tankFont.deriveFont(Font.PLAIN, (float) FRAME_HEIGHT / 35));
         finalScoreLabel.setForeground(Color.WHITE);
         finalScoreLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -302,10 +303,10 @@ public class GameplayMenu extends BaseScene {
         ));
         gameOverPanel.add(nameField);
 
-        gameOverPanel.add(Box.createVerticalStrut(FRAME_HEIGHT / 40));
+        gameOverPanel.add(Box.createVerticalStrut(FRAME_HEIGHT / 20));
 
         // Save button
-        JButton saveButton = new JButton("Save Score");
+        JButton saveButton = new JButton("  Save  ");
         saveButton.setFont(tankFont.deriveFont(Font.BOLD, (float) FRAME_HEIGHT / 45));
         saveButton.setBackground(new Color(50, 50, 50));
         saveButton.setForeground(Color.WHITE);
@@ -316,6 +317,19 @@ public class GameplayMenu extends BaseScene {
             App.sceneManager.loadScene(0);
         });
         gameOverPanel.add(saveButton);
+
+        gameOverPanel.add(Box.createVerticalStrut(FRAME_HEIGHT / 40));
+
+        JButton exitBtn = new JButton("  Exit  ");
+        exitBtn.setFont(tankFont.deriveFont(Font.BOLD, (float) FRAME_HEIGHT / 45));
+        exitBtn.setBackground(new Color(50, 50, 50));
+        exitBtn.setForeground(Color.WHITE);
+        exitBtn.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
+        exitBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
+        exitBtn.addActionListener(e -> {
+            App.sceneManager.loadScene(0);
+        });
+        gameOverPanel.add(exitBtn);
 
         gameOverPanel.setVisible(false);
     }

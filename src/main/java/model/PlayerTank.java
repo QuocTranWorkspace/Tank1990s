@@ -2,6 +2,7 @@ package main.java.model;
 
 import main.java.model.tanks.BaseTank;
 import main.java.model.tanks.Directions;
+import main.java.utils.SoundEffect;
 
 import javax.swing.*;
 import java.awt.*;
@@ -39,6 +40,7 @@ public class PlayerTank extends BaseTank {
     public void move(int velocity) {
         updatePreviousPosition();
         if (isMovable()) {
+            SoundEffect.movingSound();
             switch (direction) {
                 case DOWN:
                     moveDown(velocity);
@@ -104,6 +106,7 @@ public class PlayerTank extends BaseTank {
 
     public void shoot() {
         if (isShooting() && isShootable()) {
+            SoundEffect.shootSound();
             Bullet bullet = new Bullet(0, 0, getBulletSpeed(), direction);
             if (direction == Directions.DOWN) {
                 bullet = new Bullet(this.position.getX() + this.getWidth() / 2 - bullet.getHeight() / 2, this.getPosition().getY() + 2 * this.getHeight() / 3, getBulletSpeed(), direction);

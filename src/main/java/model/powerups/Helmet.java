@@ -18,7 +18,7 @@ public class Helmet {
     public void activate() {
         player.setShield(true);
 
-        Timer timer = new Timer(3000, e -> player.setShield(false));
+        Timer timer = new Timer(10000, e -> player.setShield(false));
         timer.setRepeats(false);
         timer.start();
     }

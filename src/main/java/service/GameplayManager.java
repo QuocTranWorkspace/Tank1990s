@@ -7,16 +7,14 @@ import main.java.model.Bullet;
 import main.java.model.Home;
 import main.java.model.PlayerTank;
 import main.java.model.Point2D;
-import main.java.model.environments.Environment;
-import main.java.model.environments.Ice;
-import main.java.model.environments.SteelWall;
-import main.java.model.environments.Tree;
+import main.java.model.environments.*;
 import main.java.model.powerups.PowerUps;
 import main.java.model.tanks.BaseTank;
 import main.java.model.tanks.Directions;
 import main.java.model.tanks.EnemyTank;
 import main.java.utils.DestroyAnimation;
 import main.java.utils.LevelRenderer;
+import main.java.utils.SoundEffect;
 import main.java.utils.TankSpawner;
 
 import javax.swing.Timer;
@@ -60,7 +58,6 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
     private boolean isGameActive;
 
     public GameplayManager() throws Exception {
-        // General setup
         Timer gameLoop = TimerManager.getSharedTimer();
         setupComponents();
         setFocusable(true);
@@ -77,6 +74,8 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
 
         gameLoop.addActionListener(this);
         gameLoop.start();
+
+        SoundEffect.levelStartingSound();
     }
 
     private void setupComponents() throws Exception {
@@ -143,6 +142,8 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
     private void updateGameState() {
         isLose = player.getHealth() <= 0 || !home.isAlive();
         if (isLose) {
+            SoundEffect.gameOverSound();
+            TimerManager.getSharedTimer().stop();
             GameplayMenu.displayGameOverPanel();
         }
     }
@@ -186,6 +187,7 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
                 return;
             } else if (environment instanceof Ice) {
                 if (!isTankSliding(tank)) {
+                    SoundEffect.iceSound();
                     startSlidingEffect(tank);
                 }
                 return;
@@ -212,6 +214,7 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
             bullet.move();
 
             if (collision2D(bullet, home)) {
+                destroyTanks.startDestroyAnimation(home.getPosition().getX(), home.getPosition().getY(), Directions.UP);
                 bulletIterator.remove();
                 isLose = true;
                 home.setAlive(false);
@@ -232,6 +235,7 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
             bulletIterator.remove();
 
             if (player.isShield()) {
+                SoundEffect.shieldHitSound();
                 player.setShield(false);
             } else {
                 player.setHealth(Math.max(0, player.getHealth() - 1));
@@ -254,11 +258,18 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
             if (environment == null || !environment.isDestroyable()) continue;
 
             if (collision2D(bullet, environment)) {
+                if (environment instanceof BrickWall) {
+                    SoundEffect.brickHitSound();
+                }
+                else if (environment instanceof SteelWall) {
+                    SoundEffect.steelHitSound();
+                }
                 environment.setHealth(environment.getHealth() - 1);
                 destroyEnvironment.startDestroyAnimation(bullet.getX(), bullet.getY(), bullet.getDirection());
                 bulletIterator.remove();
 
                 if (environment.getHealth() <= 0) {
+                    SoundEffect.eExplosionSound();
                     environmentIterator.remove();
                 }
                 break;
@@ -272,7 +283,7 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
 
         while (bulletIterator.hasNext()) {
             Bullet bullet = bulletIterator.next();
-            boolean isHandled = false;
+            boolean isHandled;
 
             if (!bullet.isActive()) {
                 bulletIterator.remove();
@@ -280,6 +291,7 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
             }
 
             if (collision2D(bullet, home)) {
+                destroyTanks.startDestroyAnimation(home.getPosition().getX(), home.getPosition().getY(), Directions.UP);
                 bulletIterator.remove();
                 isLose = true;
                 home.setAlive(false);
@@ -327,6 +339,12 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
             Environment environment = environmentIterator.next();
 
             if (environment != null && environment.isDestroyable() && collision2D(bullet, environment)) {
+                if (environment instanceof BrickWall) {
+                    SoundEffect.brickHitSound();
+                }
+                else if (environment instanceof SteelWall) {
+                    SoundEffect.steelHitSound();
+                }
                 int damage = calculateEnvironmentDamage(player.getTier(), environment);
                 environment.setHealth(environment.getHealth() - damage);
 
@@ -335,6 +353,7 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
                 bulletIterator.remove();
 
                 if (environment.getHealth() <= 0) {
+                    SoundEffect.eExplosionSound();
                     environmentIterator.remove();
                 }
                 break;
@@ -416,6 +435,10 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
                 player.setCurrentInvincible(PlayerTank.invincibleImage1);
             }
             g.drawImage(player.getCurrentInvincible(), player.getPosition().getX(), player.getPosition().getY(), player.getWidth(), player.getHeight(), null);
+        }
+
+        if (player.isShield()) {
+            g.drawImage(PlayerTank.shieldImage, player.getPosition().getX(), player.getPosition().getY(), player.getWidth(), player.getHeight(), null);
         }
 
         updatePlayerBullet();
@@ -513,7 +536,6 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
                     throw new RuntimeException(ex);
                 }
 
-                // Check for collision with non-ice environments
                 boolean collided = false;
                 for (Environment environment : map) {
                     if (environment != null && !(environment instanceof Ice) && collision2D(tank, environment)) {
@@ -529,7 +551,6 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
                     SLIPPERY--;
                 }
             } else {
-                // Stop the timer when sliding ends
                 slipperyTimer.get().stop();
             }
         });
@@ -612,8 +633,10 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
     public void keyReleased(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_W || e.getKeyCode() == KeyEvent.VK_A || e.getKeyCode() == KeyEvent.VK_S || e.getKeyCode() == KeyEvent.VK_D) {
             for (Environment environment : map) {
-                if (environment != null && collision2D(player, environment) && environment instanceof Ice)
+                if (environment != null && collision2D(player, environment) && environment instanceof Ice) {
+                    SoundEffect.iceSound();
                     startSlidingEffect(player);
+                }
             }
         }
     }

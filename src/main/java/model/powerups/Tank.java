@@ -1,6 +1,7 @@
 package main.java.model.powerups;
 
 import main.java.model.PlayerTank;
+import main.java.utils.SoundEffect;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,6 +17,7 @@ public class Tank {
 
     public void activate() {
         if (player.getPoint() >= 20000) {
+            SoundEffect.lifeSound();
             player.setLife(player.getLife() + 1);
         }
     }
