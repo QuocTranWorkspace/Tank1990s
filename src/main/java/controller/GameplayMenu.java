@@ -2,6 +2,7 @@ package main.java.controller;
 
 import main.java.App;
 import main.java.service.GameplayManager;
+import main.java.service.SceneManager;
 import main.java.service.TimerManager;
 
 import javax.swing.*;
@@ -49,9 +50,12 @@ public class GameplayMenu extends BaseScene {
         pausePanel.add(Box.createVerticalStrut(FRAME_HEIGHT / 40));
         pausePanel.add(titleLabel);
 
-        JButton continueButton = createPauseButton(" Continue ", pausePanel);
-        JButton saveButton = createPauseButton("   Save   ", pausePanel);
-        JButton exitButton = createPauseButton("   Exit   ", pausePanel);
+        JButton continueButton = createPauseButton("Continue", pausePanel);
+        continueButton.setBorder(null);
+        JButton saveButton = createPauseButton("Save", pausePanel);
+        saveButton.setBorder(null);
+        JButton exitButton = createPauseButton("Exit", pausePanel);
+        exitButton.setBorder(null);
 
         pausePanel.add(Box.createVerticalGlue());
         pausePanel.add(continueButton);
@@ -77,12 +81,9 @@ public class GameplayMenu extends BaseScene {
 
         button.addActionListener(actionEvent -> {
             switch (text) {
-                case " Continue " -> togglePause(pausePanel);
-                case "   Save   " -> {
-                    togglePause(pausePanel);
-                    App.sceneManager.loadScene(0);
-                }
-                case "   Exit   " -> {
+                case "Continue" -> togglePause(pausePanel);
+                case "Save" -> displayGameOverPanel();
+                case "Exit" -> {
                     togglePause(pausePanel);
                     App.sceneManager.loadScene(0);
                     this.gameLoop.stop();
@@ -112,7 +113,7 @@ public class GameplayMenu extends BaseScene {
         JPanel leftSidebar = new JPanel();
         leftSidebar.setLayout(new BoxLayout(leftSidebar, BoxLayout.Y_AXIS));
         leftSidebar.setPreferredSize(new Dimension(sidebarWidth, FRAME_HEIGHT));
-        leftSidebar.setBackground(new Color(50, 50, 50));  // Darker gray for a modern look
+        leftSidebar.setBackground(new Color(50, 50, 50));
 
         // Pause Button
         JButton pauseButton = getPauseButton();
@@ -242,6 +243,66 @@ public class GameplayMenu extends BaseScene {
 
         mainPanel.setLayout(new GridBagLayout());
         mainPanel.add(pausePanel);
+
+        setUpGameOverPanel();
+        mainPanel.add(gameOverPanel);
+    }
+
+    public static JPanel gameOverPanel;
+
+    // Inside initPanels or a separate method to create the game over panel
+    private void setUpGameOverPanel() {
+        gameOverPanel = new JPanel();
+        gameOverPanel.add(Box.createVerticalStrut(FRAME_HEIGHT / 40));
+        gameOverPanel.setLayout(new BoxLayout(gameOverPanel, BoxLayout.Y_AXIS));
+        gameOverPanel.setBackground(new Color(30, 30, 30));
+        gameOverPanel.setPreferredSize(new Dimension(FRAME_HEIGHT / 2, FRAME_HEIGHT / 3));
+        gameOverPanel.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
+
+        // Game Over label
+        JLabel gameOverLabel = new JLabel("Game Over");
+        gameOverLabel.setFont(tankFont.deriveFont(Font.BOLD, (float) FRAME_HEIGHT / 30));
+        gameOverLabel.setForeground(Color.RED);
+        gameOverLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        gameOverPanel.add(gameOverLabel);
+
+        gameOverPanel.add(Box.createVerticalStrut(FRAME_HEIGHT / 40));
+
+        JLabel finalScoreLabel = new JLabel("Your Score: " + currentScoreValue.getText());
+        finalScoreLabel.setFont(tankFont.deriveFont(Font.PLAIN, (float) FRAME_HEIGHT / 35));
+        finalScoreLabel.setForeground(Color.WHITE);
+        finalScoreLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        gameOverPanel.add(finalScoreLabel);
+
+        gameOverPanel.add(Box.createVerticalStrut(FRAME_HEIGHT / 40));
+
+        JTextField nameField = new JTextField(15);
+        nameField.setMaximumSize(new Dimension(FRAME_HEIGHT / 3, FRAME_HEIGHT / 20));
+        nameField.setFont(tankFont.deriveFont(Font.PLAIN, (float) FRAME_HEIGHT / 40));
+        nameField.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(Color.WHITE, 1),
+                BorderFactory.createEmptyBorder(5, 5, 5, 5)
+        ));
+        gameOverPanel.add(nameField);
+
+        gameOverPanel.add(Box.createVerticalStrut(FRAME_HEIGHT / 40));
+
+        // Save button
+        JButton saveButton = new JButton("Save Score");
+        saveButton.setFont(tankFont.deriveFont(Font.BOLD, (float) FRAME_HEIGHT / 45));
+        saveButton.setBackground(new Color(50, 50, 50));
+        saveButton.setForeground(Color.WHITE);
+        saveButton.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
+        saveButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        saveButton.addActionListener(e -> App.sceneManager.loadScene(0));
+        gameOverPanel.add(saveButton);
+
+        gameOverPanel.setVisible(false);
+    }
+
+    public static void displayGameOverPanel() {
+        gameOverPanel.setVisible(true);
+        pausePanel.setVisible(false);
     }
 
     private static JLabel getInstructionsLabel() {
@@ -278,7 +339,6 @@ public class GameplayMenu extends BaseScene {
             }
         }
     }
-
 
     @Override
     public void paintComponent(Graphics g) {

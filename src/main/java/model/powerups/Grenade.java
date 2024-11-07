@@ -22,8 +22,6 @@ public class Grenade {
             tankManager.getTankList().remove(enemyTank);
             enemyTanksIterator.remove();
         }
-
-        currentEnemies.clear();
     }
 
     public Image getImage() {

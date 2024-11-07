@@ -17,8 +17,10 @@ public class Timer {
     public void activate(TankManager tankManager) {
         for (EnemyTank enemy : currentEnemies) {
             int enemyIndex = tankManager.getTankList().indexOf(enemy);
-            tankManager.getTankList().get(enemyIndex).setMovable(false);
-            tankManager.getTankList().get(enemyIndex).setShootable(false);
+            if (enemyIndex >= 0) {
+                tankManager.getTankList().get(enemyIndex).setMovable(false);
+                tankManager.getTankList().get(enemyIndex).setShootable(false);
+            }
         }
 
         javax.swing.Timer timer = new javax.swing.Timer(10000, e -> {

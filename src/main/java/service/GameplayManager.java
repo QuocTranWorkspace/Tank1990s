@@ -35,10 +35,10 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
     public static final int VELOCITY_MOVE = App.FRAME_HEIGHT / 280;
     public static final int VELOCITY_SHOOT = App.FRAME_HEIGHT / 280;
 
-    private final transient TankSpawner playerTankSpawner;
-    private final transient TankSpawner enemyTankSpawner;
+    private transient TankSpawner playerTankSpawner;
+    private transient TankSpawner enemyTankSpawner;
     public static DestroyAnimation destroyTanks;
-    private final transient DestroyAnimation destroyEnvironment;
+    private transient DestroyAnimation destroyEnvironment;
     private transient PlayerTank player;
     private transient TankManager tankManager;
     private transient PowerUpsManager powerUpsManager;
@@ -59,93 +59,116 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
     public static int health = 2;
     public static int enemyLeft = 16;
 
+    private boolean isGameActive = false;
+
     public GameplayManager() throws Exception {
+        // General setup
         Timer gameLoop = TimerManager.getSharedTimer();
-        player = new PlayerTank(new Point2D((int) (10 * App.FRAME_HEIGHT / 27.9), (int) (25 * App.FRAME_HEIGHT / 27.9)));
+        setupComponents();
         setFocusable(true);
         requestFocusInWindow();
         addKeyListener(this);
 
-        tankManager = new TankManager();
+        resetGame();
+        isGameActive = true;
 
-        powerUpsManager = new PowerUpsManager(tankManager);
-
-        List<Image> spawnImages = new ArrayList<>();
-        List<Image> destroySmallImages = new ArrayList<>();
-        List<Image> destroyBigImages = new ArrayList<>();
-        for (int i = 1; i <= 10; i++) {
-            spawnImages.add(new ImageIcon(Objects.requireNonNull(getClass().getResource("../../resource/img/spawning/spawn_" + i + ".png"))).getImage());
-            if (i <= 7) {
-                destroyBigImages.add(new ImageIcon(Objects.requireNonNull(getClass().getResource("../../resource/img/explode/explode_big_" + i + ".png"))).getImage());
-            }
-            if (i <= 5) {
-                destroySmallImages.add(new ImageIcon(Objects.requireNonNull(getClass().getResource("../../resource/img/explode/explode_small_" + i + ".png"))).getImage());
-            }
-        }
-
-        playerTankSpawner = new TankSpawner(spawnImages);
-        enemyTankSpawner = new TankSpawner(spawnImages);
-        destroyTanks = new DestroyAnimation(destroyBigImages);
-        destroyEnvironment = new DestroyAnimation(destroySmallImages);
+        System.out.println("hello");
 
         gameLoop.addActionListener(this);
         gameLoop.start();
     }
 
-    @Override
-    public void paintComponent(Graphics g) {
-        drawComponents(g);
+    List<Image> spawnImages = new ArrayList<>();
+    List<Image> destroySmallImages = new ArrayList<>();
+    List<Image> destroyBigImages = new ArrayList<>();
+
+    private void setupComponents() throws Exception {
+        player = new PlayerTank(new Point2D((int) (10 * App.FRAME_HEIGHT / 27.9), (int) (25 * App.FRAME_HEIGHT / 27.9)));
+        tankManager = new TankManager();
+        powerUpsManager = new PowerUpsManager(tankManager);
+
+        loadImages();
+        playerTankSpawner = new TankSpawner(spawnImages);
+        enemyTankSpawner = new TankSpawner(spawnImages);
+        destroyTanks = new DestroyAnimation(destroyBigImages);
+        destroyEnvironment = new DestroyAnimation(destroySmallImages);
+
+        isGameActive = false;
     }
 
-    public void updateGameLogic() {
-        updateEnemyTank();
-        updateLevel();
-        updateGameState();
+    private void loadImages() {
+        spawnImages = new ArrayList<>();
+        destroySmallImages = new ArrayList<>();
+        destroyBigImages = new ArrayList<>();
+
+        for (int i = 1; i <= 10; i++) {
+            spawnImages.add(new ImageIcon(Objects.requireNonNull(getClass().getResource("../../resource/img/spawning/spawn_" + i + ".png"))).getImage());
+            if (i <= 7) destroyBigImages.add(new ImageIcon(Objects.requireNonNull(getClass().getResource("../../resource/img/explode/explode_big_" + i + ".png"))).getImage());
+            if (i <= 5) destroySmallImages.add(new ImageIcon(Objects.requireNonNull(getClass().getResource("../../resource/img/explode/explode_small_" + i + ".png"))).getImage());
+        }
+    }
+
+    public void resetGame() throws Exception {
+        currentLevel = 0;
+        nextLevel = 0;
+        level = 0;
+        score = 0;
+        health = 2;
+        enemyLeft = 16;
+        isLose = false;
+
+        player = new PlayerTank(new Point2D((int) (10 * App.FRAME_HEIGHT / 27.9), (int) (25 * App.FRAME_HEIGHT / 27.9)));
+        tankManager = new TankManager();
+        powerUpsManager = new PowerUpsManager(tankManager);
+        home = new Home(new Point2D((int) (13 * App.FRAME_HEIGHT / 27.9), (int) (25 * App.FRAME_HEIGHT / 27.9)));
+
+        levelRenderer = new LevelRenderer(currentLevel);
+        map = levelRenderer.getMap();
+
+        TimerManager.getSharedTimer().start();
+    }
+
+    private void updateLevel() {
+        level = currentLevel;
+        if (tankManager.getTankList().isEmpty() && isGameActive) {
+            enemyLeft = 0;
+            nextLevel = currentLevel + 1;
+        }
+
+        if (currentLevel < nextLevel) {
+            Timer timer = new Timer(2000,  e -> {
+                currentLevel = nextLevel;
+                resetGameComponents();
+            });
+
+            timer.setRepeats(false);
+            timer.start();
+        }
     }
 
     private void updateGameState() {
         if (player.getHealth() <= 0 || !home.isAlive()) {
             isLose = true;
         }
+        else {isLose = false;}
         if (isLose) {
-            //TODO: save game or return
-            TimerManager.getSharedTimer().stop();
-            score = 0;
+            GameplayMenu.displayGameOverPanel();
         }
     }
 
-    private void updateLevel() {
-        level = currentLevel;
-        if (tankManager.getTankList().isEmpty()) {
-            enemyLeft = 0;
-            Timer nextLevelDelay = new Timer(3000, e -> {
-                if (tankManager.getTankList().isEmpty()) {
-                    nextLevel++;
-                }
-            });
-            nextLevelDelay.setRepeats(false);
-            nextLevelDelay.start();
-        }
-        if (currentLevel < nextLevel) {
+    private void resetGameComponents() {
+        try {
             tankManager.stopAllTimer();
             powerUpsManager.stopAllTimer();
-            try {
-                player = new PlayerTank(new Point2D((int) (10 * App.FRAME_HEIGHT / 27.9), (int) (25 * App.FRAME_HEIGHT / 27.9)));
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-            try {
-                tankManager = new TankManager();
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-
+            player = new PlayerTank(new Point2D((int) (10 * App.FRAME_HEIGHT / 27.9), (int) (25 * App.FRAME_HEIGHT / 27.9)));
+            tankManager = new TankManager();
             home = new Home(new Point2D((int) (13 * App.FRAME_HEIGHT / 27.9), (int) (25 * App.FRAME_HEIGHT / 27.9)));
-
             powerUpsManager = new PowerUpsManager(tankManager);
-            currentLevel = nextLevel;
+
             levelRenderer = new LevelRenderer(currentLevel);
             map = levelRenderer.getMap();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -335,6 +358,12 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
         return 1;
     }
 
+    @Override
+    public void paintComponent(Graphics g) {
+        super.paintComponents(g);
+        drawComponents(g);
+    }
+
     public void drawComponents(Graphics g) {
         setBackground(Color.BLACK);
         g.setColor(Color.BLACK);
@@ -349,6 +378,8 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
         drawPowerUps(g);
         destroyEnvironment.drawAnimations(g, (int) (App.FRAME_HEIGHT / 27.9));
         destroyTanks.drawAnimations(g, (int) (3 * App.FRAME_HEIGHT / 27.9));
+
+        updateGameLogic();
     }
 
     private void drawPowerUps(Graphics g) {
@@ -524,7 +555,12 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
     public void actionPerformed(ActionEvent e) {
         revalidate();
         repaint();
-        updateGameLogic();
+    }
+
+    private void updateGameLogic() {
+        updateEnemyTank();
+        updateLevel();
+        updateGameState();
     }
 
     @Override
