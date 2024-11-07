@@ -8,6 +8,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.util.Objects;
 
 public class GameplayMenu extends BaseScene {
     public static JPanel pausePanel = new JPanel();
@@ -95,6 +96,12 @@ public class GameplayMenu extends BaseScene {
         return button;
     }
 
+    JLabel highScoreValue;
+    JLabel currentScoreValue;
+    JLabel enemyCountLabel;
+    JLabel healthValueLabel;
+    JLabel levelValueLabel;
+
     private void initPanels() {
         JPanel containerPanel = new JPanel();
         containerPanel.setLayout(new BoxLayout(containerPanel, BoxLayout.X_AXIS));
@@ -103,18 +110,72 @@ public class GameplayMenu extends BaseScene {
 
         // Left Sidebar
         JPanel leftSidebar = new JPanel();
-        leftSidebar.setLayout(new FlowLayout(FlowLayout.LEFT));
+        leftSidebar.setLayout(new BoxLayout(leftSidebar, BoxLayout.Y_AXIS));
         leftSidebar.setPreferredSize(new Dimension(sidebarWidth, FRAME_HEIGHT));
-        leftSidebar.setBackground(Color.GRAY);
+        leftSidebar.setBackground(new Color(50, 50, 50));  // Darker gray for a modern look
 
-        JButton pauseButton = new JButton("| |");
-        pauseButton.setFont(new Font("Arial", Font.BOLD, FRAME_HEIGHT / 30 - FRAME_HEIGHT / 60));
-        pauseButton.setPreferredSize(new Dimension(FRAME_HEIGHT / 30, FRAME_HEIGHT / 30));
-        pauseButton.setBackground(Color.BLACK);
-        pauseButton.setForeground(Color.WHITE);
-        pauseButton.setBorder(BorderFactory.createLineBorder(Color.WHITE));
-        pauseButton.addActionListener(actionEvent -> togglePause(pausePanel));
+        // Pause Button
+        JButton pauseButton = getPauseButton();
+
+        leftSidebar.add(Box.createVerticalStrut(20));
         leftSidebar.add(pauseButton);
+        leftSidebar.add(Box.createVerticalStrut(FRAME_HEIGHT / 25));
+
+        // Section: Instructions
+        JLabel instructionsTitle = new JLabel("How to Play");
+        instructionsTitle.setFont(tankFont.deriveFont(Font.BOLD, (float) FRAME_HEIGHT / 40));
+        instructionsTitle.setForeground(new Color(0xFFD700));
+        instructionsTitle.setAlignmentX(Component.CENTER_ALIGNMENT);
+        leftSidebar.add(instructionsTitle);
+
+        leftSidebar.add(Box.createVerticalStrut(FRAME_HEIGHT / 40));
+
+        JLabel instructionsLabel = getInstructionsLabel();
+        leftSidebar.add(instructionsLabel);
+
+        leftSidebar.add(Box.createVerticalStrut(FRAME_HEIGHT / 40));
+
+        JSeparator separator1 = new JSeparator();
+        separator1.setBackground(Color.WHITE);
+        separator1.setMaximumSize(new Dimension(sidebarWidth - 40, 1));
+        leftSidebar.add(separator1);
+        leftSidebar.add(Box.createVerticalStrut(FRAME_HEIGHT / 45));
+
+        // Section: High Score
+        JLabel highScoreTitle = new JLabel("High Score");
+        highScoreTitle.setFont(tankFont.deriveFont(Font.BOLD, (float) FRAME_HEIGHT / 40));
+        highScoreTitle.setForeground(new Color(0xFFD700));
+        highScoreTitle.setAlignmentX(Component.CENTER_ALIGNMENT);
+        leftSidebar.add(highScoreTitle);
+
+        highScoreValue = new JLabel("0");
+        highScoreValue.setFont(tankFont.deriveFont(Font.BOLD, (float) FRAME_HEIGHT / 45));
+        highScoreValue.setForeground(Color.WHITE);
+        highScoreValue.setAlignmentX(Component.CENTER_ALIGNMENT);
+        leftSidebar.add(highScoreValue);
+
+        leftSidebar.add(Box.createVerticalStrut(FRAME_HEIGHT / 40));
+
+        JSeparator separator2 = new JSeparator();
+        separator2.setBackground(Color.WHITE);
+        separator2.setMaximumSize(new Dimension(sidebarWidth - 40, 1));
+        leftSidebar.add(separator2);
+        leftSidebar.add(Box.createVerticalStrut(FRAME_HEIGHT / 40));
+
+        // Section: Current Score
+        JLabel currentScoreTitle = new JLabel("Current Score");
+        currentScoreTitle.setFont(tankFont.deriveFont(Font.BOLD, (float) FRAME_HEIGHT / 40));
+        currentScoreTitle.setForeground(new Color(0xFFD700));
+        currentScoreTitle.setAlignmentX(Component.CENTER_ALIGNMENT);
+        leftSidebar.add(currentScoreTitle);
+
+        currentScoreValue = new JLabel("0");
+        currentScoreValue.setFont(tankFont.deriveFont(Font.BOLD, (float) FRAME_HEIGHT / 45));
+        currentScoreValue.setForeground(Color.WHITE);
+        currentScoreValue.setAlignmentX(Component.CENTER_ALIGNMENT);
+        leftSidebar.add(currentScoreValue);
+
+        leftSidebar.add(Box.createVerticalGlue());
 
         // Main Panel
         JPanel mainPanel;
@@ -125,26 +186,89 @@ public class GameplayMenu extends BaseScene {
         }
         mainPanel.setPreferredSize(new Dimension(FRAME_HEIGHT, FRAME_HEIGHT));
         mainPanel.setBackground(Color.BLACK);
-
         mainPanel.setFocusable(true);
         mainPanel.requestFocusInWindow();
 
         // Right Sidebar
         JPanel rightSidebar = new JPanel();
         rightSidebar.setPreferredSize(new Dimension(sidebarWidth, FRAME_HEIGHT));
-        rightSidebar.setBackground(Color.GRAY);
+        rightSidebar.setBackground(Color.DARK_GRAY);
+        rightSidebar.setLayout(new BoxLayout(rightSidebar, BoxLayout.Y_AXIS));
 
+        // Section: Enemy Count
+        JPanel enemyPanel = new JPanel();
+        enemyPanel.setBackground(Color.DARK_GRAY);
+        JLabel enemyIconLabel = new JLabel(new ImageIcon(Objects.requireNonNull(getClass().getResource("../../resource/img/sidebar/enemy_left.png"))));
+        enemyCountLabel = new JLabel("16");
+        enemyCountLabel.setFont(tankFont.deriveFont(Font.BOLD, (float) FRAME_HEIGHT / 40));
+        enemyCountLabel.setForeground(Color.WHITE);
+        enemyPanel.add(enemyIconLabel);
+        enemyPanel.add(enemyCountLabel);
+        rightSidebar.add(enemyPanel);
+        rightSidebar.add(Box.createVerticalStrut(20));
+
+        // Section: Player Health
+        JPanel healthPanel = new JPanel();
+        healthPanel.setBackground(Color.DARK_GRAY);
+        JLabel healthIconLabel = new JLabel(new ImageIcon(Objects.requireNonNull(getClass().getResource("../../resource/img/player/health.png"))));
+        healthValueLabel = new JLabel("2");
+        healthValueLabel.setFont(tankFont.deriveFont(Font.BOLD, (float) FRAME_HEIGHT / 40));
+        healthValueLabel.setForeground(Color.WHITE);
+        healthPanel.add(healthIconLabel);
+        healthPanel.add(healthValueLabel);
+        rightSidebar.add(healthPanel);
+        rightSidebar.add(Box.createVerticalStrut(20));
+
+        // Section: Current Level
+        JPanel levelPanel = new JPanel();
+        levelPanel.setBackground(Color.DARK_GRAY);
+        JLabel levelIconLabel = new JLabel(new ImageIcon(Objects.requireNonNull(getClass().getResource("../../resource/img/sidebar/level.png"))));
+        levelValueLabel = new JLabel("1");
+        levelValueLabel.setFont(tankFont.deriveFont(Font.BOLD, (float) FRAME_HEIGHT / 40));
+        levelValueLabel.setForeground(Color.WHITE);
+        levelPanel.add(levelIconLabel);
+        levelPanel.add(levelValueLabel);
+        rightSidebar.add(levelPanel);
+        rightSidebar.add(Box.createVerticalStrut(20));
+
+        rightSidebar.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        // Assemble and add panels
         setUpPausePanel(pausePanel);
-
         containerPanel.add(leftSidebar);
         containerPanel.add(mainPanel);
         containerPanel.add(rightSidebar);
-
         add(containerPanel, BorderLayout.CENTER);
+
         mainPanel.setLayout(new GridBagLayout());
         mainPanel.add(pausePanel);
     }
 
+    private static JLabel getInstructionsLabel() {
+        JLabel instructionsLabel = new JLabel("<html>"
+                + "<div style='text-align:center; font-family:" + "rockwell" + "; font-weight:bold; font-size:" + (FRAME_HEIGHT / 60) + "px; color:white; margin-left: " + (FRAME_HEIGHT / 30) + "'>"
+                + "W - Move Up<br>"
+                + "A - Move Left&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;D - Move Right<br>"
+                + "S - Move Down<br><br>"
+                + "Space - Shoot<br><br>"
+                + "Esc - Pause"
+                + "</div></html>");
+        instructionsLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        return instructionsLabel;
+    }
+
+    private JButton getPauseButton() {
+        JButton pauseButton = new JButton("| |");
+        pauseButton.setFont(new Font("Arial", Font.BOLD, FRAME_HEIGHT / 45));
+        pauseButton.setBackground(new Color(30, 30, 30));
+        pauseButton.setForeground(Color.WHITE);
+        pauseButton.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
+        pauseButton.addActionListener(actionEvent -> togglePause(pausePanel));
+        pauseButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        pauseButton.revalidate();
+        pauseButton.repaint();
+        return pauseButton;
+    }
 
     private void requestFocusOnGameplayManager() {
         for (Component component : ((JPanel) getComponent(0)).getComponents()) {
@@ -164,6 +288,11 @@ public class GameplayMenu extends BaseScene {
     public void drawComponents(Graphics g) {
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, FRAME_WIDTH, FRAME_HEIGHT);
+        highScoreValue.setText(String.valueOf(10));
+        currentScoreValue.setText(String.valueOf(GameplayManager.score));
+        healthValueLabel.setText(String.valueOf(GameplayManager.health));
+        enemyCountLabel.setText(String.valueOf(GameplayManager.enemyLeft));
+        levelValueLabel.setText(String.valueOf(GameplayManager.level));
     }
 
     @Override
@@ -186,6 +315,4 @@ public class GameplayMenu extends BaseScene {
     public void keyReleased(KeyEvent e) {
         /**/
     }
-
-
 }

@@ -21,7 +21,7 @@ public class Timer {
             tankManager.getTankList().get(enemyIndex).setShootable(false);
         }
 
-        javax.swing.Timer timer = new javax.swing.Timer(3000, e -> {
+        javax.swing.Timer timer = new javax.swing.Timer(10000, e -> {
             for (EnemyTank enemy : currentEnemies) {
                 int enemyIndex = tankManager.getTankList().indexOf(enemy);
                 if (enemyIndex >= 0) {

@@ -36,8 +36,7 @@ public class DestroyAnimation {
         destroyAnimationTimer.start();
     }
 
-    public void drawAnimations(Graphics g) {
-        int explosionSize = (int) (App.FRAME_HEIGHT / 27.9);
+    public void drawAnimations(Graphics g, int explosionSize) {
         for (AnimationState animation : activeAnimations) {
             Image destroyImage = destroyImages.get(animation.getStep());
 

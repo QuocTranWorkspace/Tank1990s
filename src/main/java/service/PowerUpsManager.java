@@ -51,6 +51,7 @@ public class PowerUpsManager {
     }
 
     public void collectPowerUp(PlayerTank tank, PowerUps powerUp) {
+        GameplayManager.score += 500;
         tank.addPoints(500);
         powerUp.activate(tank);
         activePowerUps.remove(powerUp);
