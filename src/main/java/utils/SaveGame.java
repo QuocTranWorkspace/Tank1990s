@@ -15,10 +15,19 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * The type Save game.
+ */
 public class SaveGame {
     private static final String FILE_PATH = "src/main/resource/data.dat";
     private static final Logger LOGGER = Logger.getLogger(SaveGame.class.getName());
 
+    /**
+     * Save score.
+     *
+     * @param name  the name
+     * @param score the score
+     */
     public static void saveScore(String name, String score) {
         Date dNow = new Date();
         SimpleDateFormat ft = new SimpleDateFormat("E yyyy.MM.dd 'at' hh:mm:ss a zzz");
@@ -31,6 +40,11 @@ public class SaveGame {
         }
     }
 
+    /**
+     * Load scores list.
+     *
+     * @return the list
+     */
     public static List<SaveDTO> loadScores() {
         List<SaveDTO> scores = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(FILE_PATH))) {

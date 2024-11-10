@@ -10,10 +10,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.util.List;
 
+/**
+ * The type Score board menu.
+ */
 public class ScoreBoardMenu extends BaseScene {
     private static final int FRAME_WIDTH = App.FRAME_WIDTH;
     private static final int FRAME_HEIGHT = App.FRAME_HEIGHT;
 
+    /**
+     * Instantiates a new Score board menu.
+     */
     public ScoreBoardMenu() {
         sceneIndex = 3;
         setPreferredSize(new Dimension(FRAME_WIDTH, FRAME_HEIGHT));

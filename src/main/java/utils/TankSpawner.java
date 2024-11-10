@@ -8,18 +8,31 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * The type Tank spawner.
+ */
 public class TankSpawner {
     private static final int ANIMATION_INTERVAL = 100;
     private final Map<BaseTank, Integer> spawnAnimationSteps;
     private final Map<BaseTank, Timer> spawnAnimationTimers;
     private java.util.List<Image> spawnImages = new ArrayList<>();
 
+    /**
+     * Instantiates a new Tank spawner.
+     *
+     * @param spawnImages the spawn images
+     */
     public TankSpawner(java.util.List<Image> spawnImages) {
         spawnAnimationSteps = new HashMap<>();
         spawnAnimationTimers = new HashMap<>();
         this.spawnImages = spawnImages;
     }
 
+    /**
+     * Start spawn animation.
+     *
+     * @param tank the tank
+     */
     public void startSpawnAnimation(BaseTank tank) {
         tank.setMovable(false);
         tank.setShootable(false);
@@ -41,6 +54,12 @@ public class TankSpawner {
         spawnAnimationTimers.put(tank, spawnAnimationTimer);
     }
 
+    /**
+     * Draw tank.
+     *
+     * @param g    the g
+     * @param tank the tank
+     */
     public void drawTank(Graphics g, BaseTank tank) {
         if (spawnAnimationSteps.containsKey(tank)) {
             int step = spawnAnimationSteps.get(tank);

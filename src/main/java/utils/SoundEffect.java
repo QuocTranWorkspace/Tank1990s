@@ -4,6 +4,9 @@ import javax.sound.sampled.*;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * The type Sound effect.
+ */
 public class SoundEffect {
     private static final File bonus = new File("src/main/resource/sound/bonus_fixed.wav");
     private static final File brickhit = new File("src/main/resource/sound/brickhit_fixed.wav");
@@ -21,6 +24,9 @@ public class SoundEffect {
     private static final File steelhit = new File("src/main/resource/sound/steelhit_fixed.wav");
     private static final File tbonushit = new File("src/main/resource/sound/tbonushit_fixed.wav");
 
+    /**
+     * Bonus sound.
+     */
     public static void bonusSound() {
         try {
             AudioInputStream audioStream = AudioSystem.getAudioInputStream(bonus);
@@ -32,6 +38,9 @@ public class SoundEffect {
         }
     }
 
+    /**
+     * Brick hit sound.
+     */
     public static void brickHitSound() {
         try {
             AudioInputStream audioStream = AudioSystem.getAudioInputStream(brickhit);
@@ -43,6 +52,9 @@ public class SoundEffect {
         }
     }
 
+    /**
+     * E explosion sound.
+     */
     public static void eExplosionSound() {
         try {
             AudioInputStream audioStream = AudioSystem.getAudioInputStream(eexplosion);
@@ -54,6 +66,9 @@ public class SoundEffect {
         }
     }
 
+    /**
+     * F explosion sound.
+     */
     public static void fExplosionSound() {
         try {
             AudioInputStream audioStream = AudioSystem.getAudioInputStream(fexplosion);
@@ -65,6 +80,9 @@ public class SoundEffect {
         }
     }
 
+    /**
+     * Game over sound.
+     */
     public static void gameOverSound() {
         try {
             AudioInputStream audioStream = AudioSystem.getAudioInputStream(gameover);
@@ -76,6 +94,9 @@ public class SoundEffect {
         }
     }
 
+    /**
+     * Ice sound.
+     */
     public static void iceSound() {
         try {
             AudioInputStream audioStream = AudioSystem.getAudioInputStream(ice);
@@ -87,6 +108,9 @@ public class SoundEffect {
         }
     }
 
+    /**
+     * Level starting sound.
+     */
     public static void levelStartingSound() {
         try {
             AudioInputStream audioStream = AudioSystem.getAudioInputStream(levelstarting);
@@ -98,6 +122,9 @@ public class SoundEffect {
         }
     }
 
+    /**
+     * Life sound.
+     */
     public static void lifeSound() {
         try {
             AudioInputStream audioStream = AudioSystem.getAudioInputStream(life);
@@ -109,6 +136,9 @@ public class SoundEffect {
         }
     }
 
+    /**
+     * Moving sound.
+     */
     public static void movingSound() {
         try {
             AudioInputStream audioStream = AudioSystem.getAudioInputStream(moving);
@@ -122,6 +152,9 @@ public class SoundEffect {
         }
     }
 
+    /**
+     * N moving sound.
+     */
     public static void nMovingSound() {
         try {
             AudioInputStream audioStream = AudioSystem.getAudioInputStream(nmoving);
@@ -135,6 +168,9 @@ public class SoundEffect {
         }
     }
 
+    /**
+     * Pause sound.
+     */
     public static void pauseSound() {
         try {
             AudioInputStream audioStream = AudioSystem.getAudioInputStream(pause);
@@ -146,6 +182,9 @@ public class SoundEffect {
         }
     }
 
+    /**
+     * Steel hit sound.
+     */
     public static void steelHitSound() {
         try {
             AudioInputStream audioStream = AudioSystem.getAudioInputStream(steelhit);
@@ -157,6 +196,9 @@ public class SoundEffect {
         }
     }
 
+    /**
+     * Shoot sound.
+     */
     public static void shootSound() {
         try {
             AudioInputStream audioStream = AudioSystem.getAudioInputStream(shoot);
@@ -168,6 +210,9 @@ public class SoundEffect {
         }
     }
 
+    /**
+     * Shield hit sound.
+     */
     public static void shieldHitSound() {
         try {
             AudioInputStream audioStream = AudioSystem.getAudioInputStream(shieldhit);
@@ -179,6 +224,9 @@ public class SoundEffect {
         }
     }
 
+    /**
+     * T bonus hit sound.
+     */
     public static void tBonusHitSound() {
         try {
             AudioInputStream audioStream = AudioSystem.getAudioInputStream(tbonushit);

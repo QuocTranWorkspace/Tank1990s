@@ -28,22 +28,64 @@ import java.util.List;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
+/**
+ * The type Gameplay manager.
+ */
 public class GameplayManager extends BaseScene implements ActionListener, KeyListener {
+    /**
+     * The constant VELOCITY_MOVE.
+     */
     public static final int VELOCITY_MOVE = App.FRAME_HEIGHT / 280;
+    /**
+     * The constant VELOCITY_SHOOT.
+     */
     public static final int VELOCITY_SHOOT = App.FRAME_HEIGHT / 280;
+    /**
+     * The constant SLIPPERY.
+     */
     public static int SLIPPERY = App.FRAME_HEIGHT / 150;
+    /**
+     * The constant destroyTanks.
+     */
     public static DestroyAnimation destroyTanks;
+    /**
+     * The constant levelRenderer.
+     */
     public static LevelRenderer levelRenderer;
+    /**
+     * The constant currentEnemies.
+     */
     public static Set<EnemyTank> currentEnemies = new HashSet<>();
-    // Static variables for displaying
+    /**
+     * The constant level.
+     */
+// Static variables for displaying
     public static int level = 0;
+    /**
+     * The constant score.
+     */
     public static int score = 0;
+    /**
+     * The constant health.
+     */
     public static int health = 2;
+    /**
+     * The constant enemyLeft.
+     */
     public static int enemyLeft = 16;
     private static int currentLevel;
     private final Map<BaseTank, Timer> slidingTimers = new HashMap<>();
+    /**
+     * The Spawn images.
+     */
     List<Image> spawnImages = new ArrayList<>();
+    /**
+     * The Destroy small images.
+     */
     List<Image> destroySmallImages = new ArrayList<>();
+    /**
+     * The Destroy big images.
+     */
     List<Image> destroyBigImages = new ArrayList<>();
     private transient TankSpawner playerTankSpawner;
     private transient TankSpawner enemyTankSpawner;
@@ -57,6 +99,11 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
     private boolean isLose = false;
     private boolean isGameActive;
 
+    /**
+     * Instantiates a new Gameplay manager.
+     *
+     * @throws Exception the exception
+     */
     public GameplayManager() throws Exception {
         Timer gameLoop = TimerManager.getSharedTimer();
         setupComponents();
@@ -106,6 +153,11 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
         }
     }
 
+    /**
+     * Reset game.
+     *
+     * @throws Exception the exception
+     */
     public void resetGame() throws Exception {
         currentLevel = 0;
         nextLevel = 0;
@@ -168,7 +220,10 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
         }
     }
 
-    // Enemy tank
+    /**
+     * Update enemy tank.
+     */
+// Enemy tank
     public void updateEnemyTank() {
         for (EnemyTank tank : tankManager.getTankList()) {
             if (!tank.isDisplay()) continue;
@@ -203,7 +258,13 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
         return slidingTimers.containsKey(tank) && slidingTimers.get(tank).isRunning();
     }
 
-    //Enemy bullet
+    /**
+     * Update enemy bullet.
+     *
+     * @param tank the tank
+     * @param g    the g
+     */
+//Enemy bullet
     public void updateEnemyBullet(EnemyTank tank, Graphics g) {
         Iterator<Bullet> bulletIterator = tank.getBulletList().iterator();
         while (bulletIterator.hasNext()) {
@@ -267,8 +328,7 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
             if (collision2D(bullet, environment)) {
                 if (environment instanceof BrickWall) {
                     SoundEffect.brickHitSound();
-                }
-                else if (environment instanceof SteelWall) {
+                } else if (environment instanceof SteelWall) {
                     SoundEffect.steelHitSound();
                 }
                 environment.setHealth(environment.getHealth() - 1);
@@ -284,7 +344,10 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
         }
     }
 
-    // Player bullet
+    /**
+     * Update player bullet.
+     */
+// Player bullet
     public void updatePlayerBullet() {
         Iterator<Bullet> bulletIterator = player.getBulletList().iterator();
 
@@ -348,8 +411,7 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
             if (environment != null && environment.isDestroyable() && collision2D(bullet, environment)) {
                 if (environment instanceof BrickWall) {
                     SoundEffect.brickHitSound();
-                }
-                else if (environment instanceof SteelWall) {
+                } else if (environment instanceof SteelWall) {
                     SoundEffect.steelHitSound();
                 }
                 int damage = calculateEnvironmentDamage(player.getTier(), environment);
@@ -381,6 +443,11 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
         drawComponents(g);
     }
 
+    /**
+     * Draw components.
+     *
+     * @param g the g
+     */
     public void drawComponents(Graphics g) {
         updateGameLogic();
         setBackground(Color.BLACK);
@@ -525,6 +592,11 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
                 && powerUp.getY() + powerUp.getHeight() >= tank.getPosition().getY();
     }
 
+    /**
+     * Start sliding effect.
+     *
+     * @param tank the tank
+     */
     public void startSlidingEffect(BaseTank tank) {
         if (slidingTimers.containsKey(tank) && slidingTimers.get(tank).isRunning()) {
             slidingTimers.get(tank).stop();

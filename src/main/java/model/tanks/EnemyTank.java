@@ -8,11 +8,26 @@ import javax.swing.*;
 import java.util.Objects;
 import java.util.Random;
 
+/**
+ * The type Enemy tank.
+ */
 public class EnemyTank extends BaseTank {
     private final Timer directionTimer;
     private final Timer shootingTimer;
     private Directions currentDirection = Directions.getRandomType();
 
+    /**
+     * Instantiates a new Enemy tank.
+     *
+     * @param name          the name
+     * @param position      the position
+     * @param point         the point
+     * @param health        the health
+     * @param movementSpeed the movement speed
+     * @param bulletSpeed   the bullet speed
+     * @param description   the description
+     * @throws Exception the exception
+     */
     public EnemyTank(String name, Point2D position, int point, int health, int movementSpeed, int bulletSpeed, String description) throws Exception {
         super(name, position, point, health, movementSpeed, bulletSpeed, description);
         Random random = new Random();
@@ -89,6 +104,9 @@ public class EnemyTank extends BaseTank {
         changeImage(currentImage + "_left.png");
     }
 
+    /**
+     * Shoot.
+     */
     public void shoot() {
         if (isShooting() && isShootable()) {
             Bullet bullet = new Bullet(0, 0, getBulletSpeed(), currentDirection);
@@ -105,6 +123,9 @@ public class EnemyTank extends BaseTank {
         }
     }
 
+    /**
+     * Stop all timer.
+     */
     public void stopAllTimer() {
         if (directionTimer != null && directionTimer.isRunning()) {
             this.directionTimer.stop();

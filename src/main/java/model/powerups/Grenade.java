@@ -11,9 +11,20 @@ import java.util.Objects;
 import static main.java.service.GameplayManager.currentEnemies;
 import static main.java.service.GameplayManager.destroyTanks;
 
+/**
+ * The type Grenade.
+ */
 public class Grenade {
+    /**
+     * The constant image.
+     */
     public static Image image = new ImageIcon(Objects.requireNonNull(Grenade.class.getResource("../../../resource/img/bonus/bonus_grenade.png"))).getImage();
 
+    /**
+     * Activate.
+     *
+     * @param tankManager the tank manager
+     */
     public void activate(TankManager tankManager) {
         Iterator<EnemyTank> enemyTanksIterator = currentEnemies.iterator();
         while (enemyTanksIterator.hasNext()) {
@@ -24,6 +35,11 @@ public class Grenade {
         }
     }
 
+    /**
+     * Gets image.
+     *
+     * @return the image
+     */
     public Image getImage() {
         return image;
     }

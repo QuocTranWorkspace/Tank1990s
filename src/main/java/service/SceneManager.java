@@ -11,18 +11,32 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * The type Scene manager.
+ */
 public class SceneManager {
     private static final Logger LOGGER = Logger.getLogger(SceneManager.class.getName());
+    /**
+     * The constant tankFont.
+     */
     public static Font tankFont;
     private final JFrame frame;
     private Component currentScene;
 
+    /**
+     * Instantiates a new Scene manager.
+     *
+     * @param frame the frame
+     */
     public SceneManager(JFrame frame) {
         setUpFont();
         this.frame = frame;
         initializeScenes();
     }
 
+    /**
+     * Sets up font.
+     */
     public static void setUpFont() {
         File fontSource = new File("src/main/resource/font/tank_font.ttf");
 
@@ -51,6 +65,11 @@ public class SceneManager {
         }
     }
 
+    /**
+     * Load scene.
+     *
+     * @param index the index
+     */
     public void loadScene(int index) {
         frame.remove(currentScene);
 
@@ -75,6 +94,9 @@ public class SceneManager {
         }
     }
 
+    /**
+     * Close app.
+     */
     public void closeApp() {
         frame.dispose();
         System.exit(0);

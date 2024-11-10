@@ -15,17 +15,37 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * The type Level renderer.
+ */
 public class LevelRenderer {
     private final int level;
+    /**
+     * The Level list.
+     */
     List<Path> levelList = new ArrayList<>();
+    /**
+     * The Map.
+     */
     List<Environment> map = new ArrayList<>();
 
+    /**
+     * Instantiates a new Level renderer.
+     *
+     * @param level the level
+     */
     public LevelRenderer(int level) {
         levelList = listFilesInResourceDirectory("level");
         this.level = level;
         drawMap();
     }
 
+    /**
+     * List files in resource directory list.
+     *
+     * @param folder the folder
+     * @return the list
+     */
     public List<Path> listFilesInResourceDirectory(String folder) {
         URL resource = getClass().getResource("../../resource/" + folder);
         if (resource == null) {
@@ -43,6 +63,9 @@ public class LevelRenderer {
         return List.of();
     }
 
+    /**
+     * Draw map.
+     */
     public void drawMap() {
         Path path = this.levelList.get(level);
         try (InputStream inputStream = new FileInputStream(path.toString())) {
@@ -82,10 +105,20 @@ public class LevelRenderer {
         }
     }
 
+    /**
+     * Gets map.
+     *
+     * @return the map
+     */
     public List<Environment> getMap() {
         return map;
     }
 
+    /**
+     * Sets map.
+     *
+     * @param map the map
+     */
     public void setMap(List<Environment> map) {
         this.map = map;
     }

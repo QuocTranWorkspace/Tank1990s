@@ -10,10 +10,21 @@ import java.util.Set;
 
 import static main.java.service.GameplayManager.currentEnemies;
 
+/**
+ * The type Timer.
+ */
 public class Timer {
+    /**
+     * The constant image.
+     */
     public static final Image image = new ImageIcon(Objects.requireNonNull(Timer.class.getResource("../../../resource/img/bonus/bonus_clock.png"))).getImage();
     private final Set<EnemyTank> enemyTanks = currentEnemies;
 
+    /**
+     * Activate.
+     *
+     * @param tankManager the tank manager
+     */
     public void activate(TankManager tankManager) {
         for (EnemyTank enemy : currentEnemies) {
             int enemyIndex = tankManager.getTankList().indexOf(enemy);
@@ -37,6 +48,11 @@ public class Timer {
         timer.start();
     }
 
+    /**
+     * Gets image.
+     *
+     * @return the image
+     */
     public Image getImage() {
         return image;
     }

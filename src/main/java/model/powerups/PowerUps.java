@@ -7,6 +7,9 @@ import main.java.utils.SoundEffect;
 
 import java.awt.*;
 
+/**
+ * The type Power ups.
+ */
 public class PowerUps {
     private final Type type;
     private final TankManager tankManager;
@@ -16,6 +19,14 @@ public class PowerUps {
     private int width = (int) (2 * App.FRAME_HEIGHT / 27.9);
     private int height = (int) (2 * App.FRAME_HEIGHT / 27.9);
 
+    /**
+     * Instantiates a new Power ups.
+     *
+     * @param x           the x
+     * @param y           the y
+     * @param type        the type
+     * @param tankManager the tank manager
+     */
     public PowerUps(int x, int y, Type type, TankManager tankManager) {
         this.x = x;
         this.y = y;
@@ -24,6 +35,11 @@ public class PowerUps {
         this.tankManager = tankManager;
     }
 
+    /**
+     * Activate.
+     *
+     * @param tank the tank
+     */
     public void activate(PlayerTank tank) {
         SoundEffect.bonusSound();
         switch (type) {
@@ -36,28 +52,56 @@ public class PowerUps {
         }
     }
 
+    /**
+     * Deactivate.
+     */
     public void deactivate() {
         if (type == Type.SHOVEL) {
             Shovel.getInstance().deactivate();
         }
     }
 
+    /**
+     * Gets x.
+     *
+     * @return the x
+     */
     public int getX() {
         return x;
     }
 
+    /**
+     * Sets x.
+     *
+     * @param x the x
+     */
     public void setX(int x) {
         this.x = x;
     }
 
+    /**
+     * Gets y.
+     *
+     * @return the y
+     */
     public int getY() {
         return y;
     }
 
+    /**
+     * Sets y.
+     *
+     * @param y the y
+     */
     public void setY(int y) {
         this.y = y;
     }
 
+    /**
+     * Gets image.
+     *
+     * @return the image
+     */
     public Image getImage() {
         return image;
     }
@@ -73,26 +117,56 @@ public class PowerUps {
         }
     }
 
+    /**
+     * Sets image.
+     *
+     * @param image the image
+     */
     public void setImage(Image image) {
         this.image = image;
     }
 
+    /**
+     * Gets width.
+     *
+     * @return the width
+     */
     public int getWidth() {
         return width;
     }
 
+    /**
+     * Sets width.
+     *
+     * @param width the width
+     */
     public void setWidth(int width) {
         this.width = width;
     }
 
+    /**
+     * Gets height.
+     *
+     * @return the height
+     */
     public int getHeight() {
         return height;
     }
 
+    /**
+     * Sets height.
+     *
+     * @param height the height
+     */
     public void setHeight(int height) {
         this.height = height;
     }
 
+    /**
+     * Gets type.
+     *
+     * @return the type
+     */
     public Type getType() {
         return type;
     }

@@ -9,9 +9,21 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.Objects;
 
+/**
+ * The type Player tank.
+ */
 public class PlayerTank extends BaseTank {
+    /**
+     * The constant shieldImage.
+     */
     public static final Image shieldImage = new ImageIcon(Objects.requireNonNull(PlayerTank.class.getResource("../../resource/img/player/shield.png"))).getImage();
+    /**
+     * The constant invincibleImage1.
+     */
     public static final Image invincibleImage1 = new ImageIcon(Objects.requireNonNull(PlayerTank.class.getResource("../../resource/img/player/invincible_1.png"))).getImage();
+    /**
+     * The constant invincibleImage2.
+     */
     public static final Image invincibleImage2 = new ImageIcon(Objects.requireNonNull(PlayerTank.class.getResource("../../resource/img/player/invincible_2.png"))).getImage();
     private Directions direction;
     private Point2D position;
@@ -19,6 +31,11 @@ public class PlayerTank extends BaseTank {
     private int tier;
     private Image currentInvincible = PlayerTank.invincibleImage1;
 
+    /**
+     * Instantiates a new Player tank.
+     *
+     * @param position the position
+     */
     public PlayerTank(Point2D position) {
         super("PlayerTank", position, 0, 2, 2, 2, "Desc");
         this.direction = Directions.UP;
@@ -105,6 +122,9 @@ public class PlayerTank extends BaseTank {
         changeImage("player_left");
     }
 
+    /**
+     * Shoot.
+     */
     public void shoot() {
         if (isShooting() && isShootable()) {
             SoundEffect.shootSound();
@@ -122,6 +142,9 @@ public class PlayerTank extends BaseTank {
         }
     }
 
+    /**
+     * Respawn.
+     */
     public void respawn() {
         this.direction = Directions.UP;
         this.position = new Point2D((int) (10 * App.FRAME_HEIGHT / 27.9), (int) (25 * App.FRAME_HEIGHT / 27.9));
@@ -152,26 +175,56 @@ public class PlayerTank extends BaseTank {
         this.direction = direction;
     }
 
+    /**
+     * Is shield boolean.
+     *
+     * @return the boolean
+     */
     public boolean isShield() {
         return shield;
     }
 
+    /**
+     * Sets shield.
+     *
+     * @param shield the shield
+     */
     public void setShield(boolean shield) {
         this.shield = shield;
     }
 
+    /**
+     * Gets tier.
+     *
+     * @return the tier
+     */
     public int getTier() {
         return tier;
     }
 
+    /**
+     * Sets tier.
+     *
+     * @param tier the tier
+     */
     public void setTier(int tier) {
         this.tier = tier;
     }
 
+    /**
+     * Gets current invincible.
+     *
+     * @return the current invincible
+     */
     public Image getCurrentInvincible() {
         return currentInvincible;
     }
 
+    /**
+     * Sets current invincible.
+     *
+     * @param currentInvincible the current invincible
+     */
     public void setCurrentInvincible(Image currentInvincible) {
         this.currentInvincible = currentInvincible;
     }

@@ -14,15 +14,43 @@ import java.awt.event.KeyEvent;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * The type Gameplay menu.
+ */
 public class GameplayMenu extends BaseScene {
+    /**
+     * The constant pausePanel.
+     */
     public static JPanel pausePanel = new JPanel();
+    /**
+     * The constant gameOverPanel.
+     */
     public static JPanel gameOverPanel;
+    /**
+     * The High score value.
+     */
     JLabel highScoreValue;
+    /**
+     * The Current score value.
+     */
     JLabel currentScoreValue;
+    /**
+     * The Enemy count label.
+     */
     JLabel enemyCountLabel;
+    /**
+     * The Health value label.
+     */
     JLabel healthValueLabel;
+    /**
+     * The Level value label.
+     */
     JLabel levelValueLabel;
     private List<SaveDTO> scoreBoard = SaveGame.loadScores();
+
+    /**
+     * Instantiates a new Gameplay menu.
+     */
     public GameplayMenu() {
         sceneIndex = 2;
         setPreferredSize(new Dimension(FRAME_WIDTH, FRAME_HEIGHT));
@@ -34,6 +62,11 @@ public class GameplayMenu extends BaseScene {
         initPanels();
     }
 
+    /**
+     * Toggle pause.
+     *
+     * @param panel the panel
+     */
     public static void togglePause(JPanel panel) {
         if (!panel.isVisible()) {
             SoundEffect.pauseSound();
@@ -46,6 +79,9 @@ public class GameplayMenu extends BaseScene {
         }
     }
 
+    /**
+     * Display game over panel.
+     */
     public static void displayGameOverPanel() {
         gameOverPanel.setVisible(true);
         pausePanel.setVisible(false);
@@ -359,6 +395,11 @@ public class GameplayMenu extends BaseScene {
         drawComponents(g);
     }
 
+    /**
+     * Draw components.
+     *
+     * @param g the g
+     */
     public void drawComponents(Graphics g) {
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, FRAME_WIDTH, FRAME_HEIGHT);

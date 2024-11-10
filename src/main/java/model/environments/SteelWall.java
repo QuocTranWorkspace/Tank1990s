@@ -5,7 +5,15 @@ import main.java.model.Point2D;
 import javax.swing.*;
 import java.util.Objects;
 
+/**
+ * The type Steel wall.
+ */
 public class SteelWall extends Environment {
+    /**
+     * Instantiates a new Steel wall.
+     *
+     * @param position the position
+     */
     public SteelWall(Point2D position) {
         this.setImage(new ImageIcon(Objects.requireNonNull(getClass().getResource("../../../resource/img/environment/stone.png"))).getImage());
         this.setDestroyable(true);

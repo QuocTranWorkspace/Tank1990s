@@ -13,11 +13,25 @@ import java.util.ArrayList;
 import java.util.ListIterator;
 import java.util.Objects;
 
+/**
+ * The type Shovel.
+ */
 public class Shovel {
+    /**
+     * The constant image.
+     */
     public static final Image image = new ImageIcon(Objects.requireNonNull(Shovel.class.getResource("../../../resource/img/bonus/bonus_shovel.png"))).getImage();
     private static Shovel instance;
+    /**
+     * The Timer.
+     */
     javax.swing.Timer timer;
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     public static Shovel getInstance() {
         if (instance == null) {
             instance = new Shovel();
@@ -25,6 +39,9 @@ public class Shovel {
         return instance;
     }
 
+    /**
+     * Activate.
+     */
     public void activate() {
         java.util.List<Environment> tempEnvironments = new ArrayList<>();
         for (Environment env : GameplayManager.levelRenderer.getMap()) {
@@ -58,10 +75,18 @@ public class Shovel {
         timer.start();
     }
 
+    /**
+     * Gets image.
+     *
+     * @return the image
+     */
     public Image getImage() {
         return image;
     }
 
+    /**
+     * Deactivate.
+     */
     public void deactivate() {
         if (timer != null && timer.isRunning()) {
             timer.stop();
