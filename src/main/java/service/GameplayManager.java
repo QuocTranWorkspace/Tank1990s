@@ -243,8 +243,9 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
                 player.setShield(false);
             } else {
                 player.setHealth(Math.max(0, player.getHealth() - 1));
+                destroyTanks.startDestroyAnimation(player.getPosition().getX(), player.getPosition().getY(), player.getDirection());
+                player.respawn();
                 if (player.getHealth() <= 0) {
-                    destroyTanks.startDestroyAnimation(player.getPosition().getX(), player.getPosition().getY(), player.getDirection());
                     isLose = true;
                 }
             }

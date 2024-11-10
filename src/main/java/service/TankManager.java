@@ -10,13 +10,13 @@ import java.util.Random;
 
 public class TankManager {
     private final List<EnemyTank> tankList = new ArrayList<>();
-    private final Point2D[] spawnPoints = {new Point2D((int) (App.FRAME_HEIGHT / 27.9), (int) (App.FRAME_HEIGHT / 27.9)), new Point2D((int) (25 * App.FRAME_HEIGHT / 27.9), (int) (App.FRAME_HEIGHT / 27.9))};
 
     public TankManager() throws Exception {
         int maxTank = 1;
         for (int i = 0; i < maxTank; i++) {
             Random random = new Random();
             int randomPosition = random.nextInt(2);
+            Point2D[] spawnPoints = {new Point2D((int) (App.FRAME_HEIGHT / 27.9), (int) (App.FRAME_HEIGHT / 27.9)), new Point2D((int) (25 * App.FRAME_HEIGHT / 27.9), (int) (App.FRAME_HEIGHT / 27.9))};
             Point2D position = spawnPoints[randomPosition];
             TankType tankType = TankType.getRandomType();
             switch (tankType) {

@@ -1,5 +1,6 @@
 package main.java.model;
 
+import main.java.App;
 import main.java.model.tanks.BaseTank;
 import main.java.model.tanks.Directions;
 import main.java.utils.SoundEffect;
@@ -121,6 +122,16 @@ public class PlayerTank extends BaseTank {
         }
     }
 
+    public void respawn() {
+        this.direction = Directions.UP;
+        this.position = new Point2D((int) (10 * App.FRAME_HEIGHT / 27.9), (int) (25 * App.FRAME_HEIGHT / 27.9));
+        this.tier = 1;
+        this.setInvincible(true);
+        Timer timer = new Timer(3000, ev -> this.setInvincible(false));
+        timer.setRepeats(false);
+        timer.start();
+    }
+
     @Override
     public Point2D getPosition() {
         return position;
@@ -131,6 +142,7 @@ public class PlayerTank extends BaseTank {
         this.position = position;
     }
 
+    @Override
     public Directions getDirection() {
         return this.direction;
     }
@@ -156,20 +168,19 @@ public class PlayerTank extends BaseTank {
         this.tier = tier;
     }
 
-    @Override
-    public String toString() {
-        return "Tank [name=" + getName() + ", position=" + getPosition() + ", point=" + getPoint() + ", health="
-                + getHealth()
-                + ", movementSpeed=" + getMovementSpeed() + ", bulletSpeed=" + getBulletSpeed() + ", description="
-                + getDescription()
-                + "]";
-    }
-
     public Image getCurrentInvincible() {
         return currentInvincible;
     }
 
     public void setCurrentInvincible(Image currentInvincible) {
         this.currentInvincible = currentInvincible;
+    }
+
+    @Override
+    public boolean isShooting() {
+        if (this.tier < 3) {
+            return bulletList.isEmpty();
+        } else
+            return bulletList.size() < getBullet();
     }
 }

@@ -286,7 +286,7 @@ public class GameplayMenu extends BaseScene {
 
         gameOverPanel.add(Box.createVerticalStrut(FRAME_HEIGHT / 40));
 
-        JLabel finalScoreLabel = new JLabel("Your Score: " + GameplayManager.score);
+        JLabel finalScoreLabel = new JLabel("Your Score: " + currentScoreValue.getText());
         finalScoreLabel.setFont(tankFont.deriveFont(Font.PLAIN, (float) FRAME_HEIGHT / 35));
         finalScoreLabel.setForeground(Color.WHITE);
         finalScoreLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -326,9 +326,7 @@ public class GameplayMenu extends BaseScene {
         exitBtn.setForeground(Color.WHITE);
         exitBtn.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
         exitBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
-        exitBtn.addActionListener(e -> {
-            App.sceneManager.loadScene(0);
-        });
+        exitBtn.addActionListener(e -> App.sceneManager.loadScene(0));
         gameOverPanel.add(exitBtn);
 
         gameOverPanel.setVisible(false);
@@ -365,7 +363,7 @@ public class GameplayMenu extends BaseScene {
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, FRAME_WIDTH, FRAME_HEIGHT);
         if (!scoreBoard.isEmpty()) {
-            highScoreValue.setText(String.valueOf(scoreBoard.get(0).getScore()));
+            highScoreValue.setText(String.valueOf(scoreBoard.getFirst().getScore()));
         } else {
             highScoreValue.setText(String.valueOf(0));
         }
