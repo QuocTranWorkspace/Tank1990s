@@ -247,6 +247,8 @@ public class GameplayManager extends BaseScene implements ActionListener, KeyLis
                 player.respawn();
                 if (player.getHealth() <= 0) {
                     isLose = true;
+                    revalidate();
+                    repaint();
                 }
             }
             return true;
